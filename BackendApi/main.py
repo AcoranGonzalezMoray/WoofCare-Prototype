@@ -169,9 +169,11 @@ class SignIn(Resource):
         else:
             return {"message": "Usuario no encontrado"}, 404
 
-# =====================MESSAGE CONTROLLER==============================
+# =====================PRODUCT CONTROLLER==============================
 # =====================SERVICE CONTROLLER==============================
 # =====================REQUEST CONTROLLER==============================
-
+# =====================DOG CONTROLLER==============================
+# =====================MESSAGE CONTROLLER==============================
+# =====================ADVERTISEMENT CONTROLLER==============================
 if __name__ == "__main__":
     app.run(debug=True)
