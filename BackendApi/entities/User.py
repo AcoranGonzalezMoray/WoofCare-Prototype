@@ -1,17 +1,18 @@
 
 
 class User:
-    def __init__(self, id, name, email, password, accountType, subscriptionType, location, profileUrl, phone, service):
+    def __init__(self, id, name, email, password, accountType, suscriptionType, location, profileUrl, phone, statusAccount):
         self.id = id
         self.name = name
         self.email = email
         self.password = password
         self.accountType = accountType
-        self.subscriptionType = subscriptionType
+        self.suscriptionType = suscriptionType
         self.location = location
         self.profileUrl = profileUrl
         self.phone = phone
-        self.service = service
+        self.statusAccount = statusAccount
+
 
     def to_dict(self):
         return {
@@ -20,11 +21,11 @@ class User:
             "email": self.email,
             "password": self.password,
             "accountType": self.accountType,
-            "subscriptionType": self.subscriptionType,
+            "suscriptionType": self.suscriptionType,
             "location": self.location,
             "profileUrl": self.profileUrl,
             "phone": self.phone,
-            "service": self.service
+            "statusAccount": self.statusAccount
         }
     
 

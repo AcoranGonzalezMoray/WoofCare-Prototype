@@ -4,6 +4,7 @@ from context.sqlServer.connection import getConnection
 
 connection_string = getConnection()
 
+
 def execute_query(query):
     try:
         with pyodbc.connect(connection_string) as connection:
@@ -16,56 +17,87 @@ def execute_query(query):
         print(f"Error executing query: {e}")
         return []
 
+
 def get_user_data():
     query = "SELECT * FROM Users;"
     data = execute_query(query)
     return data
+
 
 def save_user_to_database(user):
     try:
         with pyodbc.connect(connection_string) as connection:
             cursor = connection.cursor()
             id = get_last_user_id()
-            cursor.execute("""
-                INSERT INTO Users (id, name, email, password, accountType, subscriptionType, location, profileUrl, phone, service)
+            cursor.execute(
+                """
+                INSERT INTO Users (id, name, email, password, accountType, suscriptionType, location, profileUrl, phone, statusAccount)
                 VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, ( id+1, user.name, user.email, user.password, user.accountType, user.subscriptionType, user.location, user.profileUrl, user.phone, user.service))
+                """,
+                (
+                    id + 1,
+                    user.name,
+                    user.email,
+                    user.password,
+                    user.accountType,
+                    user.suscriptionType,
+                    user.location,
+                    user.profileUrl,
+                    user.phone,
+                    user.statusAccount,
+                ),
+            )
             connection.commit()
         return True
     except pyodbc.Error as e:
         print(f"Error saving user to database: {e}")
         return False
 
+
 def update_user_in_database(user):
     try:
         with pyodbc.connect(connection_string) as connection:
             cursor = connection.cursor()
-            cursor.execute("""
+            cursor.execute(
+                """
                 UPDATE Users
-                SET name = ?, email = ?, password = ?, accountType = ?, subscriptionType = ?, location = ?, profileUrl = ?, phone = ?, service = ?
+                SET name = ?, email = ?, password = ?, accountType = ?, suscriptionType = ?, location = ?, profileUrl = ?, phone = ? , statusAccount = ?
                 WHERE id = ?
-                """, (user.name, user.email, user.password, user.accountType, user.subscriptionType, user.location, user.profileUrl, user.phone, user.service, user.id))
+                """,
+                (
+                    user.name,
+                    user.email,
+                    user.password,
+                    user.accountType,
+                    user.suscriptionType,
+                    user.location,
+                    user.profileUrl,
+                    user.phone,
+                    user.statusAccount,
+                    user.id,
+                ),
+            )
             connection.commit()
         return True
     except pyodbc.Error as e:
         print(f"Error updating user in database: {e}")
         return False
 
+
 def get_last_user_id():
     try:
         with pyodbc.connect(connection_string) as connection:
             cursor = connection.cursor()
             cursor.execute("SELECT MAX(id) FROM Users")
-            row = cursor.fetchone()
-            if row:
-                last_user_id = row[0]
-                return last_user_id
+            result = cursor.fetchone()
+            last_id = result[0]
+            if last_id is None:
+                return 0  # Devolver 0 si no hay usuarios en la base de datos
             else:
-                return None
+                return last_id
     except pyodbc.Error as e:
-        print(f"Error getting last user ID: {e}")
+        print(f"Error getting last user ID from database: {e}")
         return None
-
 
 
 def get_user_by_email(email):
@@ -81,11 +113,11 @@ def get_user_by_email(email):
                     email=row[2],
                     password=row[3],
                     accountType=row[4],
-                    subscriptionType=row[5],
+                    suscriptionType=row[5],
                     location=row[6],
                     profileUrl=row[7],
                     phone=row[8],
-                    service=row[9]
+                    statusAccount=row[9]
                 )
                 return user
             else:
@@ -93,6 +125,7 @@ def get_user_by_email(email):
     except pyodbc.Error as e:
         print(f"Error getting user by email: {e}")
         return None
+
 
 def email_exists(email):
     try:
