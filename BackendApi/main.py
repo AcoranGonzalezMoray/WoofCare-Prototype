@@ -1,4 +1,6 @@
 import hashlib
+from context.sqlServer.productT import delete_product_from_database, get_product_data, save_product_to_database, update_product_in_database
+from entities.Product import Product
 from model import  modelDoc
 from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields
@@ -14,6 +16,7 @@ api = Api(app, version='1.0', title='WoofCare API', description='API para la ges
 
 #=======================MODEL=======================================
 user_model = api.model('User', modelDoc.Model.getUserModel())
+product_model = api.model('Product', modelDoc.Model.getProductModel())
 
 # =====================USER CONTROLLER==============================
 
@@ -170,10 +173,93 @@ class SignIn(Resource):
             return {"message": "Usuario no encontrado"}, 404
 
 # =====================PRODUCT CONTROLLER==============================
+@api.route(f"/api/{version}/product")
+class ProductList(Resource):
+    @api.doc('get_products')
+    def get(self):
+        """
+        Retorna todos los productos registrados en el sistema.
+        """
+        products = get_product_data()
+        serialized_products = []
+        if(products):serialized_products = [product.to_dict() for product in products]
+
+        return jsonify(serialized_products)
+
+    @api.doc('create_product')
+    @api.expect(product_model)
+    def post(self):
+        """
+        Crea un nuevo producto.
+        """
+        data = request.json
+        new_product = Product(
+            id=0,  # El ID se generará automáticamente en la base de datos
+            name=data["name"],
+            description=data["description"],
+            price=data["price"],
+            location=data["location"],
+            companyName=data["companyName"],
+            status=data["status"],
+            bannerUrls=data["bannerUrls"]        
+            )
+        if save_product_to_database(new_product):
+            return {"message": "Producto creado correctamente"}, 201
+        else:
+            return {"message": "Error al crear el producto"}, 500
+
+@api.route(f"/api/{version}/product/<int:id>")
+class SpecificProduct(Resource):
+    @api.doc('get_product')
+    def get(self, id):
+        """
+        Retorna un producto por su ID.
+        """
+        products = get_product_data()
+        product = next((product for product in products if product.id == id), None)
+
+        if product:
+            serialized_product = product.to_dict()
+            return jsonify(serialized_product)
+        else:
+            return {"message": "Producto no encontrado"}, 404
+
+    @api.doc('update_product')
+    @api.expect(product_model)
+    def put(self, id):
+        """
+        Actualiza un producto existente.
+        """
+        data = request.json
+        products = get_product_data()
+        product = next((product for product in products if product.id == id), None)
+        if product:
+            product.name = data["name"]
+            product.description = data["description"]
+            product.price = data["price"]
+            product.location = data["location"]
+            product.companyName = data["companyName"]
+            product.status = data["status"]
+            product.bannerUrls = data["bannerUrls"]
+            if update_product_in_database(product):
+                return {"message": "Producto actualizado correctamente"}, 200
+            else:
+                return {"message": "Error al actualizar el producto"}, 500
+        else:
+            return {"message": "Producto no encontrado"}, 404
+
+    @api.doc('delete_product')
+    def delete(self, id):
+        """
+        Elimina un producto por su ID.
+        """
+        if delete_product_from_database(id):
+            return {"message": "Producto eliminado correctamente"}, 200
+        else:
+            return {"message": "Error al eliminar el producto"}, 500
+
 # =====================SERVICE CONTROLLER==============================
 # =====================REQUEST CONTROLLER==============================
-# =====================DOG CONTROLLER==============================
-# =====================MESSAGE CONTROLLER==============================
-# =====================ADVERTISEMENT CONTROLLER==============================
+
 if __name__ == "__main__":
     app.run(debug=True)

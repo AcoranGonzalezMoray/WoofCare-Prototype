@@ -13,6 +13,15 @@ class Model:
             'profileUrl': fields.String(required=True, description='URL del perfil del usuario'),
             'phone': fields.String(required=True, description='Número de teléfono del usuario'),
             'statusAccount': fields.String(required=True, description='0:Activa, 1: Indica que la cuenta esta suspendida temporalmente, 2: Indica que la cuenta esta bloqueada'),
-
         }
-    
+    @staticmethod
+    def getProductModel():
+        return {
+            'name': fields.String(required=True, description='Nombre del producto'),
+            'description': fields.String(required=True, description='Descripción del producto'),
+            'price': fields.Float(required=True, description='Precio del producto'),
+            'location': fields.String(required=True, description='Ubicación del producto'),
+            'companyName': fields.String(required=True, description='Nombre de la empresa del producto'),
+            'status': fields.String(required=True, description='Estado del producto 0: Activo 1: Descatalogado '),
+            'bannerUrls': fields.String(required=True, description='URLs del banner del producto'),
+        }
