@@ -36,3 +36,16 @@ class Model:
             'status': fields.String(required=True, description='Estado de la solicitud 0: Pendiente, 1:Aceptado, 2:Denegarla, 3:Cancelado'),
             'creationDate': fields.DateTime(required=True, description='Fecha de creación de la solicitud en formato ISO8601')
         }
+    
+    @staticmethod
+    def getServiceModel():
+        return {
+            'name': fields.String(required=True, description='Nombre del servicio'),
+            'type': fields.String(required=True, description='Tipo de servicio 1: Cuidador, 2:Entrenador'),
+            'status': fields.String(required=True, description='Estado del servicio 0: Disponible, 1:No disponible'),
+            'publicationDate': fields.DateTime(required=True, description='Fecha de publicación del servicio en formato ISO8601'),
+            'description': fields.String(required=True, description='Descripción del servicio'),
+            'price': fields.Float(required=True, description='Precio del servicio'),
+            'uid': fields.String(required=True, description='ID del usuario que publicó el servicio'),
+            'bannerUrl': fields.String(required=True, description='URL del banner del servicio')
+        }

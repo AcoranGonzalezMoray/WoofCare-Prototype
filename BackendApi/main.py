@@ -1,8 +1,10 @@
 import hashlib
 from context.sqlServer.productT import delete_product_from_database, get_product_data, save_product_to_database, update_product_in_database
 from context.sqlServer.requestT import delete_request_from_database, get_request_data, save_request_to_database, update_request_in_database
+from context.sqlServer.serviceT import delete_service_from_database, get_service_data, save_service_to_database, update_service_in_database
 from entities.Product import Product
 from entities.Request import Request
+from entities.Service import Service
 from model import  modelDoc
 from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields
@@ -20,6 +22,7 @@ api = Api(app, version='1.0', title='WoofCare API', description='API para la ges
 user_model = api.model('User', modelDoc.Model.getUserModel())
 product_model = api.model('Product', modelDoc.Model.getProductModel())
 request_model = api.model('Request', modelDoc.Model.getRequestModel())
+service_model = api.model('Service', modelDoc.Model.getServiceModel())
 
 # =====================USER CONTROLLER==============================
 
@@ -345,6 +348,93 @@ class SpecificRequest(Resource):
             return {"message": "Error al eliminar la solicitud"}, 500
         
 # =====================SERVICE CONTROLLER==============================
+@api.route(f"/api/{version}/service")
+class ServiceList(Resource):
+    @api.doc('get_services')
+    def get(self):
+        """
+        Retorna todos los servicios registrados en el sistema.
+        """
+        services = get_service_data()
+        serialized_services = []
+        if services:
+            serialized_services = [service.to_dict() for service in services]
+
+        return jsonify(serialized_services)
+
+    @api.doc('create_service')
+    @api.expect(service_model)
+    def post(self):
+        """
+        Crea un nuevo servicio.
+        """
+        data = request.json
+        new_service = Service(
+            id=0,  # El ID se generará automáticamente en la base de datos
+            name=data["name"],
+            type=data["type"],
+            status=data["status"],
+            publicationDate=data["publicationDate"],
+            description=data["description"],
+            price=data["price"],
+            uid=data["uid"],
+            bannerUrl=data["bannerUrl"]
+        )
+        if save_service_to_database(new_service):
+            return {"message": "Servicio creado correctamente"}, 201
+        else:
+            return {"message": "Error al crear el servicio"}, 500
+
+@api.route(f"/api/{version}/service/<int:id>")
+class SpecificService(Resource):
+    @api.doc('get_service')
+    def get(self, id):
+        """
+        Retorna un servicio por su ID.
+        """
+        services = get_service_data()
+        service = next((service for service in services if service.id == id), None)
+
+        if service:
+            serialized_service = service.to_dict()
+            return jsonify(serialized_service)
+        else:
+            return {"message": "Servicio no encontrado"}, 404
+
+    @api.doc('update_service')
+    @api.expect(service_model)
+    def put(self, id):
+        """
+        Actualiza un servicio existente.
+        """
+        data = request.json
+        services = get_service_data()
+        service = next((service for service in services if service.id == id), None)
+        if service:
+            service.name = data["name"]
+            service.type = data["type"]
+            service.status = data["status"]
+            service.publicationDate = data["publicationDate"]
+            service.description = data["description"]
+            service.price = data["price"]
+            service.uid = data["uid"]
+            service.bannerUrl = data["bannerUrl"]
+            if update_service_in_database(service):
+                return {"message": "Servicio actualizado correctamente"}, 200
+            else:
+                return {"message": "Error al actualizar el servicio"}, 500
+        else:
+            return {"message": "Servicio no encontrado"}, 404
+
+    @api.doc('delete_service')
+    def delete(self, id):
+        """
+        Elimina un servicio por su ID.
+        """
+        if delete_service_from_database(id):
+            return {"message": "Servicio eliminado correctamente"}, 200
+        else:
+            return {"message": "Error al eliminar el servicio"}, 500
 
 
 if __name__ == "__main__":
