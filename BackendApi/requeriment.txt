@@ -1,0 +1,6 @@
+firebase_admin
+pyodbc
+hashlib
+flask
+flask_restx
+asyncio
