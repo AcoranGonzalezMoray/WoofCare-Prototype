@@ -14,6 +14,7 @@ class Model:
             'phone': fields.String(required=True, description='Número de teléfono del usuario'),
             'statusAccount': fields.String(required=True, description='0:Activa, 1: Indica que la cuenta esta suspendida temporalmente, 2: Indica que la cuenta esta bloqueada'),
         }
+    
     @staticmethod
     def getProductModel():
         return {
@@ -24,4 +25,14 @@ class Model:
             'companyName': fields.String(required=True, description='Nombre de la empresa del producto'),
             'status': fields.String(required=True, description='Estado del producto 0: Activo 1: Descatalogado '),
             'bannerUrls': fields.String(required=True, description='URLs del banner del producto'),
+        }
+    
+    @staticmethod
+    def getRequestModel():
+        return {
+            'uidReceiver': fields.String(required=True, description='ID del receptor de la solicitud'),
+            'uidSender': fields.String(required=True, description='ID del remitente de la solicitud'),
+            'serviceId': fields.Integer(required=True, description='ID del servicio relacionado con la solicitud'),
+            'status': fields.String(required=True, description='Estado de la solicitud 0: Pendiente, 1:Aceptado, 2:Denegarla, 3:Cancelado'),
+            'creationDate': fields.DateTime(required=True, description='Fecha de creación de la solicitud en formato ISO8601')
         }

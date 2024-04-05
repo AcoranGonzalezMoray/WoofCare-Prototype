@@ -1,6 +1,8 @@
 import hashlib
 from context.sqlServer.productT import delete_product_from_database, get_product_data, save_product_to_database, update_product_in_database
+from context.sqlServer.requestT import delete_request_from_database, get_request_data, save_request_to_database, update_request_in_database
 from entities.Product import Product
+from entities.Request import Request
 from model import  modelDoc
 from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields
@@ -17,6 +19,7 @@ api = Api(app, version='1.0', title='WoofCare API', description='API para la ges
 #=======================MODEL=======================================
 user_model = api.model('User', modelDoc.Model.getUserModel())
 product_model = api.model('Product', modelDoc.Model.getProductModel())
+request_model = api.model('Request', modelDoc.Model.getRequestModel())
 
 # =====================USER CONTROLLER==============================
 
@@ -258,8 +261,91 @@ class SpecificProduct(Resource):
         else:
             return {"message": "Error al eliminar el producto"}, 500
 
-# =====================SERVICE CONTROLLER==============================
 # =====================REQUEST CONTROLLER==============================
+@api.route(f"/api/{version}/request")
+class RequestList(Resource):
+    @api.doc('get_requests')
+    def get(self):
+        """
+        Retorna todas las solicitudes registradas en el sistema.
+        """
+        requests = get_request_data()
+        serialized_requests = []
+        if requests:
+            serialized_requests = [request.to_dict() for request in requests]
+
+        return jsonify(serialized_requests)
+
+    @api.doc('create_request')
+    @api.expect(request_model)
+    def post(self):
+        """
+        Crea una nueva solicitud.
+        """
+        data = request.json
+        new_request = Request(
+            id=0,  # El ID se generará automáticamente en la base de datos
+            uidReceiver=data["uidReceiver"],
+            uidSender=data["uidSender"],
+            serviceId=data["serviceId"],
+            status=data["status"],
+            creationDate=data["creationDate"]
+        )
+        if save_request_to_database(new_request):
+            return {"message": "Solicitud creada correctamente"}, 201
+        else:
+            return {"message": "Error al crear la solicitud"}, 500
+
+@api.route(f"/api/{version}/request/<int:id>")
+class SpecificRequest(Resource):
+    @api.doc('get_request')
+    def get(self, id):
+        """
+        Retorna una solicitud por su ID.
+        """
+        requests = get_request_data()
+        request = next((request for request in requests if request.id == id), None)
+
+        if request:
+            serialized_request = request.to_dict()
+            return jsonify(serialized_request)
+        else:
+            return {"message": "Solicitud no encontrada"}, 404
+
+    @api.doc('update_request')
+    @api.expect(request_model)
+    def put(self, id):
+        """
+        Actualiza una solicitud existente.
+        """
+        data = request.json
+        requests = get_request_data()
+        requestN = next((request for request in requests if request.id == id), None)
+        if requestN:
+            requestN.uidReceiver = data["uidReceiver"]
+            requestN.uidSender = data["uidSender"]
+            requestN.serviceId = data["serviceId"]
+            requestN.status = data["status"]
+            requestN.creationDate = data["creationDate"]
+            if update_request_in_database(requestN):
+                return {"message": "Solicitud actualizada correctamente"}, 200
+            else:
+                return {"message": "Error al actualizar la solicitud"}, 500
+        else:
+            return {"message": "Solicitud no encontrada"}, 404
+
+    @api.doc('delete_request')
+    def delete(self, id):
+        """
+        Elimina una solicitud por su ID.
+        """
+        if delete_request_from_database(id):
+            return {"message": "Solicitud eliminada correctamente"}, 200
+        else:
+            return {"message": "Error al eliminar la solicitud"}, 500
+        
+# =====================SERVICE CONTROLLER==============================
+
 
 if __name__ == "__main__":
     app.run(debug=True)
