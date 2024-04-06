@@ -49,3 +49,35 @@ class Model:
             'uid': fields.String(required=True, description='ID del usuario que publicó el servicio'),
             'bannerUrl': fields.String(required=True, description='URL del banner del servicio')
         }
+    
+    @staticmethod
+    def getDogModel():
+        return {
+            'breed': fields.String(required=True, description='Raza del perro'),
+            'size': fields.String(required=True, description='Tamaño del perro'),
+            'weight': fields.Float(required=True, description='Peso del perro'),
+            'age': fields.Integer(required=True, description='Edad del perro en meses')
+        }
+    
+    @staticmethod
+    def getAdvertisementModel():
+        return {
+            'objectId': fields.String(required=True, description='Id del producto al que hace referencia') ,
+            'type': fields.String(required=True, description='Tipo de promocion (0:Producto, 1:Usuario)') ,
+            'name': fields.String(required=True, description='Nombre de la promocion') ,
+            'status': fields.String(required=True, description='Estado de la promocion (0: Disponible, 1: No disponible)') ,
+            'description': fields.String(required=True, description='Descripcion de la promocion') ,
+            'publicationDate': fields.String(required=True, description='Fecha de la publicacion de la promocion') ,
+            'expirationDate': fields.String(required=True, description='Fecha de vencimiento de la promocion') ,
+        }
+    
+    @staticmethod
+    def getMessageModel():
+        return {
+            'receiverid': fields.String(required=True, description='Id del usuario receptor del mensaje'),
+            'senderid': fields.String(required=True, description='Id del usuario que envio el mensaje'),
+            'type': fields.String(required=True, description='Tipo del mensaje (0: texto, 1: imagen)'),
+            'content': fields.String(required=True, description='Contenido del mensaje'),
+            'datetime': fields.String(required=True, description='Fechora en la que se envió el mensaje'),
+            'serviceid': fields.String(required=True, description='Id del servicio por el que se contacta')
+        }
