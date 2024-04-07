@@ -26,9 +26,11 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -140,7 +142,7 @@ fun HomeScreen(navController: NavController) {
     ) {
         LazyRow(
             modifier = Modifier
-                .padding(horizontal = 5.dp)
+                .padding(horizontal = 5.dp, vertical =  10.dp)
                 .height(100.dp)
         ) {
             items(userList) { user ->
@@ -196,14 +198,14 @@ fun UserItemServices(user: User) {
                             backgroundColor = DarkButtonWoof, // Color naranja
                             modifier = Modifier.padding(8.dp).size(40.dp)
                         ) {
-                            Icon(Icons.Default.MailOutline, contentDescription = "Add", tint = Color.White)
+                            Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Add", tint = Color.White)
                         }
                         FloatingActionButton(
                             onClick = { /* Acción del segundo botón */ },
                             backgroundColor = DarkButtonWoof,
                             modifier = Modifier.padding(8.dp).size(40.dp)
                         ) {
-                            Icon(Icons.Default.Info, contentDescription = "Edit", tint = Color.White)
+                            Icon(Icons.Default.RemoveRedEye, contentDescription = "Edit", tint = Color.White)
                         }
                     }
                 }
@@ -213,7 +215,7 @@ fun UserItemServices(user: User) {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = user.name,
+                        text = user.name+", 34",
                         color = Color.White,
                         fontSize = 18.sp,
                         modifier = Modifier

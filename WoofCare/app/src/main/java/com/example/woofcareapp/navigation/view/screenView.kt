@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,12 +84,33 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(end = 12.dp),
-                        contentAlignment = Alignment.Center
+                            .padding(end = 12.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.icon),
-                            contentDescription = "")
+
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Icon(imageVector = Icons.Filled.Menu, contentDescription = "menu", tint = Color.White )
+                        }
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.icon),
+                                contentDescription = "")
+                        }
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.End
+                        ) {
+                            Icon(imageVector = Icons.Filled.Notifications, contentDescription = "menu", tint = Color.White)
+
+                        }
+
                     }
                 },
             )
