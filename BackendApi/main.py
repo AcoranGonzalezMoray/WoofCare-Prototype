@@ -1,10 +1,6 @@
 import hashlib
-from context.sqlServer.productT import delete_product_from_database, get_product_data, save_product_to_database, update_product_in_database
-from context.sqlServer.requestT import delete_request_from_database, get_request_data, save_request_to_database, update_request_in_database
-from context.sqlServer.serviceT import delete_service_from_database, get_service_data, save_service_to_database, update_service_in_database
-from context.sqlServer.dogT import get_dog_data, delete_dog_from_database, save_dog_to_database, update_dog_in_database
-from context.sqlServer.advertisementT import get_advertisement_data, save_advertisement_to_database, update_advertisement_in_database, delete_advertisement_from_database
-from context.sqlServer.messageT import get_message_data, save_message_to_database, get_conversation, delete_message_from_database
+
+from context.sqlServer.DBHandler import DBHandler
 from entities.Message import Message
 from entities.Dog import Dog
 from entities.Advertisement import Advertisement
@@ -16,7 +12,6 @@ from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields
 # Importa tu lógica de negocio
 from context.sqlServer.userT import *
-
 
 
 #=======================CONFIG=======================================
@@ -33,6 +28,10 @@ dog_model = api.model('Dog', modelDoc.Model.getDogModel())
 advertisement_model = api.model('Advertisement', modelDoc.Model.getAdvertisementModel())
 message_model = api.model('Message', modelDoc.Model.getMessageModel())
 
+#=========================UNIQ SQL CONNECTION INSTANCE================
+db_handler = DBHandler()
+
+
 # =====================USER CONTROLLER==============================
 
 @api.route(f"/api/{version}/user")
@@ -42,7 +41,7 @@ class UserList(Resource):
         """
         Retorna todos los usuarios registrados en el sistema.
         """
-        users = get_user_data()
+        users = db_handler.get_entity_data("Users")
         serialized_users = []
         if(users):serialized_users = [user.to_dict() for user in users]
 
@@ -67,7 +66,7 @@ class UserList(Resource):
             phone=data["phone"],
             statusAccount=data["statusAccount"]        
             )
-        if save_user_to_database(new_user):
+        if db_handler.save_entity_to_database(new_user):
             return jsonify({"message": "Usuario creado correctamente"}), 201
         else:
             return jsonify({"message": "Error al crear el usuario"}), 500
@@ -79,7 +78,7 @@ class UserSpecificUser(Resource):
         """
         Retorna un usuario por su ID.
         """
-        users = get_user_data()
+        users = db_handler.get_entity_data("Users")
         user = next((user for user in users if user.id == id), None)
 
         if user:
@@ -95,8 +94,8 @@ class UserSpecificUser(Resource):
         Actualiza un usuario existente.
         """
         data = request.json
-        users = get_user_data()
-        user = next((user for user in users if user.id == id), None)
+        users = db_handler.get_entity_data("Users")
+        user: User = next((user for user in users if user.id == id), None)
         if user:
             user.name = data["name"]
             user.email = data["email"]
@@ -107,7 +106,7 @@ class UserSpecificUser(Resource):
             user.profileUrl = data["profileUrl"]
             user.phone = data["phone"]
             user.statusAccount=data["statusAccount"]    
-            if update_user_in_database(user):
+            if db_handler.update_entity_in_database(user):
                 return {"message": "Usuario actualizado correctamente"}, 200
             else:
                 return {"message": "Error al actualizar el usuario"}, 500
@@ -119,7 +118,7 @@ class UserSpecificUser(Resource):
         """
         Elimina un usuario por su ID.
         """
-        if delete_user_from_database(id):
+        if db_handler.delete_entity_from_database(id, "Users"):
             return {"message": "Usuario eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el usuario"}, 500
@@ -181,7 +180,7 @@ class SignIn(Resource):
             # Verificar la contraseña
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
             if hashed_password == user.password:
-                return jsonify(user.to_dict()) #nuevo
+                return jsonify(user.to_dict())
             else:
                 return {"message": "Contraseña incorrecta"}, 401
         else:
@@ -195,7 +194,7 @@ class ProductList(Resource):
         """
         Retorna todos los productos registrados en el sistema.
         """
-        products = get_product_data()
+        products = db_handler.get_entity_data("Products")
         serialized_products = []
         if(products):serialized_products = [product.to_dict() for product in products]
 
@@ -218,7 +217,7 @@ class ProductList(Resource):
             status=data["status"],
             bannerUrls=data["bannerUrls"]        
             )
-        if save_product_to_database(new_product):
+        if db_handler.save_entity_to_database(new_product):
             return {"message": "Producto creado correctamente"}, 201
         else:
             return {"message": "Error al crear el producto"}, 500
@@ -230,7 +229,7 @@ class SpecificProduct(Resource):
         """
         Retorna un producto por su ID.
         """
-        products = get_product_data()
+        products = db_handler.get_entity_data("Products")
         product = next((product for product in products if product.id == id), None)
 
         if product:
@@ -246,7 +245,7 @@ class SpecificProduct(Resource):
         Actualiza un producto existente.
         """
         data = request.json
-        products = get_product_data()
+        products = db_handler.get_entity_data("Products")
         product = next((product for product in products if product.id == id), None)
         if product:
             product.name = data["name"]
@@ -256,7 +255,7 @@ class SpecificProduct(Resource):
             product.companyName = data["companyName"]
             product.status = data["status"]
             product.bannerUrls = data["bannerUrls"]
-            if update_product_in_database(product):
+            if db_handler.update_entity_in_database(product):
                 return {"message": "Producto actualizado correctamente"}, 200
             else:
                 return {"message": "Error al actualizar el producto"}, 500
@@ -268,7 +267,7 @@ class SpecificProduct(Resource):
         """
         Elimina un producto por su ID.
         """
-        if delete_product_from_database(id):
+        if db_handler.delete_entity_from_database(id, "Products"):
             return {"message": "Producto eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el producto"}, 500
@@ -281,7 +280,7 @@ class RequestList(Resource):
         """
         Retorna todas las solicitudes registradas en el sistema.
         """
-        requests = get_request_data()
+        requests = db_handler.get_entity_data("Requests")
         serialized_requests = []
         if requests:
             serialized_requests = [request.to_dict() for request in requests]
@@ -303,7 +302,7 @@ class RequestList(Resource):
             status=data["status"],
             creationDate=data["creationDate"]
         )
-        if save_request_to_database(new_request):
+        if db_handler.save_entity_to_database(new_request):
             return {"message": "Solicitud creada correctamente"}, 201
         else:
             return {"message": "Error al crear la solicitud"}, 500
@@ -315,7 +314,7 @@ class SpecificRequest(Resource):
         """
         Retorna una solicitud por su ID.
         """
-        requests = get_request_data()
+        requests = db_handler.get_entity_data("Requests")
         request = next((request for request in requests if request.id == id), None)
 
         if request:
@@ -331,7 +330,7 @@ class SpecificRequest(Resource):
         Actualiza una solicitud existente.
         """
         data = request.json
-        requests = get_request_data()
+        requests = db_handler.get_entity_data("Requests")
         requestN = next((request for request in requests if request.id == id), None)
         if requestN:
             requestN.uidReceiver = data["uidReceiver"]
@@ -339,7 +338,7 @@ class SpecificRequest(Resource):
             requestN.serviceId = data["serviceId"]
             requestN.status = data["status"]
             requestN.creationDate = data["creationDate"]
-            if update_request_in_database(requestN):
+            if db_handler.update_entity_in_database(requestN):
                 return {"message": "Solicitud actualizada correctamente"}, 200
             else:
                 return {"message": "Error al actualizar la solicitud"}, 500
@@ -351,7 +350,7 @@ class SpecificRequest(Resource):
         """
         Elimina una solicitud por su ID.
         """
-        if delete_request_from_database(id):
+        if db_handler.delete_entity_from_database(id, "Requests"):
             return {"message": "Solicitud eliminada correctamente"}, 200
         else:
             return {"message": "Error al eliminar la solicitud"}, 500
@@ -364,7 +363,7 @@ class ServiceList(Resource):
         """
         Retorna todos los servicios registrados en el sistema.
         """
-        services = get_service_data()
+        services = db_handler.get_entity_data("Services")
         serialized_services = []
         if services:
             serialized_services = [service.to_dict() for service in services]
@@ -389,7 +388,7 @@ class ServiceList(Resource):
             uid=data["uid"],
             bannerUrl=data["bannerUrl"]
         )
-        if save_service_to_database(new_service):
+        if db_handler.save_entity_to_database(new_service):
             return {"message": "Servicio creado correctamente"}, 201
         else:
             return {"message": "Error al crear el servicio"}, 500
@@ -401,7 +400,7 @@ class SpecificService(Resource):
         """
         Retorna un servicio por su ID.
         """
-        services = get_service_data()
+        services = db_handler.get_entity_data("Services")
         service = next((service for service in services if service.id == id), None)
 
         if service:
@@ -417,7 +416,7 @@ class SpecificService(Resource):
         Actualiza un servicio existente.
         """
         data = request.json
-        services = get_service_data()
+        services = db_handler.get_entity_data("Services")
         service = next((service for service in services if service.id == id), None)
         if service:
             service.name = data["name"]
@@ -428,7 +427,7 @@ class SpecificService(Resource):
             service.price = data["price"]
             service.uid = data["uid"]
             service.bannerUrl = data["bannerUrl"]
-            if update_service_in_database(service):
+            if db_handler.update_entity_in_database(service):
                 return {"message": "Servicio actualizado correctamente"}, 200
             else:
                 return {"message": "Error al actualizar el servicio"}, 500
@@ -440,7 +439,7 @@ class SpecificService(Resource):
         """
         Elimina un servicio por su ID.
         """
-        if delete_service_from_database(id):
+        if db_handler.delete_entity_from_database(id):
             return {"message": "Servicio eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el servicio"}, 500
@@ -454,7 +453,7 @@ class DogList(Resource):
         """
         Retorna todos los perros registrados en el sistema.
         """
-        dogs = get_dog_data()
+        dogs = db_handler.get_entity_data("Dogs")
         serialized_dogs = []
         if dogs:
             serialized_dogs = [dog.to_dict() for dog in dogs]
@@ -474,7 +473,7 @@ class DogList(Resource):
             weight=data["weight"],
             age=data["age"]
         )
-        if save_dog_to_database(new_dog):
+        if db_handler.save_entity_to_database(new_dog):
             return {"message": "Perro creado correctamente"}, 201
         else:
             return {"message": "Error al crear el perro"}, 500
@@ -486,7 +485,7 @@ class SpecificDog(Resource):
         """
         Retorna un perro por su ID.
         """
-        dogs = get_dog_data()
+        dogs = db_handler.get_entity_data("Dogs")
         dog = next((dog for dog in dogs if dog.id == id), None)
 
         if dog:
@@ -502,14 +501,14 @@ class SpecificDog(Resource):
         Actualiza un perro existente.
         """
         data = request.json
-        dogs = get_dog_data()
+        dogs = db_handler.get_entity_data("Dogs")
         dog = next((dog for dog in dogs if dog.id == id), None)
         if dog:
             dog.breed = data["breed"]
             dog.size = data["size"]
             dog.weight = data["weight"]
             dog.age = data["age"]
-            if update_dog_in_database(dog):
+            if db_handler.update_entity_in_database(dog):
                 return {"message": "Perro actualizado correctamente"}, 200
             else:
                 return {"message": "Error al actualizar el perro"}, 500
@@ -521,7 +520,7 @@ class SpecificDog(Resource):
         """
         Elimina un perro por su ID.
         """
-        if delete_dog_from_database(id):
+        if db_handler.delete_entity_from_database(id, "Dogs"):
             return {"message": "Perro eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el perro"}, 500
@@ -536,7 +535,7 @@ class AdvertisementList(Resource):
         """
         Retorna todos los anuncios registrados en el sistema.
         """
-        advertisements = get_advertisement_data()
+        advertisements = db_handler.get_entity_data("Advertisements")
         serialized_advertisements = []
         if advertisements:
             serialized_advertisements = [advertisement.to_dict() for advertisement in advertisements]
@@ -560,7 +559,7 @@ class AdvertisementList(Resource):
             publicationDate=data["publicationDate"],
             expirationDate=data["expirationDate"]
         )
-        if save_advertisement_to_database(new_advertisement):
+        if db_handler.save_entity_to_database(new_advertisement):
             return {"message": "Anuncio creado correctamente"}, 201
         else:
             return {"message": "Error al crear el anuncio"}, 500
@@ -572,7 +571,7 @@ class SpecificAdvertisement(Resource):
         """
         Retorna un anuncio por su ID.
         """
-        advertisements = get_advertisement_data()
+        advertisements = db_handler.get_entity_data("Advertisements")
         advertisement = next((advertisement for advertisement in advertisements if advertisement.id == id), None)
 
         if advertisement:
@@ -588,8 +587,8 @@ class SpecificAdvertisement(Resource):
         Actualiza un anuncio existente.
         """
         data = request.json
-        advertisements = get_advertisement_data()
-        advertisement = next((advertisement for advertisement in advertisements if advertisement.id == id), None)
+        advertisements = db_handler.get_entity_data("Advertisements")
+        advertisement: Advertisement = next((advertisement for advertisement in advertisements if advertisement.id == id), None)
         if advertisement:
             advertisement.objectId = data["objectId"]
             advertisement.type = data["type"]
@@ -598,7 +597,7 @@ class SpecificAdvertisement(Resource):
             advertisement.description = data["description"]
             advertisement.publicationDate = data["publicationDate"]
             advertisement.expirationDate = data["expirationDate"]
-            if update_advertisement_in_database(advertisement):
+            if db_handler.update_entity_in_database(advertisement):
                 return {"message": "Anuncio actualizado correctamente"}, 200
             else:
                 return {"message": "Error al actualizar el anuncio"}, 500
@@ -610,7 +609,7 @@ class SpecificAdvertisement(Resource):
         """
         Elimina un anuncio por su ID.
         """
-        if delete_advertisement_from_database(id):
+        if db_handler.delete_entity_from_database(id, "Advertisements"):
             return {"message": "Anuncio eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el anuncio"}, 500
@@ -624,7 +623,7 @@ class MessageList(Resource):
         """
         Retorna todos los mensajes registrados en el sistema.
         """
-        messages = get_message_data()
+        messages = db_handler.get_entity_data("Messages")
         serialized_messages = []
         if messages:
             serialized_messages = [message.to_dict() for message in messages]
@@ -661,7 +660,7 @@ class MessageList(Resource):
             sentDate=data["sentDate"],
             serviceId=data["serviceId"]
         )
-        if save_message_to_database(new_message):
+        if db_handler.save_entity_to_database(new_message):
             return {"message": "Mensaje creado correctamente"}, 201
         else:
             return {"message": "Error al crear el mensaje"}, 500
@@ -673,11 +672,11 @@ class MessageOp(Resource):
         """
         Elimina un mensaje por su ID.
         """
-        if delete_message_from_database(id):
+        if db_handler.delete_entity_from_database(id, "Messages"):
             return {"message": "Mensaje eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el mensaje"}, 500
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True) #nuevo
+    app.run(host='0.0.0.0', debug=True)
