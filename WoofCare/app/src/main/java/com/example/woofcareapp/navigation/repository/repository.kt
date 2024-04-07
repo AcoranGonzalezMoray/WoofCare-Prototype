@@ -5,8 +5,7 @@ import com.example.woofcareapp.api.models.User
 
 object DataRepository {
     private var user: User? = null
-    private var employees: List<User>? = null
-    private var token: String = ""
+    private var users: List<User>? = null
     private var userPlus: User? = null
 
     fun setUserPlus(newUser: User){
@@ -17,20 +16,12 @@ object DataRepository {
         return userPlus
     }
 
-    fun setEmployees(newEmployees: List<User>) {
-        employees= newEmployees
+    fun setUsers(newEmployees: List<User>) {
+        users= newEmployees
     }
 
-    fun getEmployees(): List<User>?{
-        return employees
-    }
-
-    fun setToken(newToken: String) {
-        token = newToken
-    }
-
-    fun getToken(): String {
-        return token
+    fun getUsers(): List<User>?{
+        return users
     }
 
     fun setUser(newUser: User) {

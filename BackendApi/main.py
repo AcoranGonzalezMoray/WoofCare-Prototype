@@ -181,7 +181,7 @@ class SignIn(Resource):
             # Verificar la contraseña
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
             if hashed_password == user.password:
-                return {"message": "Inicio de sesión exitoso"}, 200
+                return jsonify(user.to_dict()) #nuevo
             else:
                 return {"message": "Contraseña incorrecta"}, 401
         else:
@@ -680,4 +680,4 @@ class MessageOp(Resource):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True) #nuevo

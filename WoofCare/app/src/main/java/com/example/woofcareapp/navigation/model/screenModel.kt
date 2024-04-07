@@ -16,15 +16,13 @@ class ScreenModel {
         val icon: ImageVector
     ) {
         object Home : HomeScreens("home", "Home", Icons.Filled.Home)
-        object TransactionHistory : HomeScreens("transactionHistory", "History", Icons.Filled.DateRange)
-        object Scan : HomeScreens("scan", "Scan QR", Icons.Filled.AddCircle)
         object Search : HomeScreens("search", "Search", Icons.Filled.Search)
         object Profile : HomeScreens("profile", "Profile", Icons.Filled.Person)
 
     }
 
     val screensInHomeFromBottomNav = listOf(
-        HomeScreens.Home, HomeScreens.TransactionHistory,  HomeScreens.Scan, HomeScreens.Search, HomeScreens.Profile
+        HomeScreens.Home, HomeScreens.Search, HomeScreens.Profile
     )
 
 }

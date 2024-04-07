@@ -44,6 +44,8 @@ import com.example.woofcareapp.navigation.logic.Navigation
 import com.example.woofcareapp.navigation.model.ScreenModel
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.navigation.widget.BottomBar
+import com.example.woofcareapp.ui.theme.DarkButtonWoof
+import com.example.woofcareapp.ui.theme.backWoof
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -76,34 +78,19 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
         },
         topBar = {
             TopAppBar(
-                backgroundColor = Color.Black,
+                backgroundColor = DarkButtonWoof,
                 title = {
-                    // Colocar la imagen en el centro
                     Box(
-                        modifier = Modifier.fillMaxSize().padding(10.dp).padding(end = 66.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(end = 12.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.icon_white),
-                            contentDescription = "",
-                            colorFilter = ColorFilter.tint(Color.White) // Invertir colores de la imagen
-                        )
+                            painter = painterResource(id = R.drawable.icon),
+                            contentDescription = "")
                     }
                 },
-                navigationIcon = {
-                    // Ícono de menú para abrir el cajón de navegación
-                    IconButton(onClick = {
-                        scope.launch {
-                            scaffoldState.drawerState.open()
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "",
-                            tint = Color.White
-                        )
-                    }
-                }
             )
 
 
@@ -153,7 +140,7 @@ fun Drawer(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(DarkButtonWoof)
     ) {
         Surface(
             modifier = Modifier
@@ -198,7 +185,7 @@ fun Drawer(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.Black) ,
+                    .background(DarkButtonWoof) ,
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -209,74 +196,16 @@ fun Drawer(
                     modifier = Modifier.height(40.dp)
                 )
                 Spacer(modifier = Modifier.width(7.dp))
-                //Text("${DataRepository.getCompany()?.name} \n Code: ${DataRepository.getUser()?.code}", fontSize = 20.sp, fontWeight = FontWeight.Bold, color= Color.White)
             }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        item.forEach() { item ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = {
-                        navController.navigate(item.route)
-                        // Closenav drawer
-                        scope.launch {
-                            scaffoldState.drawerState.close()
-                        }
-                        // Close drawer
-
-
-                    })
-                    .height(45.dp)
-
-                    .padding(start = 10.dp)
-            ) {
-                Icon(imageVector = item.icon, contentDescription = "", tint = Color.White)
-                Spacer(modifier = Modifier.width(7.dp))
-                Text(
-                    text = item.title,
-                    fontSize = 18.sp,
-                    color = Color.White
-                )
-            }
-
-
-        }
-
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = {
-                        navController.navigate("addWarehouse")
-                        scope.launch { scaffoldState.drawerState.close() }
-
-                    })
-                    .height(45.dp)
-
-                    .padding(start = 10.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "",
-                    tint = Color.Green
-                )
-                Spacer(modifier = Modifier.width(7.dp))
-                Text(
-                    text = "Add New Warehouse",
-                    fontSize = 18.sp,
-                    color = Color.Green
-                )
-
-            }
-            }
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.Start
+        ){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -318,10 +247,11 @@ fun Drawer(
                     colors = ButtonDefaults.buttonColors(Color.Red),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 4.dp) // Agrega espacio a la izquierda del botón
+                        .padding(start = 4.dp, end = 4.dp) // Agrega espacio a la izquierda del botón
                 ) {
                     Text(text = "Delete Account")
                 }
             }
         }
+    }
 }

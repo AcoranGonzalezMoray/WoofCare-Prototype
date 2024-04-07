@@ -1,17 +1,20 @@
 package com.example.woofcareapp.api.models
 
 data class User(
-    var id: Int,
-    var name: String,
-    var email: String,
-    var password: String,
-    var accountType: Int, // 0: Busca Servicios, 1: Oferta Servicios Cuidados, 2: Oferta Servicios Entrenamiento
-    var subscriptionType: String, // A, B, C, D
-    var location: String,
-    var profileUrl: String,
-    var phone: String,
-    var service: String
-    )
+    val id: Int,
+    val name: String,
+    val email: String,
+    val password: String,
+    val accountType: Int,
+    val suscriptionType: Int,
+    val location: String,
+    val profileUrl: String,
+    val phone: Long,
+    val statusAccount: Int
+)
+
+
+
 
 fun accountTypeToString(accountType: Int): String {
     return when (accountType) {
