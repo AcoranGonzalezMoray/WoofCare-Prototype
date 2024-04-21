@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.woofcareapp.api.models.Product
+import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
@@ -64,7 +65,7 @@ fun HomeScreen(navController: NavController) {
             accountType = 1,
             suscriptionType = 2,
             location = "Los Angeles",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
+            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 9876543210,
             statusAccount = 1
         ),
@@ -88,7 +89,7 @@ fun HomeScreen(navController: NavController) {
             accountType = 2,
             suscriptionType = 0,
             location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
+            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
             statusAccount = 1
         ),
@@ -112,7 +113,7 @@ fun HomeScreen(navController: NavController) {
             accountType = 2,
             suscriptionType = 0,
             location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
+            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
             statusAccount = 1
         ),        User(
@@ -123,7 +124,7 @@ fun HomeScreen(navController: NavController) {
             accountType = 2,
             suscriptionType = 0,
             location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
+            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
             statusAccount = 1
         )
@@ -195,6 +196,92 @@ fun HomeScreen(navController: NavController) {
             )
         )
     )
+    val serviceList = listOf(
+        Service(
+            id = 1,
+            name = "Paseos Diarios",
+            type = 0,
+            status = 0,
+            publicationDate = "2024-04-21",
+            description = "Paseos diarios para perros de todas las edades y razas. Incluye ejercicio moderado y socialización.",
+            price = 25.0,
+            uid = 1234,
+            bannerUrl = listOf(
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+            )
+        ),
+        Service(
+            id = 2,
+            name = "Entrenamiento Básico",
+            type = 0,
+            status = 0,
+            publicationDate = "2024-04-20",
+            description = "Entrenamiento básico para cachorros y perros adultos. Enseñanza de órdenes básicas y comportamiento adecuado.",
+            price = 50.0,
+            uid = 5678,
+            bannerUrl = listOf(
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+            )
+        ),
+        Service(
+            id = 3,
+            name = "Cuidado de Día",
+            type = 0,
+            status = 0,
+            publicationDate = "2024-04-19",
+            description = "Cuidado diurno para perros mientras los propietarios están fuera. Incluye tiempo de juego y supervisión.",
+            price = 35.0,
+            uid = 9012,
+            bannerUrl = listOf(
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+            )
+        ),
+        Service(
+            id = 4,
+            name = "Adiestramiento Avanzado",
+            type = 0,
+            status = 0,
+            publicationDate = "2024-04-18",
+            description = "Adiestramiento avanzado para perros con necesidades especiales. Enseñanza de habilidades avanzadas y obediencia.",
+            price = 70.0,
+            uid = 3456,
+            bannerUrl = listOf(
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+            )
+        ),
+        Service(
+            id = 5,
+            name = "Guardería Nocturna",
+            type = 0,
+            status = 0,
+            publicationDate = "2024-04-17",
+            description = "Guardería nocturna para perros que necesitan alojamiento durante la noche. Ambiente seguro y cómodo para descansar.",
+            price = 40.0,
+            uid = 7890,
+            bannerUrl = listOf(
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+            )
+        ),
+        Service(
+            id = 6,
+            name = "Terapia Canina",
+            type = 0,
+            status = 0,
+            publicationDate = "2024-04-16",
+            description = "Terapia emocional para perros que sufren de ansiedad o estrés. Sesiones individuales y grupales disponibles.",
+            price = 60.0,
+            uid = 2345,
+            bannerUrl = listOf(
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+            )
+        )
+    )
 
     val list = shuffleUsersAndProducts(userList, productList)
     Column(
@@ -219,14 +306,14 @@ fun HomeScreen(navController: NavController) {
                     }
                 }
             }
-            items(userList) { user ->
-                UserItemServices(user = user)
+            items(serviceList) { service ->
+                UserItemServices(service, navController)
             }
         }
     }
 }
 @Composable
-fun UserItemServices(user: User) {
+fun UserItemServices(service: Service, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -239,8 +326,8 @@ fun UserItemServices(user: User) {
         ) {
             // Fondo de la imagen de usuario
             Image(
-                painter = rememberImagePainter(user.profileUrl),
-                contentDescription = "Profile Image",
+                painter = rememberImagePainter(service.bannerUrl[0]),
+                contentDescription = "Service Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
@@ -266,7 +353,10 @@ fun UserItemServices(user: User) {
                             Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Add", tint = Color.White)
                         }
                         FloatingActionButton(
-                            onClick = { /* Acción del segundo botón */ },
+                            onClick = {
+                                      DataRepository.setServicePlus(service);
+                                navController.navigate("serviceInfo")
+                            },
                             backgroundColor = DarkButtonWoof,
                             modifier = Modifier.padding(8.dp).size(40.dp)
                         ) {
@@ -280,7 +370,7 @@ fun UserItemServices(user: User) {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = user.name+", 34",
+                        text = service.name,
                         color = Color.White,
                         fontSize = 18.sp,
                         modifier = Modifier

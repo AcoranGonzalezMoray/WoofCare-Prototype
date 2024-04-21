@@ -8,5 +8,5 @@ data class Product(
     val location: String,
     val companyName: String,
     val status: Int,
-    val bannerUrls: List<String>
+    val bannerUrls: List<String> //cambiar split , y hacer lista
 )

@@ -43,6 +43,7 @@ import com.example.woofcareapp.R
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.api.services.RequestBodyBuilder
 import com.example.woofcareapp.api.services.RetrofitInstance
+import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.ui.theme.backWoof
 import com.example.woofcareapp.ui.theme.prominentWoof
 import kotlinx.coroutines.Dispatchers
@@ -102,7 +103,7 @@ fun Login(navController: NavHostController, onLoginSuccess: (Boolean, User, Stri
                             Toast.makeText(context, "Successful Login", Toast.LENGTH_SHORT).show()
                         }
                         Log.d("excepcionUserB", loginResponse.toString())
-
+                        DataRepository.setUser(user)
                         onLoginSuccess(true, user, "token")
                     } else {
                         try {
