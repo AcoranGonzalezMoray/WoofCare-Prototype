@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Auth.ForgotPassword.ForgotPassword
 import com.example.woofcareapp.screens.Auth.Login.Login
 import com.example.woofcareapp.screens.Auth.SignUp.SignUpScreen
@@ -43,6 +44,7 @@ fun Navigation(navController: NavHostController, sharedPreferences: SharedPrefer
         // Pantallas de Autenticacion
         composable("login") {
             Login(navController = navController) { loggedIn,user,token ->
+                DataRepository.setUser(user)
                 if (loggedIn) {
                     CoroutineScope(Dispatchers.Main).launch {
                         navController.navigate("bottomScreen")

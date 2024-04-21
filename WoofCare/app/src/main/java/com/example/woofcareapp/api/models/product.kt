@@ -7,6 +7,8 @@ data class Product(
     val price: Double,
     val location: String,
     val companyName: String,
+    val reviewId: Int,//nuevo
+    val webUrl: String,//nuevo
     val status: Int,
     val bannerUrls: List<String> //cambiar split , y hacer lista
 )

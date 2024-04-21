@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -39,6 +41,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Info.Product.ExpandableItem
+import com.example.woofcareapp.screens.Search.ItemDetails.RatingBar
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 
@@ -54,6 +57,7 @@ fun UserInfoScreen(navController: NavController) {
     val passwordExpanded = remember { mutableStateOf(true) }
     val locationExpanded = remember { mutableStateOf(true) }
     val phoneExpanded = remember { mutableStateOf(true) }
+    val ratingExpanded = remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier
@@ -70,7 +74,11 @@ fun UserInfoScreen(navController: NavController) {
                     )
                 }
             },
-            title = { Text(text = "User Info", color = Color.White) },
+            title = {
+                if (user != null) {
+                    Text(text = user.name, color = Color.White)
+                }
+            },
             backgroundColor = DarkButtonWoof
         )
         Column(
@@ -113,16 +121,11 @@ fun UserInfoScreen(navController: NavController) {
                                     FloatingActionButton(
                                         onClick = { /* Acción del primer botón */ },
                                         backgroundColor = DarkButtonWoof, // Color naranja
-                                        modifier = Modifier.padding(8.dp).size(40.dp)
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .size(40.dp)
                                     ) {
                                         Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Add", tint = Color.White)
-                                    }
-                                    FloatingActionButton(
-                                        onClick = { /* Acción del segundo botón */ },
-                                        backgroundColor = DarkButtonWoof,
-                                        modifier = Modifier.padding(8.dp).size(40.dp)
-                                    ) {
-                                        Icon(Icons.Default.RemoveRedEye, contentDescription = "Edit", tint = Color.White)
                                     }
                                 }
                             }
@@ -147,39 +150,59 @@ fun UserInfoScreen(navController: NavController) {
                 // User Info
                 ExpandableItem(
                     title = "Name",
-                    content = user.name,
+                    content = { Text(text = user.name, style = typography.body1) },
                     expanded = nameExpanded,
                     onClick = { nameExpanded.value = !nameExpanded.value }
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 ExpandableItem(
                     title = "Email",
-                    content = user.email,
+                    content = { Text(text = user.email, style = typography.body1) },
                     expanded = emailExpanded,
                     onClick = { emailExpanded.value = !emailExpanded.value }
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 ExpandableItem(
                     title = "Password",
-                    content = "********", // Replace with appropriate masking logic
+                    content = { Text(text = "********", style = typography.body1) }, // Replace with appropriate masking logic
                     expanded = passwordExpanded,
                     onClick = { passwordExpanded.value = !passwordExpanded.value }
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 ExpandableItem(
                     title = "Location",
-                    content = user.location,
+                    content = { Text(text = user.location, style = typography.body1) },
                     expanded = locationExpanded,
                     onClick = { locationExpanded.value = !locationExpanded.value }
                 )
+                MapSpe()
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 ExpandableItem(
                     title = "Phone",
-                    content = user.phone.toString(),
+                    content = { Text(text = user.phone.toString(), style = typography.body1) },
                     expanded = phoneExpanded,
                     onClick = { phoneExpanded.value = !phoneExpanded.value }
                 )
+                ExpandableItem(
+                    title = "Rating",
+                    content = { RatingBar(2.2) },
+                    expanded = ratingExpanded,
+                    onClick = { ratingExpanded.value = !ratingExpanded.value }
+                )
+                Spacer(modifier = Modifier.padding(vertical = 10.dp))
             }
         }
     }
+}
+
+
+@Composable
+fun MapSpe(){
+    Image(painter = rememberImagePainter( "https://i.ytimg.com/vi/3AnY9sCfdpU/hqdefault.jpg"),
+        contentDescription = "",
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxWidth()
+            .height(200.dp)
+            .clip(RoundedCornerShape(8.dp))
+    ) // ajusta el valor de radio según lo desees)
 }

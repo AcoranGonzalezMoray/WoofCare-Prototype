@@ -97,7 +97,7 @@ fun SignUpScreen(navController: NavHostController) {
     val onSignUp:() -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val user = User(0,name, email, password,0,0,"","",0,0)
+                val user = User(0,name, email, password,0,0,"","",0,0,0)
 
                 val response = RetrofitInstance.api.signUp(user)
                 withContext(Dispatchers.Main) {

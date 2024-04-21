@@ -14,12 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,25 +93,18 @@ fun previewItem() {
 fun RatingBar(
     rating: Double,
     starSize: Dp = 24.dp,
-    fullStarIconResId: Int = R.drawable.star_solid,
-    halfStarIconResId: Int = R.drawable.star_half_solid,
-    emptyStarIconResId: Int = R.drawable.star_regular
 ) {
     Row {
-
         for (i in 1 until 6) {
-            val iconResId = when {
-                i <= rating -> fullStarIconResId
-                i <= rating + 0.6 -> halfStarIconResId
-                else -> emptyStarIconResId
+            val icon = if (i <= rating) Icons.Filled.Star else if (i - 0.5 <= rating) Icons.Filled.StarHalf else null
+            icon?.let {
+                Icon(
+                    it,
+                    contentDescription = null,
+                    tint = Color.Yellow,
+                    modifier = Modifier.size(starSize)
+                )
             }
-            Image(
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(starSize)
-                ,
-            )
         }
     }
 }

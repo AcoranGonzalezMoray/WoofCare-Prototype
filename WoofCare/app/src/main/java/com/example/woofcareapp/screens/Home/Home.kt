@@ -39,6 +39,7 @@ import com.example.woofcareapp.api.models.Product
 import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.navigation.repository.DataRepository
+import com.example.woofcareapp.screens.Search.ItemDetails.RatingBar
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 
@@ -55,6 +56,7 @@ fun HomeScreen(navController: NavController) {
             location = "New York",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 1234567890,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -67,6 +69,7 @@ fun HomeScreen(navController: NavController) {
             location = "Los Angeles",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 9876543210,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -79,6 +82,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -91,6 +95,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -103,6 +108,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -115,6 +121,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ),        User(
             id = 6,
@@ -126,9 +133,13 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         )
     )
+    DataRepository.setUsers(userList)
+    DataRepository.setUser(userList[0])
+
     val productList = listOf(
         Product(
             id = 1,
@@ -138,6 +149,8 @@ fun HomeScreen(navController: NavController) {
             location = "Pet Supplies",
             companyName = "Royal Canin",
             status = 1,
+            reviewId = 1,
+            webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
             bannerUrls = listOf(
                 "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
                 "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
@@ -151,6 +164,8 @@ fun HomeScreen(navController: NavController) {
             location = "Pet Supplies",
             companyName = "Royal Canin",
             status = 1,
+            reviewId = 1,
+            webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
             bannerUrls = listOf(
                 "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
                 "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
@@ -164,6 +179,8 @@ fun HomeScreen(navController: NavController) {
             location = "Pet Supplies",
             companyName = "Royal Canin",
             status = 1,
+            reviewId = 1,
+            webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
             bannerUrls = listOf(
                 "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
                 "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
@@ -177,6 +194,8 @@ fun HomeScreen(navController: NavController) {
             location = "Pet Supplies",
             companyName = "Royal Canin",
             status = 1,
+            reviewId = 1,
+            webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
             bannerUrls = listOf(
                 "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
                 "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
@@ -190,6 +209,8 @@ fun HomeScreen(navController: NavController) {
             location = "Pet Supplies",
             companyName = "Royal Canin",
             status = 1,
+            reviewId = 1,
+            webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
             bannerUrls = listOf(
                 "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
                 "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
@@ -205,7 +226,8 @@ fun HomeScreen(navController: NavController) {
             publicationDate = "2024-04-21",
             description = "Paseos diarios para perros de todas las edades y razas. Incluye ejercicio moderado y socialización.",
             price = 25.0,
-            uid = 1234,
+            uid = 1,
+            reviewId = 1,
             bannerUrl = listOf(
                 "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
                 "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
@@ -219,7 +241,8 @@ fun HomeScreen(navController: NavController) {
             publicationDate = "2024-04-20",
             description = "Entrenamiento básico para cachorros y perros adultos. Enseñanza de órdenes básicas y comportamiento adecuado.",
             price = 50.0,
-            uid = 5678,
+            uid = 2,
+            reviewId = 1,
             bannerUrl = listOf(
                 "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
                 "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
@@ -233,7 +256,8 @@ fun HomeScreen(navController: NavController) {
             publicationDate = "2024-04-19",
             description = "Cuidado diurno para perros mientras los propietarios están fuera. Incluye tiempo de juego y supervisión.",
             price = 35.0,
-            uid = 9012,
+            uid = 3,
+            reviewId = 1,
             bannerUrl = listOf(
                 "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
                 "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
@@ -247,7 +271,8 @@ fun HomeScreen(navController: NavController) {
             publicationDate = "2024-04-18",
             description = "Adiestramiento avanzado para perros con necesidades especiales. Enseñanza de habilidades avanzadas y obediencia.",
             price = 70.0,
-            uid = 3456,
+            uid = 4,
+            reviewId = 1,
             bannerUrl = listOf(
                 "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
                 "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
@@ -261,7 +286,8 @@ fun HomeScreen(navController: NavController) {
             publicationDate = "2024-04-17",
             description = "Guardería nocturna para perros que necesitan alojamiento durante la noche. Ambiente seguro y cómodo para descansar.",
             price = 40.0,
-            uid = 7890,
+            uid = 5,
+            reviewId = 1,
             bannerUrl = listOf(
                 "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
                 "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
@@ -275,7 +301,8 @@ fun HomeScreen(navController: NavController) {
             publicationDate = "2024-04-16",
             description = "Terapia emocional para perros que sufren de ansiedad o estrés. Sesiones individuales y grupales disponibles.",
             price = 60.0,
-            uid = 2345,
+            uid = 6,
+            reviewId = 1,
             bannerUrl = listOf(
                 "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
                 "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
@@ -298,7 +325,6 @@ fun HomeScreen(navController: NavController) {
             item {
                 LazyRow(
                     modifier = Modifier
-                        .padding(horizontal = 5.dp, vertical =  10.dp)
                         .height(100.dp)
                 ) {
                     items(list) { item ->
@@ -314,11 +340,13 @@ fun HomeScreen(navController: NavController) {
 }
 @Composable
 fun UserItemServices(service: Service, navController: NavController) {
+    val user = DataRepository.getUsers()?.filter { user: User -> user.id == service?.uid  }?.get(0)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
-            .padding(vertical = 6.dp),
+            .padding(vertical = 4.dp),
         elevation = 4.dp
     ) {
         Box(
@@ -336,47 +364,103 @@ fun UserItemServices(service: Service, navController: NavController) {
                 color = Color(0x44000000), // Color con alfa reducido
                 modifier = Modifier.fillMaxSize()
             ) {
-                Column(
+                Row(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.End
+                    verticalAlignment = Alignment.Top,
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        FloatingActionButton(
-                            onClick = { /* Acción del primer botón */ },
-                            backgroundColor = DarkButtonWoof, // Color naranja
-                            modifier = Modifier.padding(8.dp).size(40.dp)
+                        verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Add", tint = Color.White)
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically,
+
+                            ) {
+                            if(user != null){
+                                Image(
+                                    painter = rememberImagePainter(user?.profileUrl),
+                                    contentDescription = "Profile Image",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .clip(CircleShape)
+                                )
+                            }else {
+                                Image(
+                                    painter = rememberImagePainter("https://images.hola.com/imagenes/estar-bien/20221018219233/buenas-personas-caracteristicas/1-153-242/getty-chica-feliz-t.jpg?tx=w_680"),
+                                    contentDescription = "Profile Image",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .clip(CircleShape)
+                                )
+                            }
                         }
-                        FloatingActionButton(
-                            onClick = {
-                                      DataRepository.setServicePlus(service);
-                                navController.navigate("serviceInfo")
-                            },
-                            backgroundColor = DarkButtonWoof,
-                            modifier = Modifier.padding(8.dp).size(40.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Icon(Icons.Default.RemoveRedEye, contentDescription = "Edit", tint = Color.White)
+                            FloatingActionButton(
+                                onClick = { /* Acción del primer botón */ },
+                                backgroundColor = DarkButtonWoof, // Color naranja
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(40.dp)
+                            ) {
+                                Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Add", tint = Color.White)
+                            }
+                            FloatingActionButton(
+                                onClick = {
+                                    DataRepository.setServicePlus(service);
+                                    navController.navigate("serviceInfo")
+                                },
+                                backgroundColor = DarkButtonWoof,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(40.dp)
+                            ) {
+                                Icon(Icons.Default.RemoveRedEye, contentDescription = "Edit", tint = Color.White)
+                            }
+                        }
+                    }
+
+                }
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+
+                        ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                            .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            Text(
+                                text = service.name,
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                modifier = Modifier
+                                    .padding(16.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            RatingBar(rating = 3.5)
                         }
                     }
                 }
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        text = service.name,
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .padding(16.dp)
-                    )
-                }
+
             }
         }
     }
@@ -401,7 +485,8 @@ fun Item(item: Any, navController: NavController) {
                         }
                     ),
                     contentDescription = item.name,
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier
+                        .size(100.dp)
                         .clickable {
                             DataRepository.setUserPlus(item)
                             navController.navigate("userInfo")
@@ -418,7 +503,8 @@ fun Item(item: Any, navController: NavController) {
                         }
                     ),
                     contentDescription = item.name,
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier
+                        .size(100.dp)
                         .clickable {
                             DataRepository.setProductPlus(item)
                             navController.navigate("productInfo")

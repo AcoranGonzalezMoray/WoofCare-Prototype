@@ -21,6 +21,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Badge
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -29,6 +31,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -49,6 +52,7 @@ import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Info.Product.ExpandableItem
 import com.example.woofcareapp.screens.Info.Product.ImageSlider
+import com.example.woofcareapp.screens.Search.ItemDetails.RatingBar
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 
@@ -64,130 +68,172 @@ fun ServiceInfoScreen(navController: NavController) {
     val publicationDateExpanded = remember { mutableStateOf(true) }
     val descriptionExpanded = remember { mutableStateOf(true) }
     val priceExpanded = remember { mutableStateOf(true) }
+    val ratingExpanded = remember { mutableStateOf(true) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(backWoof)
     ) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = { navController.navigate("home") }) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = "Back to Home",
-                        tint = Color.White
-                    )
-                }
-            },
-            title = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if(user != null){
-                        Image(
-                            painter = rememberImagePainter(user?.profileUrl),
-                            contentDescription = "Profile Image",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(50.dp)
-                                .clip(CircleShape)
-                        )
-                        Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                        Text(text = user.name+", 34", color = Color.White)
-                    }else {
-                        Image(
-                            painter = rememberImagePainter("https://images.hola.com/imagenes/estar-bien/20221018219233/buenas-personas-caracteristicas/1-153-242/getty-chica-feliz-t.jpg?tx=w_680"),
-                            contentDescription = "Profile Image",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(50.dp)
-                                .clip(CircleShape)
-                        )
-                        Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                        Text(text = "Sandra, 34", color = Color.White)
-                    }
-                }
-            },
-            backgroundColor = DarkButtonWoof
-        )
         Column(
             modifier = Modifier
-                .verticalScroll(scrollState)
-                .padding(16.dp)
+                .fillMaxSize()
+                .background(backWoof)
         ) {
-            if(service != null) {
-                // Banner or Slider of images
-                ImageSlider(bannerUrls = service.bannerUrl)
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-                // Service Info
-                ExpandableItem(
-                    title = "Name",
-                    content = service.name,
-                    expanded = nameExpanded,
-                    onClick = { nameExpanded.value = !nameExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                ExpandableItem(
-                    title = "Type",
-                    content = "Type: ${service.type}",
-                    expanded = typeExpanded,
-                    onClick = { typeExpanded.value = !typeExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                ExpandableItem(
-                    title = "Status",
-                    content = "Status: ${service.status}",
-                    expanded = statusExpanded,
-                    onClick = { statusExpanded.value = !statusExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                ExpandableItem(
-                    title = "Publication Date",
-                    content = "Publication Date: ${service.publicationDate}",
-                    expanded = publicationDateExpanded,
-                    onClick = { publicationDateExpanded.value = !publicationDateExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                ExpandableItem(
-                    title = "Description",
-                    content = service.description,
-                    expanded = descriptionExpanded,
-                    onClick = { descriptionExpanded.value = !descriptionExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                ExpandableItem(
-                    title = "Price",
-                    content = "Price: $${service.price}",
-                    expanded = priceExpanded,
-                    onClick = { priceExpanded.value = !priceExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = { navController.navigate("login") },
-                        colors = ButtonDefaults.buttonColors(Color.White),
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    ) {
-                        Text("Cancel", color = DarkButtonWoof)
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigate("home") }) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back to Home",
+                            tint = Color.White
+                        )
                     }
-
-                    Button(
-                        onClick = {},
-                        colors = ButtonDefaults.buttonColors(DarkButtonWoof),
+                },
+                title = {
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
+                            .clickable {
+                                if (user != null) {
+                                    DataRepository.setUserPlus(user)
+                                }
+                                navController.navigate("userInfo")
+                            },
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Contact", color = Color.White)
+                        if(user != null){
+                            Image(
+                                painter = rememberImagePainter(user?.profileUrl),
+                                contentDescription = "Profile Image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .clip(CircleShape)
+                            )
+                            Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                            Text(text = user.name+", 34", color = Color.White)
+                        }else {
+                            Image(
+                                painter = rememberImagePainter("https://images.hola.com/imagenes/estar-bien/20221018219233/buenas-personas-caracteristicas/1-153-242/getty-chica-feliz-t.jpg?tx=w_680"),
+                                contentDescription = "Profile Image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .clip(CircleShape)
+                            )
+                            Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                            Text(text = "Sandra, 34", color = Color.White)
+                        }
                     }
+                },
+                backgroundColor = DarkButtonWoof
+            )
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+                    .padding(16.dp)
+            ) {
+                if(service != null) {
+                    // Banner or Slider of images
+                    ImageSlider(bannerUrls = service.bannerUrl)
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+                    // Service Info
+                    ExpandableItem(
+                        title = "Name",
+                        content = { Text(text = service.name, style = typography.body1) },
+                        expanded = nameExpanded,
+                        onClick = { nameExpanded.value = !nameExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Type",
+                        content = { CustomBadge(type = service.type)},
+                        expanded = typeExpanded,
+                        onClick = { typeExpanded.value = !typeExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Status",
+                        content = { CustomBadge(status = service.status)},
+                        expanded = statusExpanded,
+                        onClick = { statusExpanded.value = !statusExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Publication Date",
+                        content = { Text(text = "Publication Date: ${service.publicationDate}", style = typography.body1) },
+                        expanded = publicationDateExpanded,
+                        onClick = { publicationDateExpanded.value = !publicationDateExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Description",
+                        content = { Text(text = service.description, style = typography.body1) },
+                        expanded = descriptionExpanded,
+                        onClick = { descriptionExpanded.value = !descriptionExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Price",
+                        content = { Text(text = "Price: $${service.price}", style = typography.body1) },
+                        expanded = priceExpanded,
+                        onClick = { priceExpanded.value = !priceExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Rating",
+                        content = { RatingBar(2.2) },
+                        expanded = ratingExpanded,
+                        onClick = { ratingExpanded.value = !ratingExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 }
             }
+        }
+        FloatingActionButton(
+            onClick = { /* Acción cuando se hace clic en el botón */ },
+            modifier = Modifier.padding(16.dp).align(Alignment.BottomEnd),
+            backgroundColor = DarkButtonWoof
+        ) {
+            Icon(
+                imageVector = Icons.Default.ChatBubbleOutline,
+                contentDescription = "Agregar",
+                tint = Color.White
+            )
+        }
+    }
+}
+
+@Composable
+fun CustomBadge(type: Int = -1, status: Int = -1){
+    if(type != -1){
+        if(type == 0){
+            Badge(
+                backgroundColor = Color.Green,
+                content = {Text(text = "Dog Trainer Service")}
+            )
+        }
+        if(type == 1){
+            Badge(
+                backgroundColor = Color.Red,
+                content = {Text(text = "Dog Caregiver Service")}
+            )
+        }
+    }
+
+    if(status != -1){
+        if(status == 0){
+            Badge(
+                backgroundColor = Color.Green,
+                content = {Text(text = "Service Available")}
+            )
+        }
+        if(status == 1){
+            Badge(
+                backgroundColor = Color.Red,
+                content = {Text(text = "Service Temporarily Unavailable")}
+            )
         }
     }
 }

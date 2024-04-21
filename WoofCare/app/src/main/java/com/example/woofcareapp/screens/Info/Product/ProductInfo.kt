@@ -1,5 +1,7 @@
 package com.example.woofcareapp.screens.Info.Product
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -28,6 +31,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -41,10 +46,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.woofcareapp.navigation.repository.DataRepository
+import com.example.woofcareapp.screens.Search.ItemDetails.RatingBar
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 
@@ -59,105 +67,111 @@ fun ProductInfoScreen(navController: NavController) {
     val priceExpanded = remember { mutableStateOf(true) }
     val locationExpanded = remember { mutableStateOf(true) }
     val companyExpanded = remember { mutableStateOf(true) }
-
-    Column(
+    val ratingExpanded = remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(backWoof)
-    ) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = { navController.navigate("home") }) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = "Back to Home",
-                        tint = Color.White
-                    )
-                }
-            },
-            title = { Text(text = "Product Info", color = Color.White) },
-            backgroundColor = DarkButtonWoof
-        )
+    ){
         Column(
             modifier = Modifier
-                .verticalScroll(scrollState)
-                .padding(16.dp)
+                .fillMaxSize()
+                .background(backWoof)
         ) {
-            if(product!=null){
-                // Banner or Slider of images
-                ImageSlider(bannerUrls = product.bannerUrls)
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-                // Product Info
-                ExpandableItem(
-                    title = "Name",
-                    content = product.name,
-                    expanded = nameExpanded,
-                    onClick = { nameExpanded.value = !nameExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                ExpandableItem(
-                    title = "Description",
-                    content = product.description,
-                    expanded = descriptionExpanded,
-                    onClick = { descriptionExpanded.value = !descriptionExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-                ExpandableItem(
-                    title = "Price",
-                    content = "Price: $${product.price}",
-                    expanded = priceExpanded,
-                    onClick = { priceExpanded.value = !priceExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-                ExpandableItem(
-                    title = "Location",
-                    content = "Location: ${product.location}",
-                    expanded = locationExpanded,
-                    onClick = { locationExpanded.value = !locationExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-                ExpandableItem(
-                    title = "Company",
-                    content = "Company: ${product.companyName}",
-                    expanded = companyExpanded,
-                    onClick = { companyExpanded.value = !companyExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = { navController.navigate("login")},
-                        colors = ButtonDefaults.buttonColors(Color.White),
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    ) {
-                        Text("Cancel", color = DarkButtonWoof)
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigate("home") }) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back to Home",
+                            tint = Color.White
+                        )
                     }
+                },
+                title = { Text(text = "Product Info", color = Color.White) },
+                backgroundColor = DarkButtonWoof
+            )
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+                    .padding(16.dp)
+            ) {
+                if(product!=null){
+                    // Banner or Slider of images
+                    ImageSlider(bannerUrls = product.bannerUrls)
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
-                    Button(
-                        onClick = {},
-                        colors = ButtonDefaults.buttonColors(DarkButtonWoof),
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                    ) {
-                        Text("Contact", color = Color.White)
-                    }
+                    // Product Info
+                    ExpandableItem(
+                        title = "Name",
+                        content = { Text(text = product.name, style = typography.body1) },
+                        expanded = nameExpanded,
+                        onClick = { nameExpanded.value = !nameExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Description",
+                        content = { Text(text = product.description, style = typography.body1) },
+                        expanded = descriptionExpanded,
+                        onClick = { descriptionExpanded.value = !descriptionExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+                    ExpandableItem(
+                        title = "Price",
+                        content = { Text(text = "Price: $${product.price}", style = typography.body1) },
+                        expanded = priceExpanded,
+                        onClick = { priceExpanded.value = !priceExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+                    ExpandableItem(
+                        title = "Location",
+                        content = { Text(text = "Location: ${product.location}", style = typography.body1) },
+                        expanded = locationExpanded,
+                        onClick = { locationExpanded.value = !locationExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+                    ExpandableItem(
+                        title = "Company",
+                        content = { Text(text = "Company: ${product.companyName}", style = typography.body1) },
+                        expanded = companyExpanded,
+                        onClick = { companyExpanded.value = !companyExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    ExpandableItem(
+                        title = "Rating",
+                        content = { RatingBar(2.2) },
+                        expanded = ratingExpanded,
+                        onClick = { ratingExpanded.value = !ratingExpanded.value }
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 }
             }
+        }
+        FloatingActionButton(
+            onClick = {
+                val webUrl = product?.webUrl
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webUrl))
+                startActivity(context, intent, null)
+            },
+            modifier = Modifier.padding(16.dp).align(Alignment.BottomEnd),
+            backgroundColor = DarkButtonWoof
+        ) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = "Agregar",
+                tint = Color.White
+            )
         }
     }
 }
 @Composable
 fun ExpandableItem(
     title: String,
-    content: String,
+    content: @Composable () -> Unit,
     expanded: MutableState<Boolean>,
     onClick: () -> Unit
 ) {
@@ -174,7 +188,7 @@ fun ExpandableItem(
         }
         if (expanded.value) {
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = content, style = typography.body1)
+            content()
         }
     }
 }
@@ -213,7 +227,7 @@ fun ImageSlider(bannerUrls: List<String>) {
                         modifier = Modifier
                             .size(12.dp)
                             .background(
-                                color = if (index == selectedPage.value) Color.White else Color.Gray,
+                                color = if (index == selectedPage.value) backWoof else DarkButtonWoof,
                                 shape = CircleShape
                             )
                             .padding(horizontal = 4.dp),

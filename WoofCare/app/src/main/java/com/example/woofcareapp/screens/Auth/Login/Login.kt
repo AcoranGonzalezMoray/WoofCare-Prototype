@@ -103,7 +103,6 @@ fun Login(navController: NavHostController, onLoginSuccess: (Boolean, User, Stri
                             Toast.makeText(context, "Successful Login", Toast.LENGTH_SHORT).show()
                         }
                         Log.d("excepcionUserB", loginResponse.toString())
-                        DataRepository.setUser(user)
                         onLoginSuccess(true, user, "token")
                     } else {
                         try {
