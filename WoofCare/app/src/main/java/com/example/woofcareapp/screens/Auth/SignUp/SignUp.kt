@@ -1,7 +1,16 @@
 package com.example.woofcareapp.screens.Auth.SignUp
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
@@ -26,12 +36,15 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,12 +56,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.api.services.RetrofitInstance
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 import com.example.woofcareapp.ui.theme.prominentWoof
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -67,7 +85,8 @@ fun SignUpScreen(navController: NavHostController) {
 
     var isMenuExpanded by remember { mutableStateOf(false) }
     var selectedAccountType by remember { mutableStateOf(0) }
-    val accountTypes = listOf("Looking for Services", "Providing Care Services", "Providing Training and Domestication Services")
+    var accountTypes = listOf("Looking for Services", "Providing Care Services", "Providing Training and Domestication Services")
+    var showDialog by remember { mutableStateOf(false) }
 
 
     val isError = name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()
@@ -97,7 +116,7 @@ fun SignUpScreen(navController: NavHostController) {
     val onSignUp:() -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val user = User(0,name, email, password,0,0,"","",0,0,0)
+                val user = User(0,name, email, password,selectedAccountType,0,"","",phone.toLong(),0,0)
 
                 val response = RetrofitInstance.api.signUp(user)
                 withContext(Dispatchers.Main) {
@@ -141,8 +160,19 @@ fun SignUpScreen(navController: NavHostController) {
             backgroundColor = DarkButtonWoof,
             title = { androidx.compose.material3.Text(text = "Sign Up", color = Color.White) }
         )
+        if (showDialog) {
+            ShowDialog(
+                onDismiss = { showDialog = false},
+                onSuccessfully = {a,b ->
+                    location = b.toString()
+                    onSignUp()
+                }
+            )
+        }
         Box(
-            modifier = Modifier.fillMaxSize().background(backWoof),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backWoof),
             contentAlignment = Alignment.Center
 
         ) {
@@ -214,18 +244,6 @@ fun SignUpScreen(navController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
-
-                TextField(
-                    value = location,
-                    isError = isError,
-                    onValueChange = { location = it },
-                    label = { Text("Location") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = customTextFieldColors
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 TextField(
                     value = phone.toString(),
                     isError = isError,
@@ -252,17 +270,21 @@ fun SignUpScreen(navController: NavHostController) {
                     DropdownMenu(
                         expanded = isMenuExpanded,
                         onDismissRequest = { isMenuExpanded = false },
-                        modifier = Modifier.fillMaxWidth().background(prominentWoof)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(prominentWoof)
                     ) {
                         accountTypes.forEachIndexed { index, type ->
                             DropdownMenuItem(onClick = {
                                 selectedAccountType = index
                                 isMenuExpanded = false
-                            },modifier = Modifier.padding(5.dp)
+                            },modifier = Modifier
+                                .padding(5.dp)
                                 .border(
-                                width = 0.5.dp,
-                                color = DarkButtonWoof,
-                                shape = RoundedCornerShape(8.dp) )
+                                    width = 0.5.dp,
+                                    color = DarkButtonWoof,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
                             ){
                                 Text(text = type, color = Color.DarkGray )
 
@@ -270,12 +292,14 @@ fun SignUpScreen(navController: NavHostController) {
                         }
                     }
                     Icon(
-                        modifier = Modifier.weight(1f).clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            isMenuExpanded = true
-                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                isMenuExpanded = true
+                            },
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = null,
                         tint = Color.White
@@ -296,7 +320,7 @@ fun SignUpScreen(navController: NavHostController) {
                     }
 
                     Button(
-                        onClick = {onSignUp()},
+                        onClick = {showDialog = true},
                         colors = ButtonDefaults.buttonColors(DarkButtonWoof),
                         modifier = Modifier
                             .weight(1f)
@@ -305,6 +329,154 @@ fun SignUpScreen(navController: NavHostController) {
                         Text("Join", color = Color.White)
                     }
                 }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ShowDialog(onDismiss: () -> Unit, onSuccessfully: (Any, Any) -> Unit) {
+    val context = LocalContext.current
+    val contentResolver: ContentResolver = context.contentResolver
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var latitude by remember { mutableStateOf<Double?>(null) }
+    var longitude by remember { mutableStateOf<Double?>(null) }
+
+    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+    var locationPermissionGranted by remember { mutableStateOf(false) }
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            Toast.makeText(context, "Location permission added", Toast.LENGTH_SHORT).show()
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { locationResult: Location? ->
+                    locationResult?.let {
+                        latitude = it.latitude
+                        longitude = it.longitude
+                    }
+                }
+        } else {
+            Toast.makeText(context, "Location permission required", Toast.LENGTH_SHORT).show()
+        }
+    }
+    // Función para verificar y solicitar permisos de ubicación
+    fun requestLocationPermission() {
+        locationPermissionGranted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!locationPermissionGranted) {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { locationResult: Location? ->
+                    locationResult?.let {
+                        latitude = it.latitude
+                        longitude = it.longitude
+                    }
+                }
+        }
+    }
+
+
+    // Verificar y solicitar permisos de ubicación al inicio
+    LaunchedEffect(Unit) {
+        requestLocationPermission()
+    }
+
+    val chooseImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            selectedImageUri = uri // Asigna la URI seleccionada a la variable
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backWoof)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().weight(1f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            // Botón para elegir una imagen de la galería
+            ElevatedButton(
+                onClick = {
+                    // Abrir la galería cuando se hace clic en el botón
+                    chooseImageLauncher.launch("image/*")
+                },
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = Color.Transparent
+                ),
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    // Icono para elegir una imagen de la galería
+                    Icon(
+                        imageVector = Icons.Default.AddPhotoAlternate,
+                        contentDescription = "Add Photo",
+                        tint = Color.White
+                    )
+                }
+            }
+
+            // Botón para solicitar permisos de ubicación
+            ElevatedButton(
+                onClick = {
+                    Log.d("ubicaion", latitude.toString())
+
+                },
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = Color.Transparent
+                ),
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text(text ="Get Location", color = Color.White)
+            }
+        }
+
+        Row( modifier = Modifier.fillMaxSize().weight(1f),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.Center
+
+        ) {
+            ElevatedButton(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                onClick = {
+                    onDismiss.invoke()
+                },
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = DarkButtonWoof
+                )
+            ) {
+                Text(text ="Back", color = Color.White)
+            }
+            Spacer(modifier = Modifier.padding(horizontal = 60.dp))
+            ElevatedButton(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                onClick = {
+                    if (selectedImageUri != null) {
+                        // Si se seleccionó una imagen, llama a onSuccessfully con la URI de la imagen y otro dato
+                        onSuccessfully.invoke(selectedImageUri!!, "location")
+                    } else {
+                        // Si no se seleccionó ninguna imagen, puedes manejarlo como desees (por ejemplo, mostrar un mensaje de error)
+                    }
+                },
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = DarkButtonWoof
+                )
+            ) {
+                Text(text ="Continue", color = Color.White)
             }
         }
     }
