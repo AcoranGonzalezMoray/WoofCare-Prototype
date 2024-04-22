@@ -1,15 +1,23 @@
 package com.example.woofcareapp.screens.Search
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material3.SearchBar
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.woofcareapp.api.models.User
+import com.example.woofcareapp.screens.Search.ItemDetails.previewItem
 
 enum class SortOrder {
     ASCENDING,
@@ -104,12 +112,31 @@ fun SearchScreen(navController: NavController) {
             statusAccount = 1
         )
     )
-    Column(){
+    Column {
+        Box(Modifier.fillMaxWidth()
+            .padding(5.dp),){
+            SearchBar()
+        }
+        LazyColumn(Modifier.padding(5.dp)) {
+            userList.forEach {
+                item { previewItem(user = it, navController = navController) }
+            }
+        }
 
     }
 }
 
 @Composable
 fun SearchBar() {
-
+    TextField(
+        modifier =Modifier.fillMaxWidth(),
+        value = "Search", onValueChange = {},
+        singleLine = true,
+        label = {Text(text="Search")},
+        leadingIcon = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(Icons.Default.Search, contentDescription = null)
+            }
+        }
+)
 }
