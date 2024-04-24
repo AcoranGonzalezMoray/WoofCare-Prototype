@@ -29,11 +29,5 @@ fun  Navigation(navController: NavHostController) {
         composable("profile") {
             ProfileScreen(navController)
         }
-
-
-
-        composable("itemDetails"){
-            ItemDetailsScreen(navController)
-        }
     }
 }

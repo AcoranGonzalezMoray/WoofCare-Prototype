@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.woofcareapp.navigation.model.ScreenModel
+import com.example.woofcareapp.ui.theme.DarkButtonWoof
 
 @Composable
 
@@ -34,7 +35,7 @@ fun BottomBar(
             val selected = currentRoute == screens.route
 
             BottomNavigationItem(
-                modifier = Modifier.background(Color.Black),
+                modifier = Modifier.background(DarkButtonWoof),
                 icon = {
                     Icon(
                         imageVector = screens.icon,

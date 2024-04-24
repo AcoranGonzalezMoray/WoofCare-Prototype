@@ -41,12 +41,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.woofcareapp.R
 import com.example.woofcareapp.api.models.User
+import com.example.woofcareapp.api.services.RequestBodyBuilder
 import com.example.woofcareapp.api.services.RetrofitInstance
+import com.example.woofcareapp.ui.theme.backWoof
+import com.example.woofcareapp.ui.theme.prominentWoof
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import org.json.JSONObject
 
 @Composable
 fun Login(navController: NavHostController, onLoginSuccess: (Boolean, User, String) -> Unit) {
@@ -73,14 +80,20 @@ fun Login(navController: NavHostController, onLoginSuccess: (Boolean, User, Stri
         focusedBorderColor = Color.Black,
         focusedLabelColor = Color.Black,
         unfocusedBorderColor = Color.Black,
-        backgroundColor = Color(0xffe3d7bf)
+        backgroundColor = prominentWoof
     )
 
     val onLoginClicked: () -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 isloading = true
-                val response = RetrofitInstance.api.signIn(email, password)
+                val json = JSONObject()
+                json.put("email", email)
+                json.put("password", password)
+                val requestBody = RequestBodyBuilder.buildRequestBody(json)
+
+
+                val response = RetrofitInstance.api.signIn(requestBody)
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
@@ -88,6 +101,8 @@ fun Login(navController: NavHostController, onLoginSuccess: (Boolean, User, Stri
                         withContext(Dispatchers.Main) {
                             Toast.makeText(context, "Successful Login", Toast.LENGTH_SHORT).show()
                         }
+                        Log.d("excepcionUserB", loginResponse.toString())
+
                         onLoginSuccess(true, user, "token")
                     } else {
                         try {
@@ -137,7 +152,7 @@ fun Login(navController: NavHostController, onLoginSuccess: (Boolean, User, Stri
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xfffff9e1))
+                .background(backWoof)
                 .padding(26.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally

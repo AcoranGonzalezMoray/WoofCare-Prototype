@@ -1,8 +1,11 @@
 package com.example.woofcareapp.api.services
 
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.cert.CertificateException
@@ -12,7 +15,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 object RetrofitInstance {
-    private const val BASE_URL = "https://192.168.1.136:5000"
+    private const val BASE_URL = "http://192.168.1.136:5000"
     private var token: String = "" // Token de autorización
 
     private val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
@@ -51,11 +54,12 @@ object RetrofitInstance {
             .addInterceptor(Interceptor { chain ->
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
-                    .header("Authorization", "Bearer $token") // Agregar el token de autorización al encabezado
+                    .header("Content-Type", "application/json") // Configurar el tipo de contenido como JSON
                 val request = requestBuilder.build()
                 chain.proceed(request)
             })
             .build()
+
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -64,5 +68,13 @@ object RetrofitInstance {
             .build()
 
         retrofit.create(ApiService::class.java)
+    }
+}
+
+
+object RequestBodyBuilder {
+    fun buildRequestBody(jsonObject: JSONObject): RequestBody {
+        val requestBody = jsonObject.toString()
+        return RequestBody.create("application/json".toMediaTypeOrNull(), requestBody)
     }
 }

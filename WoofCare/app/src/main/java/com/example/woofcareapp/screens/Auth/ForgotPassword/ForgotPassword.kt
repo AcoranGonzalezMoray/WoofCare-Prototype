@@ -1,5 +1,6 @@
 package com.example.woofcareapp.screens.Auth.ForgotPassword
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +35,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.woofcareapp.ui.theme.DarkButtonWoof
+import com.example.woofcareapp.ui.theme.backWoof
+import com.example.woofcareapp.ui.theme.prominentWoof
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,7 +60,7 @@ fun ForgotPassword(
         focusedBorderColor = Color.Black,
         focusedLabelColor = Color.Black,
         unfocusedBorderColor = Color.Black,
-        backgroundColor = Color.LightGray
+        backgroundColor =  prominentWoof
     )
 
     // Función para manejar la selección del usuario
@@ -64,7 +68,9 @@ fun ForgotPassword(
         selectedOption = option
         expanded = false
     }
-    Column {
+    Column(
+        modifier = Modifier.background(backWoof)
+    ) {
         // Agregar el icono en la esquina superior izquierda
         TopAppBar(
             navigationIcon = {
@@ -72,7 +78,7 @@ fun ForgotPassword(
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back to Login", tint = Color.White)
                 }
             },
-            backgroundColor = Color.Black,
+            backgroundColor = DarkButtonWoof,
             title = { Text(text = "Forgot Password", color = Color.White) }
         )
         Column(
@@ -97,40 +103,9 @@ fun ForgotPassword(
                 colors = customTextFieldColors
             )
 
-            // Selector de opciones (Sí / No)
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = selectedOption,
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            expanded = true
-                        }
-                        .padding(vertical = 16.dp)
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    options.forEach { option ->
-                        DropdownMenuItem(onClick = {
-                            onOptionSelected("Option: $option")
-                            expanded = false
-                        }) {
-                            Text(text = option)
-                        }
-                    }
-                }
-            }
-
             Button(
                 onClick = { onResetPasswordClicked(selectedOption) },
-                colors = ButtonDefaults.buttonColors(Color.Black),
+                colors = ButtonDefaults.buttonColors(DarkButtonWoof),
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .fillMaxWidth()
