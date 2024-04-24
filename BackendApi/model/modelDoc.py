@@ -81,3 +81,14 @@ class Model:
             'datetime': fields.String(required=True, description='Fechora en la que se envió el mensaje'),
             'serviceid': fields.String(required=True, description='Id del servicio por el que se contacta')
         }
+    
+    @staticmethod
+    def getReviewModel():
+        return {
+            'objectId': fields.String(required=True, description='Id del objeto (usuario o servicio) sobre el que se hizo la review'),
+            'type': fields.String(required=True, description='Tipo de objeto al que hace referencia (0: usuario, 1: servicio)'),
+            'publicationDate': fields.String(required=True, description='Fecha de subida la review'),
+            'content': fields.String(required=True, description='Contenido de la review, el mensaje'),
+            'rating': fields.String(required=True, description='Numero del 1 al 5 indicando la calidad'),
+            'uidPublisher': fields.String(required=True, description='Id del usuario que lo publico')
+        }
