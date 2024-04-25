@@ -152,6 +152,6 @@ def get_conversations(uid):
         return []
     
 def get_conversation(uid1, uid2):
-    query = f"SELECT * FROM (SELECT * FROM Messages WHERE uidReceiver = {uid1} AND uidSender = {uid2} UNION SELECT * FROM Messages WHERE uidReceiver = {uid2} AND uidSender = {uid1}) AS combined_messages ORDER BY sentDate;"
+    query = f"SELECT * FROM (SELECT * FROM Messages WHERE uidReceiver = {uid1} AND uidSender = {uid2} UNION SELECT * FROM Messages WHERE uidReceiver = {uid2} AND uidSender = {uid1}) AS combined_messages ORDER BY sentDate DESC;"
     data = execute_query(query, "Messages")
     return data
