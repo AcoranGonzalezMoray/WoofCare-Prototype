@@ -628,21 +628,7 @@ class MessageList(Resource):
             serialized_messages = [message.to_dict() for message in messages]
 
         return jsonify(serialized_messages)
-    """
-    @api.doc('get_conversation')
-    def get(self, id1, id2):
-        
-        #Retorna todos los mensajes entre dos usuarios.
-        
-        data = request.json
-        print(data)
-        messages = get_conversation(id1, id2)
-        serialized_messages = []
-        if messages:
-            serialized_messages = [message.to_dict() for message in messages]
-
-        return jsonify(serialized_messages)
-    """
+    
     @api.doc('create_message')
     @api.expect(message_model)
     def post(self):
@@ -666,6 +652,30 @@ class MessageList(Resource):
 
 @api.route(f"/api/{version}/message/<int:id>")
 class MessageOp(Resource):
+    @api.doc('update_message')
+    @api.expect(message_model)
+    def put(self, id):
+        """
+        Actualiza un mensaje existente.
+        """
+        data = request.json
+        messages = get_entity_data("Messages")
+        message: Message = next((message for message in messages if message.id == id), None)
+        if message:
+            message.uidReceiver = data["uidReceiver"]
+            message.uidSender = data["uidSender"]
+            message.type = data["type"]
+            message.message = data["message"]
+            message.sentDate = data["sentDate"]
+            message.serviceId = data["serviceId"]
+            if update_entity_in_database(message):
+                return {"message": "Mensaje actualizado correctamente"}, 200
+            else:
+                return {"message": "Error al actualizar el mensaje"}, 500
+        else:
+            return {"message": "Mensaje no encontrado"}, 404
+        
+
     @api.doc('delete_message')
     def delete(self, id):
         """
@@ -675,6 +685,34 @@ class MessageOp(Resource):
             return {"message": "Mensaje eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el mensaje"}, 500
+        
+@api.route(f"/api/{version}/message/conversations/<int:id>")
+class MessageOp(Resource):
+    @api.doc('get_conversations')
+    def get(self, id):
+        """
+        Obtiene el id de los usuarios con los que el usuario relacionado con el id pasado por parametro ha intercambiado mensajes.
+        """
+        uids = get_conversations(id)
+        if uids:
+            return {"uids": str(uids)}, 200
+        else:
+            return {"message": "Error al obtener las conversaciones"}, 500
+        
+@api.route(f"/api/{version}/message/conversation/<int:id1>/<int:id2>")
+class MessageOp(Resource):
+    @api.doc('get_conversation')
+    def get(self, id1, id2):
+        """
+        Obtiene la conversación entre dos usuarios
+        """
+        messages = get_conversation(id1,id2)
+        serialized_messages = []
+        if messages:
+            serialized_messages = [message.to_dict() for message in messages]
+
+        return jsonify(serialized_messages)
+    
 
 #======================================REVIEW CONTROLLER=======================================
 

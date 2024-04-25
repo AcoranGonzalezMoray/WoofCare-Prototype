@@ -137,3 +137,21 @@ def delete_entity_from_database(id, table_name):
     
 def get_table_name(object):
     return type(object).__name__ + "s"
+
+def get_conversations(uid):
+    print("Antes")
+    query = f"SELECT DISTINCT uidSender FROM Messages WHERE uidReceiver = {uid} UNION SELECT DISTINCT uidReceiver FROM Messages WHERE uidSender = {uid}"
+    try:
+        with pyodbc.connect(connection_string) as connection:
+            cursor = connection.cursor()
+            cursor.execute(query)
+            data = cursor.fetchall()
+            return data
+    except pyodbc.Error as e:
+        print(f"Error executing query: {e}")
+        return []
+    
+def get_conversation(uid1, uid2):
+    query = f"SELECT * FROM (SELECT * FROM Messages WHERE uidReceiver = {uid1} AND uidSender = {uid2} UNION SELECT * FROM Messages WHERE uidReceiver = {uid2} AND uidSender = {uid1}) AS combined_messages ORDER BY sentDate;"
+    data = execute_query(query, "Messages")
+    return data
