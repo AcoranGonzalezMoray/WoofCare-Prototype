@@ -9,5 +9,6 @@ data class Service(
     val description: String,
     val price: Double,
     val uid: Int,
-    val bannerUrl: String
+    val reviewId: Int,//nuevo
+    val bannerUrl:List<String> //cambiar split , y hacer lista
 )

@@ -17,12 +17,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -145,8 +145,7 @@ fun RatingBar(
 ) {
     Row {
         for (i in 1 until 6) {
-            val icon =
-                if (i <= rating) Icons.Filled.Star else if (i - 0.5 <= rating) Icons.Filled.StarHalf else null
+            val icon = if (i <= rating) Icons.Filled.Star else if (i - 0.5 <= rating) Icons.Filled.StarHalf else null
             icon?.let {
                 Icon(
                     it,

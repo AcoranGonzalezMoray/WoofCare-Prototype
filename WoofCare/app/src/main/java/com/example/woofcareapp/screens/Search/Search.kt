@@ -54,6 +54,7 @@ fun SearchScreen(navController: NavController) {
             location = "New York",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 1234567890,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -66,6 +67,7 @@ fun SearchScreen(navController: NavController) {
             location = "Los Angeles",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 9876543210,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -78,6 +80,7 @@ fun SearchScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -90,6 +93,7 @@ fun SearchScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -102,6 +106,7 @@ fun SearchScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ),
         User(
@@ -114,6 +119,7 @@ fun SearchScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         ), User(
             id = 3,
@@ -125,6 +131,7 @@ fun SearchScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
+            ratingId = 1,
             statusAccount = 1
         )
     )

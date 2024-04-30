@@ -10,7 +10,8 @@ import androidx.navigation.compose.composable
 import com.example.woofcareapp.screens.Chat.ChatScreen
 import com.example.woofcareapp.screens.Home.HomeScreen
 import com.example.woofcareapp.screens.Info.Product.ProductInfoScreen
-import com.example.woofcareapp.screens.Info.Trainer.UserInfoScreen
+import com.example.woofcareapp.screens.Info.Service.ServiceInfoScreen
+import com.example.woofcareapp.screens.Info.User.UserInfoScreen
 import com.example.woofcareapp.screens.Profile.ProfileScreen
 import com.example.woofcareapp.screens.Search.SearchScreen
 import com.example.woofcareapp.screens.Service.ServiceScreen
@@ -41,6 +42,9 @@ fun  Navigation(navController: NavHostController) {
         }
         composable("userInfo") {
             UserInfoScreen(navController)
+        }
+        composable("serviceInfo") {
+            ServiceInfoScreen(navController)
         }
     }
 }
