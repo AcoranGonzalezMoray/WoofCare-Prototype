@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.woofcareapp.navigation.logic.Navigation
 import com.example.woofcareapp.navigation.model.ScreenModel
@@ -58,12 +60,13 @@ import kotlinx.coroutines.launch
 fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: SharedPreferences) {
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
-
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    val excludedRoutes = setOf("profile","productInfo", "userInfo", "serviceInfo")
     Scaffold(
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = true,
-
         drawerContent = {
             Drawer(
 
@@ -77,32 +80,58 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
             )
         },
         topBar = {
-            TopAppBar(
-                backgroundColor = DarkButtonWoof,
-                title = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(end = 12.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.icon),
-                            contentDescription = "")
-                    }
-                },
-            )
+            if (currentRoute !in excludedRoutes) {
+                TopAppBar(
+                    backgroundColor = DarkButtonWoof,
+                    title = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(end = 12.dp)
+                        ) {
+
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                Icon(imageVector = Icons.Filled.Menu, contentDescription = "menu", tint = Color.White )
+                            }
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ){
+                                Image(
+                                    painter = painterResource(id = R.drawable.icon),
+                                    contentDescription = "")
+                            }
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                Icon(imageVector = Icons.Filled.Notifications, contentDescription = "menu", tint = Color.White)
+
+                            }
+
+                        }
+                    },
+                )
+
+            }
 
 
 
         },
 
         bottomBar = {
-            BottomBar(
-                screens = ScreenModel().screensInHomeFromBottomNav,
-                navController = navController,
+            if (currentRoute !in excludedRoutes) {
+                BottomBar(
+                    screens = ScreenModel().screensInHomeFromBottomNav,
+                    navController = navController,
 
-                )
+                    )
+            }
 
         },
     ) {

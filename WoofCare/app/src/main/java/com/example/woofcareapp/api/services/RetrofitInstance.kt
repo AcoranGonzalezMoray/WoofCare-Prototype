@@ -16,7 +16,6 @@ import javax.net.ssl.X509TrustManager
 
 object RetrofitInstance {
     private const val BASE_URL = "http://192.168.1.136:5000"
-    private var token: String = "" // Token de autorización
 
     private val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
         @Throws(CertificateException::class)
@@ -36,11 +35,6 @@ object RetrofitInstance {
     }
 
     private val hostnameVerifier = HostnameVerifier { _, _ -> true }
-
-    // Función para actualizar el token de autorización
-    fun updateToken(newToken: String) {
-        token = newToken
-    }
 
     val api: ApiService by lazy {
         val logging = HttpLoggingInterceptor().apply {

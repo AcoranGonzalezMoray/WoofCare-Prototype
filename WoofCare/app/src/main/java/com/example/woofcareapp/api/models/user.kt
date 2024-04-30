@@ -10,6 +10,7 @@ data class User(
     val location: String,
     val profileUrl: String,
     val phone: Long,
+    val ratingId: Int,//nuevo
     val statusAccount: Int
 )
 
