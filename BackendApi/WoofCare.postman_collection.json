@@ -83,7 +83,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"accountType\": 0,\r\n    \"email\": \"2@gmail.com\",\r\n    \"id\": 1,\r\n    \"location\": \"\",\r\n    \"name\": \"John Doe MOOOOOOOD\",\r\n    \"password\": \"ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f\",\r\n    \"phone\": 1234567890,\r\n    \"profileUrl\": \"\",\r\n    \"statusAccount\": 0,\r\n    \"suscriptionType\": 0\r\n}",
+							"raw": "{\r\n    \"accountType\": 0,\r\n    \"email\": \"2@gmail.com\",\r\n    \"id\": 1,\r\n    \"location\": \"\",\r\n    \"name\": \"John Doe cambiado\",\r\n    \"password\": \"1234\",\r\n    \"phone\": 1234567890,\r\n    \"profileUrl\": \"\",\r\n    \"statusAccount\": 0,\r\n    \"suscriptionType\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -123,7 +123,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"4@gmail.com\",\r\n    \"password\": \"123445678\"\r\n}",
+							"raw": "{\r\n    \"email\": \"4@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -194,7 +194,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/user/3",
+							"raw": "http://127.0.0.1:5000/api/v1/user/1",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -207,7 +207,43 @@
 								"api",
 								"v1",
 								"user",
-								"3"
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "itemId",
+									"value": "1",
+									"type": "default"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/saflo/OneDrive/Escritorio/hamburguesa.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:7220/api/Item/UpdateImage",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7220",
+							"path": [
+								"api",
+								"Item",
+								"UpdateImage"
 							]
 						}
 					},
@@ -248,7 +284,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/product/2",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -261,7 +297,7 @@
 								"api",
 								"v1",
 								"product",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -274,7 +310,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros SUUUU\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros SUUUU\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 99.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -314,7 +350,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros\",\r\n    \"description\": \"SIUUUUU\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -346,7 +382,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/product/2",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -359,7 +395,7 @@
 								"api",
 								"v1",
 								"product",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -372,11 +408,23 @@
 			"item": [
 				{
 					"name": "GetAllDogs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product",
+							"raw": "http://127.0.0.1:5000/api/v1/dog",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -388,7 +436,7 @@
 							"path": [
 								"api",
 								"v1",
-								"product"
+								"dog"
 							]
 						}
 					},
@@ -400,7 +448,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/dog/2",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -412,8 +460,8 @@
 							"path": [
 								"api",
 								"v1",
-								"product",
-								"1"
+								"dog",
+								"2"
 							]
 						}
 					},
@@ -426,7 +474,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros SUUUU\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
+							"raw": "{\r\n    \"age\": 24,\r\n    \"breed\": \"Modificado\",\r\n    \"id\": 1,\r\n    \"size\": \"Grande\",\r\n    \"weight\": \"3.5\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -434,7 +482,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/dog/1",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -446,7 +494,7 @@
 							"path": [
 								"api",
 								"v1",
-								"product",
+								"dog",
 								"1"
 							]
 						}
@@ -466,7 +514,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": 0,\r\n    \"breed\": \"Perro 2\",\r\n    \"size\": \"Grande\",\r\n    \"weight\": 30.5,\r\n    \"age\": 24\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -474,7 +522,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product",
+							"raw": "http://127.0.0.1:5000/api/v1/dog",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -486,7 +534,7 @@
 							"path": [
 								"api",
 								"v1",
-								"product"
+								"dog"
 							]
 						}
 					},
@@ -498,7 +546,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/dog/2",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -510,8 +558,8 @@
 							"path": [
 								"api",
 								"v1",
-								"product",
-								"1"
+								"dog",
+								"2"
 							]
 						}
 					},
@@ -524,11 +572,23 @@
 			"item": [
 				{
 					"name": "GetAllMessages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product",
+							"raw": "http://127.0.0.1:5000/api/v1/message",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -540,7 +600,60 @@
 							"path": [
 								"api",
 								"v1",
-								"product"
+								"message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllConversations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/message/conversations/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"message",
+								"conversations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetFullConversation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/message/conversation/1/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"message",
+								"conversation",
+								"1",
+								"2"
 							]
 						}
 					},
@@ -559,7 +672,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": 0,\r\n    \"uidReceiver\": 1,\r\n    \"uidSender\": 4,\r\n    \"type\": \"0\",\r\n    \"message\": \"Hola\",\r\n    \"sentDate\": \"2024-04-06T12:30:00\",\r\n    \"serviceId\": 3\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -567,7 +680,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product",
+							"raw": "http://127.0.0.1:5000/api/v1/message",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -579,7 +692,7 @@
 							"path": [
 								"api",
 								"v1",
-								"product"
+								"message"
 							]
 						}
 					},
@@ -591,7 +704,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/message/2",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -603,8 +716,42 @@
 							"path": [
 								"api",
 								"v1",
-								"product",
+								"message",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateMessage",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"message\": \"Bien y tu\",\r\n    \"sentDate\": \"2024-04-06 12:29:02.0000000\",\r\n    \"serviceId\": \"3\",\r\n    \"type\": 0,\r\n    \"uidReceiver\": 2,\r\n    \"uidSender\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/message/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
 								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"message",
+								"3"
 							]
 						}
 					},
@@ -621,7 +768,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product",
+							"raw": "http://127.0.0.1:5000/api/v1/advertisement",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -633,7 +780,7 @@
 							"path": [
 								"api",
 								"v1",
-								"product"
+								"advertisement"
 							]
 						}
 					},
@@ -645,7 +792,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/advertisement/0",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -657,8 +804,8 @@
 							"path": [
 								"api",
 								"v1",
-								"product",
-								"1"
+								"advertisement",
+								"0"
 							]
 						}
 					},
@@ -671,7 +818,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros SUUUU\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"objectId\": 50,\r\n    \"type\": 200,\r\n    \"name\": \"Oferta especial modificada\",\r\n    \"status\": 300,\r\n    \"description\": \"¡No te pierdas esta oferta especial en productos para perros!\",\r\n    \"publicationDate\": \"2024-04-06T12:00:00\",\r\n    \"expirationDate\": \"2024-04-20T12:00:00\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -679,7 +826,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/advertisement/1",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -691,7 +838,7 @@
 							"path": [
 								"api",
 								"v1",
-								"product",
+								"advertisement",
 								"1"
 							]
 						}
@@ -711,7 +858,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Collar para perros\",\r\n    \"description\": \"Collar de cuero genuino con hebilla de metal resistente.\",\r\n    \"price\": 19.99,\r\n    \"location\": \"Ciudad de México\",\r\n    \"companyName\": \"PetSupplies\",\r\n    \"status\": 0,\r\n    \"bannerUrls\": \"\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": 0,\r\n    \"objectId\": 1000,\r\n    \"type\": 200,\r\n    \"name\": \"Oferta especial 4\",\r\n    \"status\": 300,\r\n    \"description\": \"¡No te pierdas esta oferta especial en productos para perros!\",\r\n    \"publicationDate\": \"2024-04-06T12:00:00\",\r\n    \"expirationDate\": \"2024-04-20T12:00:00\"\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -719,7 +866,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product",
+							"raw": "http://127.0.0.1:5000/api/v1/advertisement",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -731,7 +878,7 @@
 							"path": [
 								"api",
 								"v1",
-								"product"
+								"advertisement"
 							]
 						}
 					},
@@ -743,7 +890,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/api/v1/product/1",
+							"raw": "http://127.0.0.1:5000/api/v1/advertisement/0",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -755,8 +902,8 @@
 							"path": [
 								"api",
 								"v1",
-								"product",
-								"1"
+								"advertisement",
+								"0"
 							]
 						}
 					},
@@ -823,7 +970,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"uidReceiver\": \"123456\",\r\n    \"uidSender\": \"33\",\r\n    \"serviceId\": 1001,\r\n    \"status\": 0,\r\n    \"creationDate\": \"2024-04-05T10:00:00Z\"\r\n}\r\n",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"uidReceiver\": \"123456\",\r\n    \"uidSender\": \"33\",\r\n    \"serviceId\": 1001,\r\n    \"status\": 10,\r\n    \"creationDate\": \"2024-04-05T10:00:00Z\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -911,13 +1058,209 @@
 			]
 		},
 		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "GetAllReviews",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/review",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetReviewById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/review/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"review",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetObjectReview",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/review/1/0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"review",
+								"1",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateReview",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"objectId\": 2,\r\n    \"type\": 0,\r\n    \"publicationDate\": \"2024-04-24\",\r\n    \"content\": \"Esto es mi primer comentario editado\",\r\n    \"rating\": 6,\r\n    \"uidPublisher\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/review/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"review",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateReview",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"objectId\": 1,\r\n    \"type\": 2,\r\n    \"publicationDate\": \"2024-04-06T10:00:00Z\",\r\n    \"content\": \"Review producto 1\",\r\n    \"rating\": 5,\r\n    \"uidPublisher\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/review",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteReview",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/review/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"review",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Services",
 			"item": [
 				{
 					"name": "GetAllServices",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://127.0.0.1:5000/api/v1/request",
 							"protocol": "http",
