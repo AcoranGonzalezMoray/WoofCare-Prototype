@@ -13,6 +13,7 @@ class Model:
             'profileUrl': fields.String(required=True, description='URL del perfil del usuario'),
             'phone': fields.String(required=True, description='Número de teléfono del usuario'),
             'statusAccount': fields.String(required=True, description='0:Activa, 1: Indica que la cuenta esta suspendida temporalmente, 2: Indica que la cuenta esta bloqueada'),
+            'age': fields.Integer(required=True, description='Edad del usuario'),
         }
     
     @staticmethod
@@ -86,7 +87,7 @@ class Model:
     def getReviewModel():
         return {
             'objectId': fields.String(required=True, description='Id del objeto (usuario o servicio) sobre el que se hizo la review'),
-            'type': fields.String(required=True, description='Tipo de objeto al que hace referencia (0: usuario, 1: servicio)'),
+            'type': fields.String(required=True, description='Tipo de objeto al que hace referencia (0: usuario, 1: servicio, 2: producto)'),
             'publicationDate': fields.String(required=True, description='Fecha de subida la review'),
             'content': fields.String(required=True, description='Contenido de la review, el mensaje'),
             'rating': fields.String(required=True, description='Numero del 1 al 5 indicando la calidad'),

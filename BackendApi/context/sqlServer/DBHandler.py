@@ -155,3 +155,8 @@ def get_conversation(uid1, uid2):
     query = f"SELECT * FROM (SELECT * FROM Messages WHERE uidReceiver = {uid1} AND uidSender = {uid2} UNION SELECT * FROM Messages WHERE uidReceiver = {uid2} AND uidSender = {uid1}) AS combined_messages ORDER BY sentDate DESC;"
     data = execute_query(query, "Messages")
     return data
+
+def get_object_reviews(oid, type):
+    query = f"SELECT * FROM Reviews WHERE objectId = {oid} AND type = {type}"
+    data = execute_query(query, "Reviews")
+    return data

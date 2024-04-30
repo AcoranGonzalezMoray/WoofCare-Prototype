@@ -1,7 +1,7 @@
 
 
 class User:
-    def __init__(self, id, name, email, password, accountType, suscriptionType, location, profileUrl, phone, statusAccount):
+    def __init__(self, id, name, email, password, accountType, suscriptionType, location, profileUrl, phone, statusAccount, age):
         self.id = id
         self.name = name
         self.email = email
@@ -12,6 +12,7 @@ class User:
         self.profileUrl = profileUrl
         self.phone = phone
         self.statusAccount = statusAccount
+        self.age = age
 
 
     def to_dict(self):
@@ -25,7 +26,8 @@ class User:
             "location": self.location,
             "profileUrl": self.profileUrl,
             "phone": self.phone,
-            "statusAccount": self.statusAccount
+            "statusAccount": self.statusAccount,
+            "age": self.age
         }
     
 

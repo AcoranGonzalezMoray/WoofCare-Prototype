@@ -63,7 +63,8 @@ class UserList(Resource):
             location=data["location"],
             profileUrl=data["profileUrl"],
             phone=data["phone"],
-            statusAccount=data["statusAccount"]        
+            statusAccount=data["statusAccount"], 
+            age=data["age"]       
             )
         if save_entity_to_database(new_user):
             return jsonify({"message": "Usuario creado correctamente"}), 201
@@ -104,7 +105,8 @@ class UserSpecificUser(Resource):
             user.location = data["location"]
             user.profileUrl = data["profileUrl"]
             user.phone = data["phone"]
-            user.statusAccount=data["statusAccount"]    
+            user.statusAccount=data["statusAccount"]
+            user.age=data["age"]    
             if update_entity_in_database(user):
                 return {"message": "Usuario actualizado correctamente"}, 200
             else:
@@ -155,7 +157,8 @@ class SignUp(Resource):
             location=data.get("location"),
             profileUrl=data.get("profileUrl"),
             phone=data.get("phone"),
-            statusAccount = data.get("statusAccount")
+            statusAccount = data.get("statusAccount"),
+            age=data.get("age")
         )
 
         if save_user_to_database(new_user):
@@ -752,7 +755,7 @@ class ReviewList(Resource):
             return {"message": "Error al crear el comentario"}, 500
 
 @api.route(f"/api/{version}/review/<int:id>")
-class SpecificAdvertisement(Resource):
+class SpecificReview(Resource):
     @api.doc('get_review')
     def get(self, id):
         """
@@ -799,6 +802,21 @@ class SpecificAdvertisement(Resource):
             return {"message": "Comentario eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el comentario"}, 500
+
+@api.route(f"/api/{version}/review/<int:id>/<int:type>")
+class ObjectoReviews(Resource):
+    @api.doc('get_object_reviews')
+    def get(self, id, type):
+        """
+        Retorna las reviews de un objeto (usuario, servicio o producto) por su ID.
+        """
+        reviews = get_object_reviews(id, type)
+
+        serialized_reviews = []
+        if reviews:
+            serialized_reviews = [review.to_dict() for review in reviews]
+
+        return jsonify(serialized_reviews)        
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
