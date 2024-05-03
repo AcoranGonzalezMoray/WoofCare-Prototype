@@ -1,5 +1,9 @@
 package com.example.woofcareapp.screens.Search
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,26 +11,32 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,7 +50,6 @@ enum class SortOrder {
     DESCENDING
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchScreen(navController: NavController) {
     val userList = listOf(
@@ -67,7 +76,7 @@ fun SearchScreen(navController: NavController) {
             location = "Los Angeles",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 9876543210,
-            ratingId = 1,
+            ratingId = 3,
             statusAccount = 1
         ),
         User(
@@ -160,7 +169,14 @@ fun SearchScreen(navController: NavController) {
 @Composable
 fun SearchBar() {
     TextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .padding(10.dp) // Ajusta el padding según tus preferencias
+            .fillMaxWidth()
+            .border(
+                BorderStroke(1.dp, Color.Gray),
+                shape = RoundedCornerShape(20.dp)
+            ) // Ajusta el radio según tus preferencias
+        ,
         value = "Search", onValueChange = {},
         singleLine = true,
         label = { Text(text = "Search") },
@@ -178,6 +194,13 @@ fun PriceFilter(
     onPriceRangeChange: (Pair<Int, Int>) -> Unit, // Callback to handle price range changes
     currentPriceRange: Pair<Int, Int>? = null, // Initial price range (optional)
 ) {
+    val checkedList = remember { mutableStateListOf<Int>() }
+    val options = listOf("Trainer", "Pet Sitter")
+    val icons = listOf(
+        Icons.Filled.StarBorder,
+        Icons.AutoMirrored.Filled.TrendingUp,
+        Icons.Filled.BookmarkBorder
+    )
     var minPrice by remember { mutableStateOf(currentPriceRange?.first ?: 0) }
     var maxPrice by remember { mutableStateOf(currentPriceRange?.second ?: 5000) }
 
@@ -187,49 +210,68 @@ fun PriceFilter(
             .height(60.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            Modifier
+                .fillMaxWidth()
+                .background(Color.Red),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = true,
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                value = minPrice.toString(),
-                onValueChange = {
-                    minPrice = it.toInt()
-                },
-                label = { Text("Min Price") },
-                modifier = Modifier.weight(1f) // Assign equal weight to both TextFields
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
 
-            )
-            Box(
-                modifier = Modifier.weight(0.2f),
-                contentAlignment = Alignment.Center
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.Remove, contentDescription = null)
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    value = minPrice.toString(),
+                    onValueChange = {
+                        minPrice = it.toInt()
+                    },
+                    label = { Text("Min Price") },
+                    modifier = Modifier.weight(1f) // Assign equal weight to both TextFields
+
+                )
+                Box(
+                    modifier = Modifier.weight(0.2f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.Remove, contentDescription = null)
+                }
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    value = maxPrice.toString(),
+                    onValueChange = {
+                        maxPrice = it.toInt()
+                    },
+                    label = { Text("Max price") },
+                    modifier = Modifier.weight(1f) // Assign equal weight to both TextFields
+
+                )
+
             }
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = true,
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                value = maxPrice.toString(),
-                onValueChange = {
-                    maxPrice = it.toInt()
-                },
-                label = { Text("Max price") },
-                modifier = Modifier.weight(1f) // Assign equal weight to both TextFields
-
+            Spacer(modifier = Modifier.width(5.dp))
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
             )
-
+            {
+            }
         }
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
