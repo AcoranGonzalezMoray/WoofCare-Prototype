@@ -86,7 +86,7 @@ class Model:
     @staticmethod
     def getReviewModel():
         return {
-            'objectId': fields.String(required=True, description='Id del objeto (usuario o servicio) sobre el que se hizo la review'),
+            'objectId': fields.String(required=True, description='Id del objeto (usuario o servicio o producto) sobre el que se hizo la review'),
             'type': fields.String(required=True, description='Tipo de objeto al que hace referencia (0: usuario, 1: servicio, 2: producto)'),
             'publicationDate': fields.String(required=True, description='Fecha de subida la review'),
             'content': fields.String(required=True, description='Contenido de la review, el mensaje'),
