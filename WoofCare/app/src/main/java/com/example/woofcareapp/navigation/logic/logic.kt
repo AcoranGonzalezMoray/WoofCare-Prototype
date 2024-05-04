@@ -33,7 +33,7 @@ fun  Navigation(navController: NavHostController) {
             ServiceScreen(navController)
         }
         composable("chat") {
-            ChatScreen(navController)
+            ChatScreen()
         }
     }
 }
