@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -57,9 +56,6 @@ fun ChatScreen() {
             item {
                 ChatMessages()
             }
-            item {
-                MessageInput()
-            }
         }
         Box(modifier = Modifier.weight(0.1f).fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
             SendMessage()
@@ -88,16 +84,12 @@ fun Header(userName: String) {
 fun ChatMessages() {
     val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(System.currentTimeMillis())
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
-        Message("Alice", "Hi there!", R.drawable.alice, currentTime)
-        Message("Bob", "Hey, how are you?", R.drawable.profile, currentTime)
-        Message("Alice", "I'm good, thanks! How about you?", R.drawable.alice, currentTime)
-        Message("Bob", "I'm doing great, thanks for asking!", R.drawable.profile, currentTime)
-        Message("Alice", "That's good to hear.", R.drawable.alice, currentTime)
-        // Add more messages as needed
-    }
+    Message("Alice", "Hi there!", R.drawable.alice, currentTime)
+    Message("Bob", "Hey, how are you?", R.drawable.profile, currentTime)
+    Message("Alice", "I'm good, thanks! How about you?", R.drawable.alice, currentTime)
+    Message("Bob", "I'm doing great, thanks for asking!", R.drawable.profile, currentTime)
+    Message("Alice", "That's good to hear.", R.drawable.alice, currentTime)
+    // Add more messages as needed
 }
 
 @Composable
@@ -121,22 +113,6 @@ fun Message(sender: String, text: String, profileImageResource: Int, timestamp: 
                 )
             }
         }
-    }
-}
-
-@Composable
-fun MessageInput() {
-    val messageState = remember { mutableStateOf(TextFieldValue()) }
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        BasicTextField(
-            value = messageState.value,
-            onValueChange = { messageState.value = it },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize(),
-            textStyle = MaterialTheme.typography.body1
-        )
     }
 }
 
