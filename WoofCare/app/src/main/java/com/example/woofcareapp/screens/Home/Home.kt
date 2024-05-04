@@ -138,7 +138,21 @@ fun HomeScreen(navController: NavController) {
         )
     )
     DataRepository.setUsers(userList)
-    DataRepository.setUser(userList[0])
+    DataRepository.setUser(
+        User(
+            id = 123,
+            name = "Jane Smith",
+            email = "jane.smith@example.com",
+            password = "password456",
+            accountType = 1,
+            suscriptionType = 2,
+            location = "Los Angeles",
+            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
+            phone = 9876543210,
+            ratingId = 1,
+            statusAccount = 1
+        )
+    )
 
     val productList = listOf(
         Product(

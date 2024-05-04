@@ -1,5 +1,6 @@
 package com.example.woofcareapp.navigation.repository
 
+import com.example.woofcareapp.api.models.Message
 import com.example.woofcareapp.api.models.Product
 import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.api.models.User
@@ -11,6 +12,16 @@ object DataRepository {
     private var userPlus: User? = null
     private var productPlus: Product? = null
     private var servicePlus: Service? = null
+    private var messagesPlus: List<Message>? = null
+
+    fun setMessagePlus(messages: List<Message>){
+        messagesPlus = messages
+    }
+
+    fun getMessagePlus():List<Message>?{
+        return messagesPlus
+    }
+
 
     fun setServicePlus(newService: Service){
         servicePlus = newService

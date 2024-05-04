@@ -24,7 +24,7 @@ class ScreenModel {
         object Search : HomeScreens("search", "Search", Icons.Filled.Search)
         object Service : HomeScreens("service", "Service", Icons.Filled.Pets)
 
-        object Chat : HomeScreens("chat", "Chat", Icons.Filled.ChatBubble)
+        object Chat : HomeScreens("chats", "Chat", Icons.Filled.ChatBubble)
 
         object Profile : HomeScreens("profile", "Profile", Icons.Filled.Person)
 

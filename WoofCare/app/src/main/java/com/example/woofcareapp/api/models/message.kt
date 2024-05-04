@@ -2,8 +2,8 @@ package com.example.woofcareapp.api.models
 
 data class Message(
     val id: Int,
-    val uidReceiver: String,
-    val uidSender: String,
+    val uidReceiver: Int,
+    val uidSender: Int,
     val type: String,
     val message: String,
     val sentDate: String,
