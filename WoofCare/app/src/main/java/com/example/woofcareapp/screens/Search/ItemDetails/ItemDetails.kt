@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -26,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
@@ -33,7 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.api.models.User
+import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -41,12 +46,14 @@ import com.example.woofcareapp.ui.theme.DarkButtonWoof
 
 
 @Composable
-fun previewItem(user: User, navController: NavController) {
-    androidx.compose.material.Card(
+fun previewItem(service: Service, navController: NavController) {
+    val user = DataRepository.getUsers()?.filter { user: User -> user.id == service?.uid  }?.get(0)
+
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
-            .padding(vertical = 6.dp),
+            .padding(vertical = 4.dp),
         elevation = 4.dp
     ) {
         Box(
@@ -54,8 +61,8 @@ fun previewItem(user: User, navController: NavController) {
         ) {
             // Fondo de la imagen de usuario
             Image(
-                painter = rememberImagePainter(user.profileUrl),
-                contentDescription = "Profile Image",
+                painter = rememberImagePainter(service.bannerUrl[0]),
+                contentDescription = "Service Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
@@ -64,76 +71,108 @@ fun previewItem(user: User, navController: NavController) {
                 color = Color(0x44000000), // Color con alfa reducido
                 modifier = Modifier.fillMaxSize()
             ) {
-                Column(
+                Row(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.End
+                    verticalAlignment = Alignment.Top,
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        FloatingActionButton(
-                            onClick = { /* Acción del primer botón */ },
-                            backgroundColor = DarkButtonWoof, // Color naranja
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .size(40.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically,
+
+                            ) {
+                            if(user != null){
+                                Image(
+                                    painter = rememberImagePainter(user?.profileUrl),
+                                    contentDescription = "Profile Image",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .clip(CircleShape)
+                                )
+                            }else {
+                                Image(
+                                    painter = rememberImagePainter("https://images.hola.com/imagenes/estar-bien/20221018219233/buenas-personas-caracteristicas/1-153-242/getty-chica-feliz-t.jpg?tx=w_680"),
+                                    contentDescription = "Profile Image",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .clip(CircleShape)
+                                )
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Icon(
-                                Icons.Default.ChatBubbleOutline,
-                                contentDescription = "Add",
-                                tint = Color.White
+                            FloatingActionButton(
+                                onClick = { /* Acción del primer botón */ },
+                                backgroundColor = DarkButtonWoof, // Color naranja
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(40.dp)
+                            ) {
+                                Icon(Icons.Default.ChatBubbleOutline, contentDescription = "Add", tint = Color.White)
+                            }
+                            FloatingActionButton(
+                                onClick = {
+                                    DataRepository.setServicePlus(service);
+                                    navController.navigate("serviceInfo")
+                                },
+                                backgroundColor = DarkButtonWoof,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(40.dp)
+                            ) {
+                                Icon(Icons.Default.RemoveRedEye, contentDescription = "Edit", tint = Color.White)
+                            }
+                        }
+                    }
+
+                }
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+
+                        ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            androidx.compose.material.Text(
+                                text = service.name,
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                modifier = Modifier
+                                    .padding(16.dp)
                             )
                         }
-                        FloatingActionButton(
-                            onClick = { /* Acción del segundo botón */ },
-                            backgroundColor = DarkButtonWoof,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .size(40.dp)
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Icon(
-                                Icons.Default.RemoveRedEye,
-                                contentDescription = "Edit",
-                                tint = Color.White
-                            )
+                            RatingBar(rating = 3.5)
                         }
                     }
                 }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                    ,
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = user.name,
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            modifier = Modifier
-                        )
-                        Text(
-                            text = "City: ${user.location}",
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            modifier = Modifier
-                        )
-                    }
-                    Spacer(modifier =Modifier.height(5.dp))
-                    RatingBar(rating = 4.0)
-
-                }
             }
         }
     }
 }
+
 
 
 

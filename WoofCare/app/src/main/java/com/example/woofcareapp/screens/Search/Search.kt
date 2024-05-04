@@ -1,10 +1,12 @@
 package com.example.woofcareapp.screens.Search
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,10 +26,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonColors
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,13 +37,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.woofcareapp.api.models.User
+import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.screens.Search.ItemDetails.previewItem
+import com.example.woofcareapp.ui.theme.DarkButtonWoof
+import com.example.woofcareapp.ui.theme.backWoof
+import com.example.woofcareapp.ui.theme.prominentWoof
 
 enum class SortOrder {
     ASCENDING,
@@ -51,144 +57,153 @@ enum class SortOrder {
 @Composable
 fun SearchScreen(navController: NavController) {
     val searchValue = remember{ mutableStateOf("") }
-    val userList = listOf(
-        User(
+    val (selectedType, setSelectedType) = remember { mutableStateOf(0) }
+    val (selectedPriceMin, setSelectedPriceMin) = remember { mutableStateOf(0.0) }
+    val (selectedPriceMax, setSelectedPriceMax) = remember { mutableStateOf(50.0) }
+
+    val serviceList = listOf(
+        Service(
             id = 1,
-            name = "John Doe",
-            email = "john.doe@example.com",
-            password = "password123",
-            accountType = 0,
-            suscriptionType = 1,
-            location = "New York",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 1234567890,
-            ratingId = 1,
-            statusAccount = 1
+            name = "Paseos Diarios",
+            type = 1,
+            status = 0,
+            publicationDate = "2024-04-21",
+            description = "Paseos diarios para perros de todas las edades y razas. Incluye ejercicio moderado y socialización.",
+            price = 25.0,
+            uid = 1,
+            reviewId = 1,
+            bannerUrl = listOf(
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+            )
         ),
-        User(
+        Service(
             id = 2,
-            name = "Jane Smith",
-            email = "jane.smith@example.com",
-            password = "password456",
-            accountType = 1,
-            suscriptionType = 2,
-            location = "Los Angeles",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 9876543210,
-            ratingId = 3,
-            statusAccount = 1
+            name = "Entrenamiento Básico",
+            type = 2,
+            status = 0,
+            publicationDate = "2024-04-20",
+            description = "Entrenamiento básico para cachorros y perros adultos. Enseñanza de órdenes básicas y comportamiento adecuado.",
+            price = 50.0,
+            uid = 2,
+            reviewId = 1,
+            bannerUrl = listOf(
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+            )
         ),
-        User(
+        Service(
             id = 3,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 5555555555,
-            ratingId = 1,
-            statusAccount = 1
+            name = "Cuidado de Día",
+            type = 1,
+            status = 0,
+            publicationDate = "2024-04-19",
+            description = "Cuidado diurno para perros mientras los propietarios están fuera. Incluye tiempo de juego y supervisión.",
+            price = 35.0,
+            uid = 3,
+            reviewId = 1,
+            bannerUrl = listOf(
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+            )
         ),
-        User(
-            id = 3,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 5555555555,
-            ratingId = 1,
-            statusAccount = 1
+        Service(
+            id = 4,
+            name = "Adiestramiento Avanzado",
+            type = 1,
+            status = 0,
+            publicationDate = "2024-04-18",
+            description = "Adiestramiento avanzado para perros con necesidades especiales. Enseñanza de habilidades avanzadas y obediencia.",
+            price = 70.0,
+            uid = 4,
+            reviewId = 1,
+            bannerUrl = listOf(
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+            )
         ),
-        User(
-            id = 3,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 5555555555,
-            ratingId = 1,
-            statusAccount = 1
+        Service(
+            id = 5,
+            name = "Guardería Nocturna",
+            type = 2,
+            status = 0,
+            publicationDate = "2024-04-17",
+            description = "Guardería nocturna para perros que necesitan alojamiento durante la noche. Ambiente seguro y cómodo para descansar.",
+            price = 40.0,
+            uid = 5,
+            reviewId = 1,
+            bannerUrl = listOf(
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+            )
         ),
-        User(
-            id = 3,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 5555555555,
-            ratingId = 1,
-            statusAccount = 1
-        ), User(
-            id = 3,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 5555555555,
-            ratingId = 1,
-            statusAccount = 1
+        Service(
+            id = 6,
+            name = "Terapia Canina",
+            type = 2,
+            status = 0,
+            publicationDate = "2024-04-16",
+            description = "Terapia emocional para perros que sufren de ansiedad o estrés. Sesiones individuales y grupales disponibles.",
+            price = 60.0,
+            uid = 6,
+            reviewId = 1,
+            bannerUrl = listOf(
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+            )
         )
     )
-    Column {
-        Column {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp),
-            ) {
-                SearchBar(searchValue)
-            }
-            Filter(onPriceRangeChange = {})
-            LazyColumn(Modifier.padding(5.dp)) {
-                userList.forEach {
-                    item { previewItem(user = it, navController = navController) }
-                }
-            }
+    var filteredList = serviceList.filter { service ->
+        service.name.contains(searchValue.value, ignoreCase = true) &&
+                (selectedType == 0 || service.type == selectedType) &&
+                (service.price in selectedPriceMin..selectedPriceMax)
+    }
 
+
+    Column(
+        modifier = Modifier.fillMaxSize().background(backWoof)
+    ) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+        ) {
+            OutlinedTextField(
+                maxLines = 1,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                value = searchValue.value, onValueChange = {
+                    searchValue.value = it
+                },
+                singleLine = true,
+                label = { Text(text = "Search") },
+                leadingIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Default.Search, contentDescription = null)
+                    }
+                }
+            )        }
+        Filter(onPriceRangeChange = {}, onTypeChange = { setSelectedType(it) }, onMinPrice = {setSelectedPriceMin(it)},
+            onMaxPrice = {setSelectedPriceMax(it)})
+        LazyColumn(Modifier.padding(5.dp)) {
+            filteredList.forEach {
+                item { previewItem(service = it, navController = navController) }
+            }
         }
 
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchBar(searchValue: MutableState<String>) {
-
-    OutlinedTextField(
-        maxLines = 1,
-        modifier = Modifier
-            .padding(10.dp) // Ajusta el padding según tus preferencias
-            .fillMaxWidth(),
-        value = searchValue.value, onValueChange = {searchValue.value = it},
-        singleLine = true,
-        label = { Text(text = "Search") },
-        leadingIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Default.Search, contentDescription = null)
-            }
-        }
-    )
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Filter(
     onPriceRangeChange: (Pair<Int, Int>) -> Unit, // Callback to handle price range changes
     currentPriceRange: Pair<Int, Int>? = null, // Initial price range (optional)
+    onTypeChange: (Int) -> Unit,
+    onMinPrice: (Double) -> Unit,
+    onMaxPrice: (Double) -> Unit,
 ) {
     val checkedList = remember { mutableStateListOf<Int>() }
     val options = listOf("Trainer", "Pet Sitter")
@@ -196,9 +211,24 @@ fun Filter(
         Icons.Default.TrendingUp,
         Icons.Default.Pets,
     )
-    var minPrice by remember { mutableStateOf(currentPriceRange?.first ?: 0) }
-    var maxPrice by remember { mutableStateOf(currentPriceRange?.second ?: 5000) }
+    var minPrice by remember { mutableStateOf(currentPriceRange?.first ?: 0.0) }
+    var maxPrice by remember { mutableStateOf(currentPriceRange?.second ?: 50.0) }
+    val segmentedButtonColors = SegmentedButtonColors(
+        activeContainerColor = DarkButtonWoof,
+        activeContentColor = Color.White,
+        activeBorderColor = prominentWoof,
 
+        inactiveContainerColor = backWoof,
+        inactiveContentColor = Color.Black,
+        inactiveBorderColor = prominentWoof,
+
+        disabledActiveContainerColor = Color.LightGray,
+        disabledActiveContentColor = Color.Gray,
+        disabledActiveBorderColor = Color.LightGray,
+        disabledInactiveContainerColor = Color.LightGray,
+        disabledInactiveContentColor = Color.Gray,
+        disabledInactiveBorderColor = Color.LightGray
+    )
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -227,7 +257,8 @@ fun Filter(
                     ),
                     value = minPrice.toString(),
                     onValueChange = {
-                        minPrice = it.toInt()
+                        if(it.isNotEmpty())minPrice = it.toDouble()
+                        if(minPrice.toString().isNotEmpty()) onMinPrice( minPrice.toDouble())
                     },
                     label = { Text("Min Price") },
                     modifier = Modifier.weight(1f) // Assign equal weight to both TextFields
@@ -248,7 +279,8 @@ fun Filter(
                     ),
                     value = maxPrice.toString(),
                     onValueChange = {
-                        maxPrice = it.toInt()
+                        if(it.isNotEmpty())maxPrice = it.toDouble()
+                        if(maxPrice.toString().isNotEmpty()) onMaxPrice( maxPrice.toDouble())
                     },
                     label = { Text("Max price") },
                     modifier = Modifier.weight(1f) // Assign equal weight to both TextFields
@@ -266,6 +298,7 @@ fun Filter(
                 MultiChoiceSegmentedButtonRow {
                     options.forEachIndexed { index, label ->
                         SegmentedButton(
+                            colors =segmentedButtonColors,
                             shape = SegmentedButtonDefaults.itemShape(
                                 index = index,
                                 count = options.size
@@ -279,12 +312,17 @@ fun Filter(
                                     )
                                 }
                             },
-                            onCheckedChange = {
-                                if (index in checkedList) {
-                                    checkedList.remove(index)
-                                } else {
+                            onCheckedChange = { isChecked ->
+                                if (isChecked) {
                                     checkedList.clear()
                                     checkedList.add(index)
+                                    var local = index +1
+                                    onTypeChange(local)
+                                } else {
+                                    checkedList.remove(index)
+                                    if (checkedList.isEmpty()) {
+                                        onTypeChange(0)
+                                    }
                                 }
                             },
                             checked = index in checkedList
@@ -296,14 +334,5 @@ fun Filter(
             }
         }
 
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = { onPriceRangeChange(Pair(minPrice, maxPrice)) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Apply Filter")
-        }
     }
 }
