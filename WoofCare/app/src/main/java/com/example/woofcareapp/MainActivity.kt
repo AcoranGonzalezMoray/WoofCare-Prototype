@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation(navController: NavHostController, sharedPreferences: SharedPreferences) {
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "bottomScreen") {
         // Pantallas de Autenticacion
         composable("login") {
             Login(navController = navController) { loggedIn,user,token ->
