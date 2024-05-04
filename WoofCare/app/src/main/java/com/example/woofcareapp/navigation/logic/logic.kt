@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.woofcareapp.screens.Chat.ChatScreen
+import com.example.woofcareapp.screens.FAQ.FaqView
 import com.example.woofcareapp.screens.Home.HomeScreen
 import com.example.woofcareapp.screens.Info.Product.ProductInfoScreen
 import com.example.woofcareapp.screens.Info.Service.ServiceInfoScreen
@@ -48,7 +49,10 @@ fun  Navigation(navController: NavHostController) {
             ServiceInfoScreen(navController)
         }
         composable("notifications") {
-            NotificactionsScreen()
+            NotificactionsScreen(navController)
+        }
+        composable("FAQ") {
+            FaqView(navController)
         }
     }
 

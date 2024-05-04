@@ -1,8 +1,5 @@
 package com.example.woofcareapp.screens.Search
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,24 +8,26 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.TrendingUp
-import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -52,6 +50,7 @@ enum class SortOrder {
 
 @Composable
 fun SearchScreen(navController: NavController) {
+    val searchValue = remember{ mutableStateOf("") }
     val userList = listOf(
         User(
             id = 1,
@@ -151,9 +150,9 @@ fun SearchScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(5.dp),
             ) {
-                SearchBar()
+                SearchBar(searchValue)
             }
-            PriceFilter(onPriceRangeChange = {})
+            Filter(onPriceRangeChange = {})
             LazyColumn(Modifier.padding(5.dp)) {
                 userList.forEach {
                     item { previewItem(user = it, navController = navController) }
@@ -167,17 +166,14 @@ fun SearchScreen(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar() {
-    TextField(
+fun SearchBar(searchValue: MutableState<String>) {
+
+    OutlinedTextField(
+        maxLines = 1,
         modifier = Modifier
             .padding(10.dp) // Ajusta el padding según tus preferencias
-            .fillMaxWidth()
-            .border(
-                BorderStroke(1.dp, Color.Gray),
-                shape = RoundedCornerShape(20.dp)
-            ) // Ajusta el radio según tus preferencias
-        ,
-        value = "Search", onValueChange = {},
+            .fillMaxWidth(),
+        value = searchValue.value, onValueChange = {searchValue.value = it},
         singleLine = true,
         label = { Text(text = "Search") },
         leadingIcon = {
@@ -190,16 +186,15 @@ fun SearchBar() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PriceFilter(
+fun Filter(
     onPriceRangeChange: (Pair<Int, Int>) -> Unit, // Callback to handle price range changes
     currentPriceRange: Pair<Int, Int>? = null, // Initial price range (optional)
 ) {
     val checkedList = remember { mutableStateListOf<Int>() }
     val options = listOf("Trainer", "Pet Sitter")
     val icons = listOf(
-        Icons.Filled.StarBorder,
-        Icons.AutoMirrored.Filled.TrendingUp,
-        Icons.Filled.BookmarkBorder
+        Icons.Default.TrendingUp,
+        Icons.Default.Pets,
     )
     var minPrice by remember { mutableStateOf(currentPriceRange?.first ?: 0) }
     var maxPrice by remember { mutableStateOf(currentPriceRange?.second ?: 5000) }
@@ -212,8 +207,7 @@ fun PriceFilter(
     ) {
         Row(
             Modifier
-                .fillMaxWidth()
-                .background(Color.Red),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -262,13 +256,43 @@ fun PriceFilter(
                 )
 
             }
-            Spacer(modifier = Modifier.width(5.dp))
+            Spacer(modifier = Modifier.width(7.dp))
             Row(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
             )
             {
+                MultiChoiceSegmentedButtonRow {
+                    options.forEachIndexed { index, label ->
+                        SegmentedButton(
+                            shape = SegmentedButtonDefaults.itemShape(
+                                index = index,
+                                count = options.size
+                            ),
+                            icon = {
+                                SegmentedButtonDefaults.Icon(active = index in checkedList) {
+                                    Icon(
+                                        imageVector = icons[index],
+                                        contentDescription = null,
+                                        modifier = Modifier.size(SegmentedButtonDefaults.IconSize)
+                                    )
+                                }
+                            },
+                            onCheckedChange = {
+                                if (index in checkedList) {
+                                    checkedList.remove(index)
+                                } else {
+                                    checkedList.clear()
+                                    checkedList.add(index)
+                                }
+                            },
+                            checked = index in checkedList
+                        ) {
+                            Text(label)
+                        }
+                    }
+                }
             }
         }
 

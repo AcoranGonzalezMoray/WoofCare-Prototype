@@ -71,7 +71,7 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val excludedRoutes = setOf("profile","productInfo", "userInfo", "notifications")
+    val excludedRoutes = setOf("profile","productInfo", "userInfo", "FAQ")
     Scaffold(
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = true,

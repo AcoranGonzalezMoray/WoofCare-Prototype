@@ -3,8 +3,10 @@ package com.example.woofcareapp.screens.Notifications
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +15,8 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.navigation.repository.DataRepository
+import com.example.woofcareapp.screens.Info.Product.ExpandableItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,46 +125,90 @@ fun NotificactionsScreen() {
         )
     )
     val emptyList = emptyList<User>()
-
+    val expandedToday = remember { mutableStateOf(false) }
     if (userList.isNullOrEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "No hay notificaciones")
 
         }
     } else {
-        LazyColumn(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        ) {
-            userList.forEach {
-                item {
-                    ListItem(
-                        leadingContent = {
-                            Image(
-                                painter = rememberImagePainter(
-                                    data = it.profileUrl,
-                                    builder = {
-                                        crossfade(true)
-                                    }
-                                ),
-                                contentDescription = it.name,
-                                modifier = Modifier
-                                    .size(50.dp)
-                                    .clickable {
-                                        DataRepository.setUserPlus(it)
-                                        //navController.navigate("userInfo")
+        Column {
+            Box(modifier = Modifier.padding(10.dp)) {
+                ExpandableItem(title = "Today", content = {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        userList.forEach {
+                            item {
+                                ListItem(
+                                    leadingContent = {
+                                        Image(
+                                            painter = rememberImagePainter(
+                                                data = it.profileUrl,
+                                                builder = {
+                                                    crossfade(true)
+                                                }
+                                            ),
+                                            contentDescription = it.name,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                                .clickable {
+                                                    DataRepository.setUserPlus(it)
+                                                    //navController.navigate("userInfo")
+                                                },
+                                            contentScale = ContentScale.Crop
+                                        )
                                     },
-                                contentScale = ContentScale.Crop
-                            )
-                        },
-                        headlineText = { Text(text = it.name)},
-                        supportingText = { Text(text = "Today",
-                            modifier = Modifier.padding(top = 5.dp))}
-                    )
-                    Divider(thickness = 2.dp, color = Color.Gray)
-                }
+                                    headlineContent = { Text(text = it.name) }
+                                )
+                                Divider(thickness = 2.dp, color = Color.Gray)
+                            }
+                        }
+                    }
+                }, expanded = expandedToday, onClick = { expandedToday.value = false })
+
+            }
+            Divider(Modifier.height(5.dp))
+
+            Box(modifier = Modifier.padding(10.dp)) {
+                ExpandableItem(title = "Last Week", content = {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        userList.forEach {
+                            item {
+                                ListItem(
+                                    leadingContent = {
+                                        Image(
+                                            painter = rememberImagePainter(
+                                                data = it.profileUrl,
+                                                builder = {
+                                                    crossfade(true)
+                                                }
+                                            ),
+                                            contentDescription = it.name,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                                .clickable {
+                                                    DataRepository.setUserPlus(it)
+                                                    //navController.navigate("userInfo")
+                                                },
+                                            contentScale = ContentScale.Crop
+                                        )
+                                    },
+                                    headlineContent = { Text(text = it.name) }
+                                )
+                                Divider(thickness = 2.dp, color = Color.Gray)
+                            }
+                        }
+                    }
+                }, expanded = expandedToday, onClick = { expandedToday.value = false })
+
             }
         }
+
+
     }
 }

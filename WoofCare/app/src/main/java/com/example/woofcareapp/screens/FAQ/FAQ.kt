@@ -15,16 +15,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.woofcareapp.screens.Info.Product.ExpandableItem
 import com.example.woofcareapp.screens.Search.SearchBar
 
 @Composable
-@Preview(showBackground = true)
-fun FaqView() {
+fun FaqView(navController: NavHostController) {
     val firstExpanded = remember { mutableStateOf(true) }
-
+    val searchValue = remember { mutableStateOf("") }
     Column(
         Modifier
             .fillMaxSize()
@@ -42,7 +41,7 @@ fun FaqView() {
             )
         }
 
-        SearchBar()
+        SearchBar(searchValue)
 
         Text(
             text = "FAQ",
