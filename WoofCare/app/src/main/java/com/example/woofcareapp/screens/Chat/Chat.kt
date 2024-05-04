@@ -104,6 +104,10 @@ fun Header(other: User, navController: NavController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(end = 12.dp)
+                    .clickable {
+                        DataRepository.setUserPlus(other)
+                        navController.navigate("userInfo")
+                    }
             ) {
 
                 Column(
@@ -383,37 +387,39 @@ fun SendMessage(other: User) {
                      var urlImage = me?.profileUrl
 
                      if (urlImage != null) {
-                         // Si hay una URL de imagen disponible, muestra la imagen desde la URL
-                         Box(
-                             modifier = Modifier
-                                 .size(45.dp)
-                                 .padding(start = 5.dp)
-                                 .clip(CircleShape)
-                         ) {
-                             Image(
-                                 painter = rememberImagePainter(urlImage),
-                                 contentDescription = "Imagen de perfil",
-                                 contentScale = ContentScale.Crop,
-                                 modifier = Modifier.fillMaxSize()
-                             )
-                         }
-                     } else {
-                         // Si no hay URL de imagen disponible, muestra una imagen predeterminada desde los recursos
-                         Box(
-                             modifier = Modifier
-                                 .size(45.dp)
-                                 .padding(start = 5.dp)
-                                 .clip(CircleShape)
-                         ) {
-                             Image(
-                                 painter = painterResource(id = R.drawable.alice),
-                                 contentDescription = "Imagen de perfil",
-                                 contentScale = ContentScale.Crop,
-                                 modifier = Modifier.fillMaxSize()
-                             )
+                         if (urlImage.isNotBlank()) {
+                             // Si hay una URL de imagen disponible, muestra la imagen desde la URL
+                             Box(
+                                 modifier = Modifier
+                                     .size(40.dp)
+                                     .padding(start = 5.dp)
+                                     .clip(CircleShape)
+                             ) {
+                                 Image(
+                                     painter = rememberImagePainter(urlImage),
+                                     contentDescription = "Imagen de perfil",
+                                     contentScale = ContentScale.Crop,
+                                     modifier = Modifier.fillMaxSize()
+                                 )
+                             }
+                         } else {
+                             // Si no hay URL de imagen disponible, muestra una imagen predeterminada desde los recursos
+                             Box(
+                                 modifier = Modifier
+                                     .size(40.dp)
+                                     .padding(start = 5.dp)
+                                     .clip(CircleShape)
+                             ) {
+                                 Image(
+                                     painter = painterResource(id = R.drawable.profile),
+                                     contentDescription = "Imagen de perfil",
+                                     contentScale = ContentScale.Crop,
+                                     modifier = Modifier.fillMaxSize()
+                                 )
+                             }
                          }
                      }
-                     Spacer(modifier = Modifier.width(16.dp))
+                     Spacer(modifier = Modifier.width(4.dp))
                      Box(
                          modifier = Modifier
                              .weight(1f)

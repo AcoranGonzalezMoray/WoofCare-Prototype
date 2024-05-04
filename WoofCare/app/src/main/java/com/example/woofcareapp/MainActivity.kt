@@ -27,29 +27,40 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getPreferences(Context.MODE_PRIVATE)
-
         setContent {
             val navController = rememberNavController()
             Navigation(navController, sharedPreferences)
         }
 
     }
-
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation(navController: NavHostController, sharedPreferences: SharedPreferences) {
-    NavHost(navController = navController, startDestination = "bottomScreen") {
+    NavHost(navController = navController, startDestination = "login") {
         // Pantallas de Autenticacion
         composable("login") {
-            Login(navController = navController) { loggedIn,user,token ->
-                DataRepository.setUser(user)
-                if (loggedIn) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        navController.navigate("bottomScreen")
+            val value = sharedPreferences.getString("USERID", null)
+
+            if(value == null){
+                Login(navController = navController) { loggedIn,user,token ->
+                    DataRepository.setUser(user)
+                    DataRepository.setUID(user.id)
+
+                    val editor = sharedPreferences.edit()
+                    editor.putString("USERID", user.id.toString())
+                    editor.apply()
+
+                    if (loggedIn) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            navController.navigate("bottomScreen")
+                        }
                     }
                 }
+            }else {
+                DataRepository.setUID(value.toInt())
+                BottomNavigationScreen(navController, sharedPreferences)
             }
         }
 

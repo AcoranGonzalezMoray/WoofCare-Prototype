@@ -25,6 +25,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,7 +44,15 @@ import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Search.ItemDetails.RatingBar
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
+import android.content.SharedPreferences
+import android.util.Log
+import com.example.woofcareapp.api.services.RetrofitInstance
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun HomeScreen(navController: NavController) {
     val userList = listOf(
@@ -56,7 +66,7 @@ fun HomeScreen(navController: NavController) {
             location = "New York",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 1234567890,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -69,7 +79,7 @@ fun HomeScreen(navController: NavController) {
             location = "Los Angeles",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 9876543210,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -82,7 +92,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -95,7 +105,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -108,7 +118,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -121,7 +131,7 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),        User(
             id = 6,
@@ -133,27 +143,10 @@ fun HomeScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         )
     )
-    DataRepository.setUsers(userList)
-    DataRepository.setUser(
-        User(
-            id = 123,
-            name = "Jane Smith",
-            email = "jane.smith@example.com",
-            password = "password456",
-            accountType = 1,
-            suscriptionType = 2,
-            location = "Los Angeles",
-            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
-            phone = 9876543210,
-            ratingId = 1,
-            statusAccount = 1
-        )
-    )
-
     val productList = listOf(
         Product(
             id = 1,
@@ -324,6 +317,29 @@ fun HomeScreen(navController: NavController) {
         )
     )
 
+    DataRepository.setUsers(userList)
+
+
+
+    LaunchedEffect(Unit) {
+        val userId = DataRepository.getUID()
+        if (userId != null) {
+            try {
+                val response = RetrofitInstance.api.getUserById(userId.toString())
+                if (response.isSuccessful) {
+                    val user: User? = response.body()
+                    if (user != null) {
+                        DataRepository.setUser(user)
+                    }
+                } else {
+                    Log.e("excepcionUserB", "Error al obtener el usuario: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e("excepcionUserB", "Error al obtener el usuario: $e")
+            }
+        }
+    }
+
     val list = shuffleUsersAndProducts(userList, productList)
     Column(
         modifier = Modifier
@@ -387,7 +403,8 @@ fun UserItemServices(service: Service, navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically,
                         ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .weight(1f), // Cada fila ocupará el 50% del ancho
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically,
@@ -414,7 +431,8 @@ fun UserItemServices(service: Service, navController: NavController) {
                             }
                         }
                         Row(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .weight(1f), // Cada fila ocupará el 50% del ancho
                             horizontalArrangement = Arrangement.End
                         ) {
@@ -453,8 +471,9 @@ fun UserItemServices(service: Service, navController: NavController) {
 
                         ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth()
-                            .weight(1f), // Cada fila ocupará el 50% del ancho
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f), // Cada fila ocupará el 50% del ancho
                             horizontalArrangement = Arrangement.Start
                         ) {
                             Text(
@@ -466,7 +485,8 @@ fun UserItemServices(service: Service, navController: NavController) {
                             )
                         }
                         Row(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .weight(1f), // Cada fila ocupará el 50% del ancho
                             horizontalArrangement = Arrangement.End
                         ) {

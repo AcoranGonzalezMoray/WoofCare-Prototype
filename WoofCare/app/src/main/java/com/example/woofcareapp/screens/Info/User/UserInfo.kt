@@ -35,10 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.woofcareapp.R
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Info.Product.ExpandableItem
 import com.example.woofcareapp.screens.Search.ItemDetails.RatingBar
@@ -54,10 +56,10 @@ fun UserInfoScreen(navController: NavController) {
     // Estados para rastrear si cada sección está expandida o no
     val nameExpanded = remember { mutableStateOf(true) }
     val emailExpanded = remember { mutableStateOf(true) }
-    val passwordExpanded = remember { mutableStateOf(true) }
     val locationExpanded = remember { mutableStateOf(true) }
     val phoneExpanded = remember { mutableStateOf(true) }
     val ratingExpanded = remember { mutableStateOf(true) }
+    var accountTypes = listOf("Looking for Services", "Providing Care Services", "Providing Training and Domestication Services")
 
     Column(
         modifier = Modifier
@@ -98,12 +100,21 @@ fun UserInfoScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     ) {
                         // Fondo de la imagen de usuario
-                        Image(
-                            painter = rememberImagePainter(user.profileUrl),
-                            contentDescription = "Profile Image",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        if(user.profileUrl.isNotBlank()){
+                            Image(
+                                painter = rememberImagePainter(user.profileUrl),
+                                contentDescription = "Profile Image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }else{
+                            Image(
+                                painter =  painterResource(id = R.drawable.profile),
+                                contentDescription = "Profile Image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                         // Capa superior con los botones y el nombre del usuario
                         Surface(
                             color = Color(0x44000000), // Color con alfa reducido
@@ -135,7 +146,7 @@ fun UserInfoScreen(navController: NavController) {
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Text(
-                                    text = user.name+", 34",
+                                    text = user.name+", "+user.age,
                                     color = Color.White,
                                     fontSize = 18.sp,
                                     modifier = Modifier
@@ -156,17 +167,17 @@ fun UserInfoScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 ExpandableItem(
+                    title = "Account Type",
+                    content = { Text(text = accountTypes.get(user.accountType), style = typography.body1) },
+                    expanded = nameExpanded,
+                    onClick = { nameExpanded.value = !nameExpanded.value }
+                )
+                Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                ExpandableItem(
                     title = "Email",
                     content = { Text(text = user.email, style = typography.body1) },
                     expanded = emailExpanded,
                     onClick = { emailExpanded.value = !emailExpanded.value }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                ExpandableItem(
-                    title = "Password",
-                    content = { Text(text = "********", style = typography.body1) }, // Replace with appropriate masking logic
-                    expanded = passwordExpanded,
-                    onClick = { passwordExpanded.value = !passwordExpanded.value }
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 ExpandableItem(

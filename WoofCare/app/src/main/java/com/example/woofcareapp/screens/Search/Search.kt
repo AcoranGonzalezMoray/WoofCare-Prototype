@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.TrendingUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +43,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.woofcareapp.api.models.Service
+import com.example.woofcareapp.api.models.User
+import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Search.ItemDetails.previewItem
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
@@ -184,9 +185,12 @@ fun SearchScreen(navController: NavController) {
                     }
                 }
             )        }
-        Filter(onPriceRangeChange = {}, onTypeChange = { setSelectedType(it) }, onMinPrice = {setSelectedPriceMin(it)},
-            onMaxPrice = {setSelectedPriceMax(it)})
+
         LazyColumn(Modifier.padding(5.dp)) {
+            item{
+                Filter(onPriceRangeChange = {}, onTypeChange = { setSelectedType(it) }, onMinPrice = {setSelectedPriceMin(it)},
+                    onMaxPrice = {setSelectedPriceMax(it)})
+            }
             filteredList.forEach {
                 item { previewItem(service = it, navController = navController) }
             }

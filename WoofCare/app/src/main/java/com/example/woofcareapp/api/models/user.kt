@@ -8,10 +8,10 @@ data class User(
     val accountType: Int,
     val suscriptionType: Int,
     val location: String,
-    val profileUrl: String,
+    var profileUrl: String,
     val phone: Long,
-    val ratingId: Int,//nuevo
-    val statusAccount: Int
+    val statusAccount: Int,
+    val age: Int
 )
 
 

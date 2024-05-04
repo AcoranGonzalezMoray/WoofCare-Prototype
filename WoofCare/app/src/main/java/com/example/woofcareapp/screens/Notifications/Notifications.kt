@@ -42,7 +42,7 @@ fun NotificactionsScreen(navController: NavHostController) {
             location = "New York",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 1234567890,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -55,7 +55,7 @@ fun NotificactionsScreen(navController: NavHostController) {
             location = "Los Angeles",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 9876543210,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -68,7 +68,7 @@ fun NotificactionsScreen(navController: NavHostController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -81,7 +81,7 @@ fun NotificactionsScreen(navController: NavHostController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -94,7 +94,7 @@ fun NotificactionsScreen(navController: NavHostController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -107,7 +107,7 @@ fun NotificactionsScreen(navController: NavHostController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ), User(
             id = 6,
@@ -119,7 +119,7 @@ fun NotificactionsScreen(navController: NavHostController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         )
     )

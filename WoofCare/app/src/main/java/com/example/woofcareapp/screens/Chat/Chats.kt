@@ -34,7 +34,6 @@ import coil.compose.rememberImagePainter
 import com.example.woofcareapp.R
 import com.example.woofcareapp.ui.theme.backWoof
 import com.example.woofcareapp.api.models.Message
-import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
@@ -44,7 +43,7 @@ fun ChatsScreen(navController: NavController) {
     val messages = listOf(
         Message(
             id = 1,
-            uidReceiver = 123,
+            uidReceiver = 1,
             uidSender = 456,
             type = "text",
             message = "¡Hola! ¿Estoy interesao en este servicio?",
@@ -53,7 +52,7 @@ fun ChatsScreen(navController: NavController) {
         ),
         Message(
             id = 1,
-            uidReceiver = 123,
+            uidReceiver = 1,
             uidSender = 234,
             type = "text",
             message = "¡Hola! ¿Cómo estás?",
@@ -63,7 +62,7 @@ fun ChatsScreen(navController: NavController) {
         Message(
             id = 2,
             uidReceiver = 456,
-            uidSender = 123,
+            uidSender = 1,
             type = "text",
             message = "Hola, estoy bien. ¿Y tú?",
             sentDate = "2024-05-04 09:17:00",
@@ -71,7 +70,7 @@ fun ChatsScreen(navController: NavController) {
         ),
         Message(
             id = 3,
-            uidReceiver = 123,
+            uidReceiver = 1,
             uidSender = 456,
             type = "text",
             message = "Genial, gracias por preguntar.",
@@ -81,7 +80,7 @@ fun ChatsScreen(navController: NavController) {
         Message(
             id = 4,
             uidReceiver = 456,
-            uidSender = 123,
+            uidSender = 1,
             type = "text",
             message = "¿Tienes planes para hoy?",
             sentDate = "2024-05-04 09:22:00",
@@ -89,7 +88,7 @@ fun ChatsScreen(navController: NavController) {
         ),
         Message(
             id = 5,
-            uidReceiver = 123,
+            uidReceiver = 1,
             uidSender = 456,
             type = "text",
             message = "No realmente, solo descansar en casa. ¿Y tú?",
@@ -99,7 +98,7 @@ fun ChatsScreen(navController: NavController) {
         Message(
             id = 6,
             uidReceiver = 456,
-            uidSender = 123,
+            uidSender = 1,
             type = "text",
             message = "Pensaba en salir a caminar más tarde.",
             sentDate = "2024-05-04 09:28:00",
@@ -107,7 +106,7 @@ fun ChatsScreen(navController: NavController) {
         ),
         Message(
             id = 7,
-            uidReceiver = 123,
+            uidReceiver = 1,
             uidSender = 456,
             type = "text",
             message = "Suena bien. El clima parece perfecto para eso.",
@@ -117,7 +116,7 @@ fun ChatsScreen(navController: NavController) {
         Message(
             id = 8,
             uidReceiver = 456,
-            uidSender = 123,
+            uidSender = 1,
             type = "text",
             message = "Sí, espero que no llueva.",
             sentDate = "2024-05-04 09:32:00",
@@ -125,7 +124,7 @@ fun ChatsScreen(navController: NavController) {
         ),
         Message(
             id = 9,
-            uidReceiver = 123,
+            uidReceiver = 1,
             uidSender = 456,
             type = "text",
             message = "Deberías revisar el pronóstico del tiempo antes de salir.",
@@ -135,7 +134,7 @@ fun ChatsScreen(navController: NavController) {
         Message(
             id = 10,
             uidReceiver = 456,
-            uidSender = 123,
+            uidSender = 1,
             type = "text",
             message = "Sí, lo haré. Gracias por el recordatorio.",
             sentDate = "2024-05-04 09:37:00",
@@ -147,17 +146,17 @@ fun ChatsScreen(navController: NavController) {
             id = 456,
             name = "John Doe",
             email = "john.doe@example.com",
-            password = "password123",
+            password = "password1",
             accountType = 0,
             suscriptionType = 1,
             location = "New York",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 1234567890,
-            ratingId = 1,
+            phone = 14567890,
+            age = 18,
             statusAccount = 1
         ),
         User(
-            id = 123,
+            id = 1,
             name = "Jane Smith",
             email = "jane.smith@example.com",
             password = "password456",
@@ -166,7 +165,7 @@ fun ChatsScreen(navController: NavController) {
             location = "Los Angeles",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 9876543210,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -179,7 +178,7 @@ fun ChatsScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -192,7 +191,7 @@ fun ChatsScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -205,7 +204,7 @@ fun ChatsScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),
         User(
@@ -218,7 +217,7 @@ fun ChatsScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         ),        User(
             id = 6,
@@ -230,13 +229,13 @@ fun ChatsScreen(navController: NavController) {
             location = "Chicago",
             profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
             phone = 5555555555,
-            ratingId = 1,
+            age = 18,
             statusAccount = 1
         )
     )
 
 
-    val myId = 123 //DataRepository
+    val myId = 1 //DataRepository
     val chats = remember { mutableStateListOf<MutableList<Message>>() }
 
     LaunchedEffect(myId) {

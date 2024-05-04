@@ -31,8 +31,8 @@ def save_user_to_database(user):
             id = get_last_user_id()
             cursor.execute(
                 """
-                INSERT INTO Users (id, name, email, password, accountType, suscriptionType, location, profileUrl, phone, statusAccount)
-                VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO Users (id, name, email, password, accountType, suscriptionType, location, profileUrl, phone, statusAccount, age)
+                VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     id + 1,
@@ -45,6 +45,7 @@ def save_user_to_database(user):
                     user.profileUrl,
                     user.phone,
                     user.statusAccount,
+                    user.age
                 ),
             )
             connection.commit()
@@ -117,7 +118,8 @@ def get_user_by_email(email):
                     location=row[6],
                     profileUrl=row[7],
                     phone=row[8],
-                    statusAccount=row[9]
+                    statusAccount=row[9],
+                    age=row[10]
                 )
                 return user
             else:

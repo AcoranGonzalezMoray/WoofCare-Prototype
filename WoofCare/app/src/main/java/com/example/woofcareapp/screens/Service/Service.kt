@@ -29,7 +29,7 @@ fun ServiceScreen(navController: NavController) {
         }
         // Botón flotante
         FloatingActionButton(
-            onClick = { /* Acción cuando se hace clic en el botón */ },
+            onClick = { navController.navigate("addService")},
             modifier = Modifier.padding(16.dp).padding(bottom = 80.dp).align(Alignment.BottomEnd),
             backgroundColor = DarkButtonWoof
         ) {

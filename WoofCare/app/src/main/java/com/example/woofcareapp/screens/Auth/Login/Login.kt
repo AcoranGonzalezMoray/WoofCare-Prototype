@@ -44,6 +44,7 @@ import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.api.services.RequestBodyBuilder
 import com.example.woofcareapp.api.services.RetrofitInstance
 import com.example.woofcareapp.navigation.repository.DataRepository
+import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 import com.example.woofcareapp.ui.theme.prominentWoof
 import kotlinx.coroutines.Dispatchers
@@ -137,15 +138,15 @@ fun Login(navController: NavHostController, onLoginSuccess: (Boolean, User, Stri
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Gray)
+                .background(backWoof)
         ) {
             // Muestra el círculo de carga
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(50.dp)
                     .align(Alignment.Center),
-                color = Color.Black,
-                backgroundColor = Color.White
+                color = DarkButtonWoof,
+                backgroundColor = prominentWoof
             )
         }
     }else{

@@ -1,5 +1,9 @@
+import asyncio
 import hashlib
+import os
+import tempfile
 
+from context.firebase.StorageRepository import StorageRepository
 from context.sqlServer.DBHandler import *
 from entities.Message import Message
 from entities.Dog import Dog
@@ -19,7 +23,7 @@ from context.sqlServer.userT import *
 app = Flask(__name__)
 version = "v1"
 api = Api(app, version='1.0', title='WoofCare API', description='API para la gestión de usuarios en WoofCare.')
-
+storage_repo = StorageRepository()
 #=======================MODEL=======================================
 user_model = api.model('User', modelDoc.Model.getUserModel())
 product_model = api.model('Product', modelDoc.Model.getProductModel())
@@ -96,10 +100,16 @@ class UserSpecificUser(Resource):
         data = request.json
         users = get_entity_data("Users")
         user: User = next((user for user in users if user.id == id), None)
+        hashed_password = user.password
+
+        if(user.password != data['password']):
+            hashed_password = hashlib.sha256(data['password'].encode()).hexdigest()
+        
+
         if user:
             user.name = data["name"]
             user.email = data["email"]
-            user.password = data["password"]
+            user.password = hashed_password
             user.accountType = data["accountType"]
             user.suscriptionType = data["suscriptionType"]
             user.location = data["location"]
@@ -160,7 +170,7 @@ class SignUp(Resource):
             statusAccount = data.get("statusAccount"),
             age=data.get("age")
         )
-
+        print(new_user.age)
         if save_user_to_database(new_user):
             return {"message": "Usuario creado correctamente"}, 201
         else:
@@ -273,6 +283,60 @@ class SpecificProduct(Resource):
             return {"message": "Producto eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el producto"}, 500
+
+
+# =====================IMAGE CONTROLLER==============================
+@api.route(f'/api/{version}/image')
+class Image(Resource):
+    @api.doc('upload_image')
+    def post(self):
+        """
+        Sube una imagen y retorna la URL de descarga.
+        """
+        # Asegúrate de que 'file' sea el nombre del parámetro que contiene la imagen en el cuerpo de la solicitud
+        file = request.files['image']
+        objectId = request.form['objectId']
+        objectType = request.form['objectType']
+
+        # Crea un archivo temporal para almacenar la imagen
+        temp_image = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+        print(objectId, objectType)
+        # Guarda la imagen en el archivo temporal
+        file.save(temp_image.name)
+
+        # Nombre de la imagen (puedes usar el nombre original o generar uno único)
+        image_name = "image_name.jpg"  # Cambia esto según tus necesidades
+        download_url = ""
+
+
+        # 0.User, 1.Service, 2.Product
+
+        if(int(objectType) == 0):
+            users = get_entity_data("Users")
+            user:User = next((user for user in users if user.id == int(objectId)), None)
+            print(user.name, objectType.__class__)
+            if(user.profileUrl != ""):       
+                async def delete_image_async():
+                    return await storage_repo.delete_image(user.profileUrl)
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                loop.run_until_complete(delete_image_async())
+                pass
+
+            async def upload_image_async():
+                return await storage_repo.upload_image(temp_image.name, image_name)
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            download_url = loop.run_until_complete(upload_image_async())
+            user.profileUrl = download_url
+            update_entity_in_database(user)
+
+        elif(objectType == 1):
+            pass
+        elif(objectType == 2):
+            pass
+
+        return download_url,200
 
 # =====================REQUEST CONTROLLER==============================
 @api.route(f"/api/{version}/request")

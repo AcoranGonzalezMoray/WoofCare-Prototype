@@ -71,7 +71,7 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val excludedRoutes = setOf("profile","productInfo", "userInfo", "FAQ", "serviceInfo", "chat")
+    val excludedRoutes = setOf("profile","productInfo", "userInfo", "FAQ", "serviceInfo", "chat", "addService")
     Scaffold(
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = true,
@@ -99,7 +99,9 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
                         ) {
 
                             Column(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier.fillMaxSize().clickable {
+                                    scope.launch { scaffoldState.drawerState.open() }
+                                },
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.Start
                             ) {
@@ -160,6 +162,7 @@ fun Drawer(
     scope: CoroutineScope
 ) {
     var showDialog by remember { mutableStateOf(false) }
+
 
     val deleteAccount:()->Unit = {
         GlobalScope.launch(Dispatchers.IO) {
@@ -248,11 +251,9 @@ fun Drawer(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = {
-                        //DataRepository.LogOut()
-                        sharedPreferences.edit {
-                            remove("TOKEN_KEY")
-                            remove("USER_KEY")
-                        }
+                        val editor = sharedPreferences.edit()
+                        editor.clear()
+                        editor.apply()
                         navControllerLogin.navigate("login")
                         scope.launch { scaffoldState.drawerState.close() }
 

@@ -1,9 +1,7 @@
 package com.example.woofcareapp.screens.Auth.SignUp
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
@@ -56,16 +54,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.api.services.RetrofitInstance
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 import com.example.woofcareapp.ui.theme.prominentWoof
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -82,6 +78,8 @@ fun SignUpScreen(navController: NavHostController) {
     var accountType by remember { mutableStateOf(0) }
     var location by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf(111111111) }
+    var age by remember { mutableStateOf(18) }
+    var isAgeError by remember { mutableStateOf(false) }
 
     var isMenuExpanded by remember { mutableStateOf(false) }
     var selectedAccountType by remember { mutableStateOf(0) }
@@ -98,7 +96,8 @@ fun SignUpScreen(navController: NavHostController) {
             "Confirm Password" to confirmPassword,
             "Phone" to phone.toString(),
             "Account Type" to accountType.toString(),
-            "Location" to location
+            "Location" to location,
+            "Age" to age.toString()
         ).firstOrNull { it.second.isBlank() }
 
         "${emptyField?.first ?: ""} is required"
@@ -116,7 +115,7 @@ fun SignUpScreen(navController: NavHostController) {
     val onSignUp:() -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val user = User(0,name, email, password,selectedAccountType,0,"","",phone.toLong(),0,0)
+                val user = User(0,name, email, password,selectedAccountType,0,"","",phone.toLong(),0, age)
 
                 val response = RetrofitInstance.api.signUp(user)
                 withContext(Dispatchers.Main) {
@@ -242,16 +241,41 @@ fun SignUpScreen(navController: NavHostController) {
                 if (!passwordMatches) {
                     Text("Passwords do not match", color = Color.Red)
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
+
 
                 TextField(
                     value = phone.toString(),
                     isError = isError,
-                    onValueChange = { phone = it.toInt() },
+                    onValueChange = { if (it.isDigitsOnly()) phone = it.toIntOrNull() ?: 0 },
                     label = { Text("Phone") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = customTextFieldColors,
+                )
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextField(
+                    value = age.toString(),
+                    isError = isError,
+                    onValueChange = { newText ->
+                        if (newText.isDigitsOnly()) {
+                            val newAge = newText.toIntOrNull() ?: 0
+                            age = newAge
+                            if (age < 18) {
+                                Toast.makeText(context, "You must be of legal age", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    },
+                    label = { Text("Age") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = customTextFieldColors
                 )
+
+
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
@@ -320,7 +344,8 @@ fun SignUpScreen(navController: NavHostController) {
                     }
 
                     Button(
-                        onClick = {showDialog = true},
+                        //onClick = {showDialog = true},
+                        onClick = {onSignUp() },
                         colors = ButtonDefaults.buttonColors(DarkButtonWoof),
                         modifier = Modifier
                             .weight(1f)

@@ -13,6 +13,14 @@ object DataRepository {
     private var productPlus: Product? = null
     private var servicePlus: Service? = null
     private var messagesPlus: List<Message>? = null
+    private var UID: Int = 0
+    fun setUID(id: Int){
+        UID = id
+    }
+
+    fun getUID():Int{
+        return UID
+    }
 
     fun setMessagePlus(messages: List<Message>){
         messagesPlus = messages

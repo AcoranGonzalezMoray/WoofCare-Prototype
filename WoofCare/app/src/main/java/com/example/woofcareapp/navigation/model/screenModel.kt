@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.woofcareapp.navigation.repository.DataRepository
 
 class ScreenModel {
 
@@ -23,15 +24,20 @@ class ScreenModel {
         object Home : HomeScreens("home", "Home", Icons.Filled.Home)
         object Search : HomeScreens("search", "Search", Icons.Filled.Search)
         object Service : HomeScreens("service", "Service", Icons.Filled.Pets)
-
         object Chat : HomeScreens("chats", "Chat", Icons.Filled.ChatBubble)
-
         object Profile : HomeScreens("profile", "Profile", Icons.Filled.Person)
-
     }
 
-    val screensInHomeFromBottomNav = listOf(
-        HomeScreens.Home, HomeScreens.Search, HomeScreens.Service, HomeScreens.Chat ,HomeScreens.Profile
+    val repo = DataRepository.getUser()?.accountType
+    var screensInHomeFromBottomNav = listOf(
+        HomeScreens.Home, HomeScreens.Search, HomeScreens.Chat ,HomeScreens.Profile
     )
 
+    init {
+        if(repo != 0){
+            screensInHomeFromBottomNav = listOf(
+                HomeScreens.Home, HomeScreens.Search, HomeScreens.Service , HomeScreens.Chat ,HomeScreens.Profile
+            )
+        }
+    }
 }

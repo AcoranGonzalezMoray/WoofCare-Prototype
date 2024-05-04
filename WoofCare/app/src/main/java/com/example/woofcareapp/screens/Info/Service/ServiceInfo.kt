@@ -111,7 +111,7 @@ fun ServiceInfoScreen(navController: NavController) {
                                     .clip(CircleShape)
                             )
                             Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                            Text(text = user.name+", 34", color = Color.White)
+                            Text(text = user.name+", "+user.age, color = Color.White)
                         }else {
                             Image(
                                 painter = rememberImagePainter("https://images.hola.com/imagenes/estar-bien/20221018219233/buenas-personas-caracteristicas/1-153-242/getty-chica-feliz-t.jpg?tx=w_680"),
