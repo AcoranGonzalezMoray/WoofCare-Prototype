@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -77,7 +78,7 @@ fun AddServiceScreen(navController: NavController) {
     val typeState = remember { mutableStateOf(accountTypes[user!!.accountType]) }
     val statusState = remember { mutableStateOf("") }
     val descriptionState = remember { mutableStateOf("") }
-    val priceState = remember { mutableStateOf("") }
+    val priceState = remember { mutableStateOf(0.0) }
 
     val scrollState = rememberScrollState()
     val service = remember {
@@ -169,7 +170,10 @@ fun AddServiceScreen(navController: NavController) {
                 if (service != null) {
                     // Banner or Slider of images
                     ImageSlider(bannerUrls = images, onchange = {
-                        images.add(images.size, it)
+                        images = mutableListOf()
+                        for (uri in it) images.add(uri)
+                        Log.d("ImageSlider", "Current images: $images") // Agregar un registro para depurar
+
                     })
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
@@ -258,8 +262,8 @@ fun AddServiceScreen(navController: NavController) {
                     )
                     EditableItem(
                         title = "Price",
-                        text = priceState.value,
-                        onTextChanged = { priceState.value = it },
+                        text = priceState.value.toString()+"€",
+                        onTextChanged = { priceState.value = it.split("€")[0].toDouble() },
                         expanded = priceExpanded,
                         onExpandToggle = { priceExpanded.value = !priceExpanded.value },)
                 }
@@ -316,23 +320,25 @@ fun EditableItem(
 
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun ImageSlider(bannerUrls: List<String>, onchange: (String) -> Unit) {
+fun ImageSlider(bannerUrls: List<String>, onchange: (List<String>) -> Unit) {
     var pagerState = rememberPagerState(pageCount = { bannerUrls.size })
     var selectedPage = remember { mutableStateOf(0) }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var images  by remember { mutableStateOf(bannerUrls.toMutableList()) }
 
-    val chooseImageLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            // Agrega la nueva URL de la imagen a la lista de URLs
-            selectedImageUri = uri
-            onchange(uri.toString())
+    val chooseImagesLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris: List<Uri>? ->
+        uris?.let { uriList ->
+            for (uri in uriList) {
+                images.add(uri.toString()) // Agrega cada URI a la lista de imágenes
+            }
+            onchange(images)
         }
     }
-
 
 
     Column {
@@ -364,7 +370,7 @@ fun ImageSlider(bannerUrls: List<String>, onchange: (String) -> Unit) {
                 ) {
                     FloatingActionButton(
                         onClick = {
-                            chooseImageLauncher.launch("image/*")
+                            chooseImagesLauncher.launch("image/*")
                         },
                         backgroundColor = DarkButtonWoof,
                         modifier = Modifier.padding(8.dp).size(40.dp)
