@@ -62,7 +62,7 @@ fun SearchScreen(navController: NavController) {
     val (selectedPriceMin, setSelectedPriceMin) = remember { mutableStateOf(0.0) }
     val (selectedPriceMax, setSelectedPriceMax) = remember { mutableStateOf(50.0) }
 
-    val serviceList = DataRepository.getServices()?.shuffled()
+    val serviceList = DataRepository.getServices()?.shuffled()?.distinct()
 
     var filteredList = serviceList?.filter { service ->
         service.name.contains(searchValue.value, ignoreCase = true) &&

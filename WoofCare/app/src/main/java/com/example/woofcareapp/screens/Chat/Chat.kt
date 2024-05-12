@@ -1,5 +1,7 @@
 package com.example.woofcareapp.screens.Chat
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,6 +35,7 @@ import androidx.compose.material.icons.filled.OnlinePrediction
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,29 +47,82 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.woofcareapp.R
 import com.example.woofcareapp.api.models.Message
-import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.api.models.User
+import com.example.woofcareapp.api.services.RetrofitInstance
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Home.UserItemServices
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 import com.example.woofcareapp.ui.theme.prominentWoof
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
 fun ChatScreen(navController: NavController) {
-    var messages = DataRepository.getMessagePlus()
+    var messages by remember {
+        mutableStateOf(DataRepository.getMessagePlus())
+    }
+
     var other = DataRepository.getUserPlus()
+    var me = DataRepository.getUser()
+    val context = LocalContext.current
+    var current by remember{ mutableStateOf(true) }
+
+    val onLoadMessages: () -> Unit = {
+        GlobalScope.launch(Dispatchers.IO) {
+            while (current){
+                try {
+                    val messagePetition = RetrofitInstance.api.getMessages()
+
+                    if (messagePetition.isSuccessful) {
+                        val messagesDB = messagePetition.body()!!
+                        messagesDB.filter { (it.uidSender ==  me!!.id|| it.uidReceiver == other!!.id) &&
+                                (it.uidSender == other!!.id || it.uidReceiver == me.id) }
+
+                        val hasNewMessages = messagesDB.any { newMessage ->
+                            !messages!!.any { oldMessage ->
+                                newMessage.id == oldMessage.id
+                            }
+                        }
+                        if (hasNewMessages) messages = messagesDB
+                    } else {
+                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Log.d("excepcionUserC", "${e}")
+                }
+
+                delay(500)
+            }
+
+        }
+    }
+
+    LaunchedEffect(Unit){
+        delay(1500)
+        onLoadMessages()
+    }
+
     Column(Modifier.fillMaxSize()) {
         if (other != null) {
-            Header(other, navController)
+            Header(other, navController, onCurrent= {
+                current = false
+                navController.navigate("chats")
+            })
         }
         LazyColumn(
             modifier = Modifier
@@ -96,7 +151,7 @@ fun ChatScreen(navController: NavController) {
 }
 
 @Composable
-fun Header(other: User, navController: NavController) {
+fun Header(other: User, navController: NavController, onCurrent: () -> Unit) {
     TopAppBar(
         backgroundColor = DarkButtonWoof,
         title = {
@@ -119,7 +174,9 @@ fun Header(other: User, navController: NavController) {
                        verticalAlignment = Alignment.CenterVertically
                    ) {
                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = "menu", tint = Color.White,
-                           modifier = Modifier.clickable { navController.popBackStack() })
+                           modifier = Modifier.clickable {
+                               onCurrent()
+                           })
                        var urlImage = other.profileUrl
 
                        if (urlImage != null) {
@@ -188,84 +245,7 @@ fun ChatMessages(messages: List<Message>?, other: User, navController: NavContro
 fun Message(message: Message, other: User, navController: NavController) {
     val me = DataRepository.getUser()
     val user = if (message.uidSender == me?.id) me else other
-    val serviceList = listOf(
-        Service(
-            id = 1,
-            name = "Paseos Diarios",
-            type = 0,
-            status = 0,
-            publicationDate = "2024-04-21",
-            description = "Paseos diarios para perros de todas las edades y razas. Incluye ejercicio moderado y socialización.",
-            price = 25.0,
-            uid = 1,
-            bannerUrl =
-            "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-                    +";"+"https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-
-        ),
-        Service(
-            id = 2,
-            name = "Entrenamiento Básico",
-            type = 0,
-            status = 0,
-            publicationDate = "2024-04-20",
-            description = "Entrenamiento básico para cachorros y perros adultos. Enseñanza de órdenes básicas y comportamiento adecuado.",
-            price = 50.0,
-            uid = 2,
-            bannerUrl =
-            "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-                    +";"+"https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-
-        ),
-        Service(
-            id = 3,
-            name = "Cuidado de Día",
-            type = 0,
-            status = 0,
-            publicationDate = "2024-04-19",
-            description = "Cuidado diurno para perros mientras los propietarios están fuera. Incluye tiempo de juego y supervisión.",
-            price = 35.0,
-            uid = 3,
-            bannerUrl = "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-                    +";"+"https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-        ),
-        Service(
-            id = 4,
-            name = "Adiestramiento Avanzado",
-            type = 0,
-            status = 0,
-            publicationDate = "2024-04-18",
-            description = "Adiestramiento avanzado para perros con necesidades especiales. Enseñanza de habilidades avanzadas y obediencia.",
-            price = 70.0,
-            uid = 4,
-            bannerUrl = "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-                    +";"+"https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-        ),
-        Service(
-            id = 5,
-            name = "Guardería Nocturna",
-            type = 0,
-            status = 0,
-            publicationDate = "2024-04-17",
-            description = "Guardería nocturna para perros que necesitan alojamiento durante la noche. Ambiente seguro y cómodo para descansar.",
-            price = 40.0,
-            uid = 5,
-            bannerUrl = "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-                    +";"+"https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-        ),
-        Service(
-            id = 6,
-            name = "Terapia Canina",
-            type = 0,
-            status = 0,
-            publicationDate = "2024-04-16",
-            description = "Terapia emocional para perros que sufren de ansiedad o estrés. Sesiones individuales y grupales disponibles.",
-            price = 60.0,
-            uid = 6,
-            bannerUrl =  "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-                    +";"+"https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-        )
-    )
+    val serviceList = DataRepository.getServices()
     Surface(
         color = backWoof,
         modifier = Modifier.padding(4.dp),
@@ -275,7 +255,7 @@ fun Message(message: Message, other: User, navController: NavController) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if(user.id == me?.id){
+            if(user.id == me?.id && message.serviceId==0){
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -305,7 +285,7 @@ fun Message(message: Message, other: User, navController: NavController) {
                             modifier = Modifier.padding(10.dp)
                         ) {
                             if(message.serviceId!=0){
-                                val service = serviceList.filter { it.id == message.serviceId }
+                                val service = serviceList!!.filter { it.id == message.serviceId }
                                 if(service.isNotEmpty()){
                                     UserItemServices(service[0], navController)
                                 }
@@ -320,7 +300,7 @@ fun Message(message: Message, other: User, navController: NavController) {
                                 horizontalArrangement = Arrangement.Start
                             ) {
                                 Text(
-                                    text = message.sentDate,
+                                    text = message.sentDate.split(".").first(),
                                     color = Color.Gray,
                                     style = MaterialTheme.typography.caption,
                                     textAlign = TextAlign.Start// Alinea el texto a la derecha si es tu mensaje, de lo contrario, alinea a la izquierda
@@ -333,7 +313,7 @@ fun Message(message: Message, other: User, navController: NavController) {
             if(user.id != me?.id){
                 Column(
                     modifier = Modifier
-                        .weight((if(message.serviceId!=0) 0.1f else 1f) as Float)
+                        .weight((if (message.serviceId != 0) 0.1f else 1f) as Float)
                         .padding(4.dp)
                 ) {
                     // Contenido de la primera columna
@@ -347,6 +327,37 @@ fun Message(message: Message, other: User, navController: NavController) {
 fun SendMessage(other: User) {
     var text by remember { mutableStateOf(TextFieldValue()) } // Variable para almacenar el valor del texto
     val me = DataRepository.getUser()
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
+    val onSendMessage: () -> Unit = {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                val formattedDateTime = currentDateTime.format(formatter)
+                var message = Message(
+                    id = 0,
+                    uidSender = me!!.id,
+                    uidReceiver = other.id,
+                    message = text.text,
+                    serviceId = 0,
+                    sentDate = formattedDateTime,
+                    type = "0"
+                )
+                val messagePetition = RetrofitInstance.api.createMessage(message)
+
+                if (messagePetition.isSuccessful) {
+                        text =  TextFieldValue("")
+                } else {
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.d("excepcionUserC", "${e}")
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -431,7 +442,11 @@ fun SendMessage(other: User) {
               }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { /* Handle send button click */ },
+                onClick = {
+                    onSendMessage()
+
+                    focusManager.clearFocus()
+                          },
                 modifier = Modifier.weight(0.1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = DarkButtonWoof),
                 shape = CircleShape,
