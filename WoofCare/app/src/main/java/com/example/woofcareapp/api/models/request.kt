@@ -5,6 +5,6 @@ data class Request(
     val uidReceiver: String,
     val uidSender: String,
     val serviceId: Int,
-    val status: String,
+    var status: String,
     val creationDate: String
 )
