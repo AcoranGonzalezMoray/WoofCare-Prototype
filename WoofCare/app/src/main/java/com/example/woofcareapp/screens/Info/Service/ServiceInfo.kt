@@ -82,7 +82,7 @@ fun ServiceInfoScreen(navController: NavController) {
         ) {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("home") }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.Default.ArrowBack,
                             contentDescription = "Back to Home",
@@ -135,7 +135,7 @@ fun ServiceInfoScreen(navController: NavController) {
             ) {
                 if(service != null) {
                     // Banner or Slider of images
-                    ImageSlider(bannerUrls = service.bannerUrl)
+                    ImageSlider(bannerUrls = service.bannerUrl.split(";").dropLast(1))
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                     // Service Info
@@ -216,7 +216,7 @@ fun CustomBadge(type: Int = -1, status: Int = -1){
         }
         if(type == 1){
             Badge(
-                backgroundColor = Color.Red,
+                backgroundColor = Color.Green,
                 content = {Text(text = "Dog Caregiver Service")}
             )
         }
@@ -232,7 +232,7 @@ fun CustomBadge(type: Int = -1, status: Int = -1){
         if(status == 1){
             Badge(
                 backgroundColor = Color.Red,
-                content = {Text(text = "Service Temporarily Unavailable")}
+                content = {Text(text = "Service Temporarily Unavailable", color =Color.White)}
             )
         }
     }

@@ -9,6 +9,9 @@ import com.example.woofcareapp.api.models.User
 object DataRepository {
     private var user: User? = null
     private var users: List<User>? = null
+    private var services: List<Service>? = null
+    private var products: List<Product>? = null
+
     private var userPlus: User? = null
     private var productPlus: Product? = null
     private var servicePlus: Service? = null
@@ -62,6 +65,22 @@ object DataRepository {
 
     fun getUsers(): List<User>?{
         return users
+    }
+
+    fun setServices(newServices: List<Service>) {
+        services= newServices
+    }
+
+    fun getServices(): List<Service>?{
+        return services
+    }
+
+    fun setProducts(newProducts: List<Product>) {
+        products= newProducts
+    }
+
+    fun getProducts(): List<Product>?{
+        return products
     }
 
     fun setUser(newUser: User) {

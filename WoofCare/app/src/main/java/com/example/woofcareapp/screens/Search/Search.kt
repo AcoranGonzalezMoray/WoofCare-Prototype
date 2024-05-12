@@ -62,99 +62,9 @@ fun SearchScreen(navController: NavController) {
     val (selectedPriceMin, setSelectedPriceMin) = remember { mutableStateOf(0.0) }
     val (selectedPriceMax, setSelectedPriceMax) = remember { mutableStateOf(50.0) }
 
-    val serviceList = listOf(
-        Service(
-            id = 1,
-            name = "Paseos Diarios",
-            type = 1,
-            status = 0,
-            publicationDate = "2024-04-21",
-            description = "Paseos diarios para perros de todas las edades y razas. Incluye ejercicio moderado y socialización.",
-            price = 25.0,
-            uid = 1,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-            )
-        ),
-        Service(
-            id = 2,
-            name = "Entrenamiento Básico",
-            type = 2,
-            status = 0,
-            publicationDate = "2024-04-20",
-            description = "Entrenamiento básico para cachorros y perros adultos. Enseñanza de órdenes básicas y comportamiento adecuado.",
-            price = 50.0,
-            uid = 2,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-            )
-        ),
-        Service(
-            id = 3,
-            name = "Cuidado de Día",
-            type = 1,
-            status = 0,
-            publicationDate = "2024-04-19",
-            description = "Cuidado diurno para perros mientras los propietarios están fuera. Incluye tiempo de juego y supervisión.",
-            price = 35.0,
-            uid = 3,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-            )
-        ),
-        Service(
-            id = 4,
-            name = "Adiestramiento Avanzado",
-            type = 1,
-            status = 0,
-            publicationDate = "2024-04-18",
-            description = "Adiestramiento avanzado para perros con necesidades especiales. Enseñanza de habilidades avanzadas y obediencia.",
-            price = 70.0,
-            uid = 4,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-            )
-        ),
-        Service(
-            id = 5,
-            name = "Guardería Nocturna",
-            type = 2,
-            status = 0,
-            publicationDate = "2024-04-17",
-            description = "Guardería nocturna para perros que necesitan alojamiento durante la noche. Ambiente seguro y cómodo para descansar.",
-            price = 40.0,
-            uid = 5,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-            )
-        ),
-        Service(
-            id = 6,
-            name = "Terapia Canina",
-            type = 2,
-            status = 0,
-            publicationDate = "2024-04-16",
-            description = "Terapia emocional para perros que sufren de ansiedad o estrés. Sesiones individuales y grupales disponibles.",
-            price = 60.0,
-            uid = 6,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-            )
-        )
-    )
-    var filteredList = serviceList.filter { service ->
+    val serviceList = DataRepository.getServices()?.shuffled()
+
+    var filteredList = serviceList?.filter { service ->
         service.name.contains(searchValue.value, ignoreCase = true) &&
                 (selectedType == 0 || service.type == selectedType) &&
                 (service.price in selectedPriceMin..selectedPriceMax)
@@ -191,8 +101,11 @@ fun SearchScreen(navController: NavController) {
                 Filter(onPriceRangeChange = {}, onTypeChange = { setSelectedType(it) }, onMinPrice = {setSelectedPriceMin(it)},
                     onMaxPrice = {setSelectedPriceMax(it)})
             }
-            filteredList.forEach {
+            filteredList?.forEach {
                 item { previewItem(service = it, navController = navController) }
+            }
+            item {
+                Spacer(modifier = Modifier.padding(vertical = 40.dp))
             }
         }
 
@@ -320,7 +233,7 @@ fun Filter(
                                 if (isChecked) {
                                     checkedList.clear()
                                     checkedList.add(index)
-                                    var local = index +1
+                                    var local = index
                                     onTypeChange(local)
                                 } else {
                                     checkedList.remove(index)

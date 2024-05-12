@@ -99,7 +99,7 @@ fun ProductInfoScreen(navController: NavController) {
             ) {
                 if(product!=null){
                     // Banner or Slider of images
-                    ImageSlider(bannerUrls = product.bannerUrls)
+                    ImageSlider(bannerUrls = product.bannerUrls.split(";"))
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                     // Product Info

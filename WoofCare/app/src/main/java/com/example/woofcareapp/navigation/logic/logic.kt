@@ -18,6 +18,7 @@ import com.example.woofcareapp.screens.Notifications.NotificactionsScreen
 import com.example.woofcareapp.screens.Profile.ProfileScreen
 import com.example.woofcareapp.screens.Search.SearchScreen
 import com.example.woofcareapp.screens.Service.AddService.AddServiceScreen
+import com.example.woofcareapp.screens.Service.AddService.EditServiceScreen
 import com.example.woofcareapp.screens.Service.ServiceScreen
 
 
@@ -61,6 +62,9 @@ fun  Navigation(navController: NavHostController) {
         }
         composable("addService") {
             AddServiceScreen(navController)
+        }
+        composable("editService") {
+            EditServiceScreen(navController)
         }
     }
 
