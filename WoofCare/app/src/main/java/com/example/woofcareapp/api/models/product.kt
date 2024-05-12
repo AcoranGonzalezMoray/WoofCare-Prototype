@@ -10,5 +10,5 @@ data class Product(
     val reviewId: Int,//nuevo
     val webUrl: String,//nuevo
     val status: Int,
-    val bannerUrls: List<String> //cambiar split , y hacer lista
+    val bannerUrls: String //cambiar split , y hacer lista
 )

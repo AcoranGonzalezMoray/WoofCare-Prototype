@@ -1,5 +1,5 @@
 class Product:
-    def __init__(self, id, name, description, price, location, companyName, status, bannerUrls):
+    def __init__(self, id, name, description, price, location, companyName, status, bannerUrls, webUrl):
         self.id = id
         self.name = name
         self.description = description
@@ -8,6 +8,7 @@ class Product:
         self.companyName = companyName
         self.status = status
         self.bannerUrls = bannerUrls
+        self.webUrl = webUrl
 
     def to_dict(self):
         return {
@@ -18,5 +19,6 @@ class Product:
             "location": self.location,
             "companyName": self.companyName,
             "status": self.status,
-            "bannerUrls": self.bannerUrls
+            "bannerUrls": self.bannerUrls,
+            "webUrl": self.webUrl
         }

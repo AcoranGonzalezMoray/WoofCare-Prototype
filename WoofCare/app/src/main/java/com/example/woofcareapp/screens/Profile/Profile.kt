@@ -118,7 +118,7 @@ fun ProfileScreen(navController: NavController) {
                     // Envía la solicitud para actualizar la imagen del usuario
                     val response =
                         imagePart?.let {
-                            RetrofitInstance.api.updateImageUser(userIdRequestBody,typeRequestBody,
+                            RetrofitInstance.api.updateImage(userIdRequestBody,typeRequestBody,
                                 it
                             )
                         }

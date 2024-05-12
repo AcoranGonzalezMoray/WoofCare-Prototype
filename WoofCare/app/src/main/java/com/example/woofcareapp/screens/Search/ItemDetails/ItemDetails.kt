@@ -61,7 +61,7 @@ fun previewItem(service: Service, navController: NavController) {
         ) {
             // Fondo de la imagen de usuario
             Image(
-                painter = rememberImagePainter(service.bannerUrl[0]),
+                painter = rememberImagePainter(service.bannerUrl.split(";")[0]),
                 contentDescription = "Service Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()

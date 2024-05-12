@@ -1,5 +1,6 @@
 package com.example.woofcareapp.screens.Home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,110 +47,117 @@ import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import com.example.woofcareapp.api.services.RetrofitInstance
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+@SuppressLint("MutableCollectionMutableState")
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-    val userList = listOf(
-        User(
-            id = 1,
-            name = "John Doe",
-            email = "john.doe@example.com",
-            password = "password123",
-            accountType = 0,
-            suscriptionType = 1,
-            location = "New York",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 1234567890,
-            age = 18,
-            statusAccount = 1
-        ),
-        User(
-            id = 2,
-            name = "Jane Smith",
-            email = "jane.smith@example.com",
-            password = "password456",
-            accountType = 1,
-            suscriptionType = 2,
-            location = "Los Angeles",
-            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
-            phone = 9876543210,
-            age = 18,
-            statusAccount = 1
-        ),
-        User(
-            id = 3,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 5555555555,
-            age = 18,
-            statusAccount = 1
-        ),
-        User(
-            id = 3,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
-            phone = 5555555555,
-            age = 18,
-            statusAccount = 1
-        ),
-        User(
-            id = 4,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
-            phone = 5555555555,
-            age = 18,
-            statusAccount = 1
-        ),
-        User(
-            id = 5,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
-            phone = 5555555555,
-            age = 18,
-            statusAccount = 1
-        ),        User(
-            id = 6,
-            name = "Alice Johnson",
-            email = "alice.johnson@example.com",
-            password = "password789",
-            accountType = 2,
-            suscriptionType = 0,
-            location = "Chicago",
-            profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
-            phone = 5555555555,
-            age = 18,
-            statusAccount = 1
-        )
-    )
-    val productList = listOf(
+    val userList by remember { mutableStateOf(mutableListOf(
+            User(
+                id = 146,
+                name = "John Doe",
+                email = "john.doe@example.com",
+                password = "password123",
+                accountType = 0,
+                suscriptionType = 1,
+                location = "New York",
+                profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
+                phone = 1234567890,
+                age = 18,
+                statusAccount = 1
+            ),
+            User(
+                id = 2456,
+                name = "Jane Smith",
+                email = "jane.smith@example.com",
+                password = "password456",
+                accountType = 1,
+                suscriptionType = 2,
+                location = "Los Angeles",
+                profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
+                phone = 9876543210,
+                age = 18,
+                statusAccount = 1
+            ),
+            User(
+                id = 3456,
+                name = "Alice Johnson",
+                email = "alice.johnson@example.com",
+                password = "password789",
+                accountType = 2,
+                suscriptionType = 0,
+                location = "Chicago",
+                profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
+                phone = 5555555555,
+                age = 18,
+                statusAccount = 1
+            ),
+            User(
+                id = 3456,
+                name = "Alice Johnson",
+                email = "alice.johnson@example.com",
+                password = "password789",
+                accountType = 2,
+                suscriptionType = 0,
+                location = "Chicago",
+                profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
+                phone = 5555555555,
+                age = 18,
+                statusAccount = 1
+            ),
+            User(
+                id = 4456,
+                name = "Alice Johnson",
+                email = "alice.johnson@example.com",
+                password = "password789",
+                accountType = 2,
+                suscriptionType = 0,
+                location = "Chicago",
+                profileUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIeOvKydWQ3J5PJv3jQV4gdQzmqtjFi1FDZ4Zjxh5yAA&s",
+                phone = 5555555555,
+                age = 18,
+                statusAccount = 1
+            ),
+            User(
+                id = 5456,
+                name = "Alice Johnson",
+                email = "alice.johnson@example.com",
+                password = "password789",
+                accountType = 2,
+                suscriptionType = 0,
+                location = "Chicago",
+                profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
+                phone = 5555555555,
+                age = 18,
+                statusAccount = 1
+            ),        User(
+                id = 6456,
+                name = "Alice Johnson",
+                email = "alice.johnson@example.com",
+                password = "password789",
+                accountType = 2,
+                suscriptionType = 0,
+                location = "Chicago",
+                profileUrl = "https://s1.elespanol.com/2023/06/08/vivir/salud-mental/769933690_233804290_1706x960.jpg",
+                phone = 5555555555,
+                age = 18,
+                statusAccount = 1
+            )
+        )) }
+    val productList by remember { mutableStateOf(mutableListOf(
         Product(
-            id = 1,
+            id = 1456,
             name = "Royal Canin Mini Sterilised",
             description = "Nutritious dog food for sterilized small breed dogs",
             price = 599.99,
@@ -158,13 +166,13 @@ fun HomeScreen(navController: NavController) {
             status = 1,
             reviewId = 1,
             webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
-            bannerUrls = listOf(
-                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
-                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
-            )
+            bannerUrls =
+                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg"+";"+
+                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg;"
+
         ),
         Product(
-            id = 2,
+            id = 2456,
             name = "Royal Canin Medium Sterilised",
             description = "Balanced dog food for sterilized medium breed dogs",
             price = 149.99,
@@ -173,13 +181,13 @@ fun HomeScreen(navController: NavController) {
             status = 1,
             reviewId = 1,
             webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
-            bannerUrls = listOf(
-                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
-                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
-            )
+            bannerUrls =
+                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg"+";"+
+                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg;"
+
         ),
         Product(
-            id = 3,
+            id = 3456,
             name = "Royal Canin Maxi Sterilised",
             description = "Specially formulated dog food for sterilized large breed dogs",
             price = 79.99,
@@ -188,13 +196,13 @@ fun HomeScreen(navController: NavController) {
             status = 1,
             reviewId = 1,
             webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
-            bannerUrls = listOf(
-                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
-                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
-            )
+            bannerUrls =
+                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg"+";"+
+                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg;"
+
         ),
         Product(
-            id = 4,
+            id = 446,
             name = "Royal Canin Mini Puppy",
             description = "Premium nutrition for small breed puppies",
             price = 79.99,
@@ -203,13 +211,13 @@ fun HomeScreen(navController: NavController) {
             status = 1,
             reviewId = 1,
             webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
-            bannerUrls = listOf(
-                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
-                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
-            )
+            bannerUrls =
+                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg"+";"+
+                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg;"
+
         ),
         Product(
-            id = 5,
+            id = 546,
             name = "Royal Canin Maxi Puppy",
             description = "Complete and balanced nutrition for large breed puppies",
             price = 79.99,
@@ -218,110 +226,126 @@ fun HomeScreen(navController: NavController) {
             status = 1,
             reviewId = 1,
             webUrl = "https://www.zooplus.es/shop/tienda_perros/pienso_perros",
-            bannerUrls = listOf(
-                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg",
-                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg"
-            )
+            bannerUrls =
+                "https://piensoymascotas.com/27460-large_default/royal-canin-mini-sterilised.jpg"+";"+
+                "https://images.ecestaticos.com/XKJFrabFEJ1xTt_2Ox8dFkVyV0c=/0x0:2121x1414/1200x900/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fd67%2Fa8d%2F860%2Fd67a8d8604edeac49386e96e2890fe7a.jpg;"
+
         )
-    )
-    val serviceList = listOf(
+    ))}
+    val serviceList by remember { mutableStateOf( mutableListOf(
         Service(
-            id = 1,
+            id = 1456,
             name = "Paseos Diarios",
             type = 0,
             status = 0,
             publicationDate = "2024-04-21",
             description = "Paseos diarios para perros de todas las edades y razas. Incluye ejercicio moderado y socialización.",
             price = 25.0,
-            uid = 1,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-            )
+            uid = 3456,
+            bannerUrl =
+                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+                    +";"+"https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"+";"
+
         ),
         Service(
-            id = 2,
+            id = 2456,
             name = "Entrenamiento Básico",
             type = 0,
             status = 0,
             publicationDate = "2024-04-20",
             description = "Entrenamiento básico para cachorros y perros adultos. Enseñanza de órdenes básicas y comportamiento adecuado.",
             price = 50.0,
-            uid = 2,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-            )
+            uid = 2456,
+            bannerUrl =
+                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+                    +";"+"https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"+";"
+
         ),
         Service(
-            id = 3,
+            id = 3456,
             name = "Cuidado de Día",
             type = 0,
             status = 0,
             publicationDate = "2024-04-19",
             description = "Cuidado diurno para perros mientras los propietarios están fuera. Incluye tiempo de juego y supervisión.",
             price = 35.0,
-            uid = 3,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-            )
+            uid = 146,
+            bannerUrl = "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+            +";"+"https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"+";"
         ),
         Service(
-            id = 4,
+            id = 4456,
             name = "Adiestramiento Avanzado",
             type = 0,
             status = 0,
             publicationDate = "2024-04-18",
             description = "Adiestramiento avanzado para perros con necesidades especiales. Enseñanza de habilidades avanzadas y obediencia.",
             price = 70.0,
-            uid = 4,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-            )
+            uid = 3456,
+            bannerUrl = "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+            +";"+"https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"+";"
         ),
         Service(
-            id = 5,
+            id = 5456,
             name = "Guardería Nocturna",
             type = 0,
             status = 0,
             publicationDate = "2024-04-17",
             description = "Guardería nocturna para perros que necesitan alojamiento durante la noche. Ambiente seguro y cómodo para descansar.",
             price = 40.0,
-            uid = 5,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg",
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
-            )
+            uid = 146,
+            bannerUrl = "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
+                    +";"+"https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"+";"
         ),
         Service(
-            id = 6,
+            id = 6456,
             name = "Terapia Canina",
             type = 0,
             status = 0,
             publicationDate = "2024-04-16",
             description = "Terapia emocional para perros que sufren de ansiedad o estrés. Sesiones individuales y grupales disponibles.",
             price = 60.0,
-            uid = 6,
-            reviewId = 1,
-            bannerUrl = listOf(
-                "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg",
-                "https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"
-            )
+            uid = 2456,
+            bannerUrl =  "https://entrenosotros.consum.es/public/Image/2020/12/paseo-perros.jpg"
+                    +";"+"https://imagenes.20minutos.es/files/image_1920_1080/uploads/imagenes/2020/04/02/imagen-de-una-perro-de-paseo.jpeg"+";"
         )
-    )
+    ))}
+    val context = LocalContext.current
 
-    DataRepository.setUsers(userList)
+    val onLoadGetData: () -> Unit = {
+        Log.d("pERO LLAAMA", userList.count().toString())
 
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val usersPetition = RetrofitInstance.api.getUsers()
+                val productsPetition = RetrofitInstance.api.getProducts()
+                val servicesPetition = RetrofitInstance.api.getServices()
+                Log.d("ACOUNTTTTT", userList.count().toString())
 
+                if (usersPetition.isSuccessful && productsPetition.isSuccessful && servicesPetition.isSuccessful) {
+                    val services = servicesPetition.body()
+                    val users = usersPetition.body()
+                    val products = productsPetition.body()
 
+                    if(services!=null) serviceList.addAll(services)
+                    if(users!=null) userList.addAll(users)
+                    if(products!=null) productList.addAll(products)
+                    DataRepository.setUsers(userList)
+                    DataRepository.setServices(serviceList)
+                    DataRepository.setProducts(productList)
+                    Log.d("ACOUNTTTTT", userList?.count().toString())
+                    serviceList.shuffle()
+                } else {
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                // Manejar cualquier excepción
+                Log.d("excepcionUserC", "${e}")
+            }
+        }
+    }
     LaunchedEffect(Unit) {
+        onLoadGetData()
         val userId = DataRepository.getUID()
         if (userId != null) {
             try {
@@ -365,6 +389,9 @@ fun HomeScreen(navController: NavController) {
             items(serviceList) { service ->
                 UserItemServices(service, navController)
             }
+            item { 
+                Spacer(modifier = Modifier.padding(vertical = 40.dp))
+            }
         }
     }
 }
@@ -384,7 +411,7 @@ fun UserItemServices(service: Service, navController: NavController) {
         ) {
             // Fondo de la imagen de usuario
             Image(
-                painter = rememberImagePainter(service.bannerUrl[0]),
+                painter = rememberImagePainter(service.bannerUrl.split(";")[0]),
                 contentDescription = "Service Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -531,7 +558,7 @@ fun Item(item: Any, navController: NavController) {
             is Product -> {
                 Image(
                     painter = rememberImagePainter(
-                        data = item.bannerUrls[0],
+                        data = item.bannerUrls.split(";")[0],
                         builder = {
                             crossfade(true)
                         }

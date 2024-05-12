@@ -331,8 +331,17 @@ class Image(Resource):
             user.profileUrl = download_url
             update_entity_in_database(user)
 
-        elif(objectType == 1):
-            pass
+        elif(int(objectType) == 1):
+            print("ASDLKJMASDFDAKF")
+            services = get_entity_data("Services")
+            service:Service = next((service for service in services if service.id == int(objectId)), None)
+            async def upload_image_async():
+                return await storage_repo.upload_image(temp_image.name, image_name)
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            download_url = loop.run_until_complete(upload_image_async())
+            service.bannerUrl += download_url+";"
+            update_entity_in_database(service)
         elif(objectType == 2):
             pass
 
@@ -505,7 +514,7 @@ class SpecificService(Resource):
         """
         Elimina un servicio por su ID.
         """
-        if delete_entity_from_database(id):
+        if delete_entity_from_database(id, "Services"):
             return {"message": "Servicio eliminado correctamente"}, 200
         else:
             return {"message": "Error al eliminar el servicio"}, 500

@@ -35,6 +35,9 @@ interface ApiService {
         @Path("id") id: String
     ): Response<User>
 
+    @GET("api/v1/user")
+    suspend fun getUsers(): Response<List<User>>
+
 
     @PUT("api/v1/user/{id}")
     suspend fun updateUser(
@@ -49,7 +52,7 @@ interface ApiService {
 
     @Multipart
     @POST("api/v1/image")
-    suspend fun updateImageUser(
+    suspend fun updateImage(
         @Part("objectId") objectId: RequestBody,
         @Part("objectType") objectType: RequestBody,
         @Part image: MultipartBody.Part
