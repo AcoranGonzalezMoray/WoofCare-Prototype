@@ -1,6 +1,7 @@
 package com.example.woofcareapp.screens.Notifications
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import coil.compose.rememberImagePainter
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.screens.Info.Product.ExpandableItem
+import com.example.woofcareapp.ui.theme.prominentWoof
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -131,7 +133,7 @@ fun NotificactionsScreen(navController: NavHostController) {
 
         }
     } else {
-        Column {
+        Column(modifier = Modifier.background(prominentWoof)) {
             Box(modifier = Modifier.padding(10.dp)) {
                 ExpandableItem(title = "Today", content = {
                     LazyColumn(

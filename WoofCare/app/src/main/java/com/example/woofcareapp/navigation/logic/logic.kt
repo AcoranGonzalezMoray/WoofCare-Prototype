@@ -14,6 +14,7 @@ import com.example.woofcareapp.screens.Info.Product.ProductInfoScreen
 import com.example.woofcareapp.screens.Info.Service.ServiceInfoScreen
 import com.example.woofcareapp.screens.Info.User.UserInfoScreen
 import com.example.woofcareapp.screens.Notifications.NotificactionsScreen
+import com.example.woofcareapp.screens.Preference.PreferenceView
 import com.example.woofcareapp.screens.Profile.ProfileScreen
 import com.example.woofcareapp.screens.Search.SearchScreen
 import com.example.woofcareapp.screens.Service.ServiceScreen
@@ -53,6 +54,9 @@ fun  Navigation(navController: NavHostController) {
         }
         composable("FAQ") {
             FaqView(navController)
+        }
+        composable("preference") {
+            PreferenceView(navController)
         }
     }
 

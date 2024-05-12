@@ -23,6 +23,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -65,13 +67,16 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: SharedPreferences) {
+fun BottomNavigationScreen(
+    navControllerLogin: NavController,
+    sharedPreferences: SharedPreferences
+) {
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val excludedRoutes = setOf("profile","productInfo", "userInfo", "FAQ")
+    val excludedRoutes = setOf("profile", "productInfo", "userInfo", "")
     Scaffold(
         scaffoldState = scaffoldState,
         drawerGesturesEnabled = true,
@@ -103,22 +108,31 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.Start
                             ) {
-                                Icon(imageVector = Icons.Filled.Menu, contentDescription = "menu", tint = Color.White )
+                                Icon(
+                                    imageVector = Icons.Filled.Menu,
+                                    contentDescription = "menu",
+                                    tint = Color.White
+                                )
                             }
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
-                            ){
+                            ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.icon),
-                                    contentDescription = "")
+                                    contentDescription = ""
+                                )
                             }
                             Column(
                                 modifier = Modifier.fillMaxSize(),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.End
                             ) {
-                                Icon(imageVector = Icons.Filled.Notifications, contentDescription = "menu", tint = Color.White)
+                                Icon(
+                                    imageVector = Icons.Filled.Notifications,
+                                    contentDescription = "menu",
+                                    tint = Color.White
+                                )
 
                             }
 
@@ -127,7 +141,6 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
                 )
 
             }
-
 
 
         },
@@ -161,13 +174,13 @@ fun Drawer(
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
-    val deleteAccount:()->Unit = {
+    val deleteAccount: () -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
-            var user =DataRepository.getUser()
-            if(user!=null){
+            var user = DataRepository.getUser()
+            if (user != null) {
                 try {
 
-                }catch (e: Exception) {
+                } catch (e: Exception) {
                     Log.e("excepcionUserB", "Error al obtener el cuerpo del error: $e")
                 }
             }
@@ -194,7 +207,7 @@ fun Drawer(
                         Text(text = "Alert")
                     },
                     text = {
-                        Text(text ="Are you sure you want to delete this account?")
+                        Text(text = "Are you sure you want to delete this account?")
                     },
                     confirmButton = {
                         Button(
@@ -214,7 +227,7 @@ fun Drawer(
                                 showDialog = false
                             }, colors = ButtonDefaults.buttonColors(Color.Red)
                         ) {
-                            Text("Cancel",  color = Color.White)
+                            Text("Cancel", color = Color.White)
                         }
                     }
                 )
@@ -222,7 +235,7 @@ fun Drawer(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(DarkButtonWoof) ,
+                    .background(DarkButtonWoof),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -237,12 +250,36 @@ fun Drawer(
         }
 
         Spacer(modifier = Modifier.height(10.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            OutlinedButton(
+                onClick = { navController.navigate("FAQ") },
+                modifier = Modifier
+                    .padding(start = 4.dp, end = 4.dp) // Agrega espacio a la izquierda del botón
+            ) {
+                Text(text = "FAQ")
+            }
+            OutlinedButton(
+                onClick = { navController.navigate("preference") },
+                modifier = Modifier
+                    .padding(start = 4.dp, end = 4.dp) // Agrega espacio a la izquierda del botón
+            ) {
+                Text(text = "Preference")
+                Icon(Icons.Default.Settings, contentDescription = "Settings")
+
+            }
+
+        }
+
 
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.Start
-        ){
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -280,11 +317,14 @@ fun Drawer(
                     .padding(top = 16.dp)
             ) {
                 Button(
-                    onClick = {showDialog = true},
+                    onClick = { showDialog = true },
                     colors = ButtonDefaults.buttonColors(Color.Red),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 4.dp, end = 4.dp) // Agrega espacio a la izquierda del botón
+                        .padding(
+                            start = 4.dp,
+                            end = 4.dp
+                        ) // Agrega espacio a la izquierda del botón
                 ) {
                     Text(text = "Delete Account")
                 }

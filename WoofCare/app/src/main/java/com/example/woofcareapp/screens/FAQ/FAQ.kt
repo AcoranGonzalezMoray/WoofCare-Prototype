@@ -1,5 +1,6 @@
 package com.example.woofcareapp.screens.FAQ
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,14 +20,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.woofcareapp.screens.Info.Product.ExpandableItem
 import com.example.woofcareapp.screens.Search.SearchBar
+import com.example.woofcareapp.ui.theme.prominentWoof
 
 @Composable
 fun FaqView(navController: NavHostController) {
     val firstExpanded = remember { mutableStateOf(true) }
+    val secondExpanded = remember { mutableStateOf(true) }
+    val thirdExpanded = remember { mutableStateOf(true) }
+
     val searchValue = remember { mutableStateOf("") }
     Column(
         Modifier
             .fillMaxSize()
+            .background(prominentWoof)
             .padding(30.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
@@ -57,7 +63,7 @@ fun FaqView(navController: NavHostController) {
                     title = "What is WoofCare?",
                     content = { Text(text = "Ni idea de que es WoofCare") },
                     expanded = firstExpanded,
-                    onClick = {firstExpanded.value = false}
+                    onClick = {firstExpanded.value = !firstExpanded.value}
                 )
             }
 
@@ -66,8 +72,8 @@ fun FaqView(navController: NavHostController) {
                 ExpandableItem(
                     title = "What is WoofCare?",
                     content = { Text(text = "Ni idea de que es WoofCare") },
-                    expanded = firstExpanded,
-                    onClick = {firstExpanded.value = false}
+                    expanded = secondExpanded,
+                    onClick = {secondExpanded.value = !secondExpanded.value}
                 )
             }
 
@@ -76,8 +82,8 @@ fun FaqView(navController: NavHostController) {
                 ExpandableItem(
                     title = "What is WoofCare?",
                     content = { Text(text = "Ni idea de que es WoofCare") },
-                    expanded = firstExpanded,
-                    onClick = {firstExpanded.value = false}
+                    expanded = thirdExpanded,
+                    onClick = {thirdExpanded.value = !thirdExpanded.value}
                 )
             }
         }
