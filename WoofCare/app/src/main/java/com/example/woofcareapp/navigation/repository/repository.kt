@@ -1,6 +1,8 @@
 package com.example.woofcareapp.navigation.repository
 
 import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.example.woofcareapp.api.models.Message
 import com.example.woofcareapp.api.models.Product
 import com.example.woofcareapp.api.models.Service
@@ -12,8 +14,18 @@ object DataRepository {
     private var userPlus: User? = null
     private var productPlus: Product? = null
     private var servicePlus: Service? = null
+    private var sizeOfText: TextUnit = 18.sp
     private var messagesPlus: List<Message>? = null
     private var UID: Int = 0
+
+    fun setSizeOfText(size: TextUnit){
+        sizeOfText = size
+    }
+
+    fun getSizeOfText(): TextUnit {
+        return sizeOfText
+    }
+
     fun setUID(id: Int){
         UID = id
     }

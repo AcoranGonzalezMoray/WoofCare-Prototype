@@ -305,7 +305,7 @@ fun UserItemServices(service: Service, navController: NavController) {
                             Text(
                                 text = service.name,
                                 color = Color.White,
-                                fontSize = 18.sp,
+                                fontSize = DataRepository.getSizeOfText(),
                                 modifier = Modifier
                                     .padding(16.dp)
                             )

@@ -41,10 +41,12 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,6 +69,7 @@ import com.example.woofcareapp.navigation.logic.Navigation
 import com.example.woofcareapp.navigation.model.ScreenModel
 import com.example.woofcareapp.navigation.repository.DataRepository
 import com.example.woofcareapp.navigation.widget.BottomBar
+import com.example.woofcareapp.screens.Preference.PreferenceScreen
 import com.example.woofcareapp.ui.theme.DarkButtonWoof
 import com.example.woofcareapp.ui.theme.backWoof
 import kotlinx.coroutines.CoroutineScope
@@ -217,7 +220,7 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.defaultprofile),
+                                    painter = painterResource(id = R.drawable.profile),
                                     contentDescription = user?.name,
                                     modifier = Modifier
                                         .size(60.dp) // Toma todo el espacio disponible
@@ -297,6 +300,7 @@ fun Drawer(
     scope: CoroutineScope
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    var settings  by remember { mutableStateOf(false) }
 
 
     val deleteAccount:()->Unit = {
@@ -312,6 +316,33 @@ fun Drawer(
 
         }
     }
+
+
+    if (settings) {
+        AlertDialog(
+            backgroundColor = backWoof,
+            onDismissRequest = { settings = false },
+            title = {
+                Text(text = "Preferences")
+            },
+            text = {
+                PreferenceScreen(navController)
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        navController.navigate("home")
+                        settings = false
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = DarkButtonWoof)
+                ) {
+                    Text("Close", color = Color.White)
+                }
+            }
+        )
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -358,19 +389,62 @@ fun Drawer(
                 )
             }
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(DarkButtonWoof) ,
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.background(DarkButtonWoof)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.AccountBox,
-                    contentDescription = "",
-                    tint = Color.White,
-                    modifier = Modifier.height(40.dp)
-                )
-                Spacer(modifier = Modifier.width(7.dp))
+                Row(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .background(DarkButtonWoof) ,
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val user =  DataRepository.getUser()
+                    if(user!=null && user.profileUrl!!.isNotBlank()){
+                        Image(
+                            painter = rememberImagePainter(
+                                data =user.profileUrl,
+                                builder = {
+                                    crossfade(true)
+                                }
+                            ),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(70.dp)
+                                .clip(shape = RoundedCornerShape(36.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    }else {
+                        Image(
+                            painter = painterResource(id = R.drawable.profile),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(70.dp)
+                                .clip(shape = RoundedCornerShape(36.dp))
+                            ,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(7.dp))
+                }
+                Row(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .background(DarkButtonWoof) ,
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = "",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .height(40.dp)
+                            .clickable {
+                                settings = true
+                            }
+                    )
+                    Spacer(modifier = Modifier.width(7.dp))
+                }
             }
         }
 

@@ -193,59 +193,87 @@ fun ServiceInfoScreen(navController: NavController) {
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                     // Service Info
-                    ExpandableItem(
+                    Row(
+                        Modifier
+                            .background(DarkButtonWoof)
+                            .padding(15.dp)
+                    ) {ExpandableItem(
                         title = "Name",
-                        content = { Text(text = service.name, style = typography.body1) },
+                        content = { Text(text = service.name, style = typography.body1, color = Color.White,) },
                         expanded = nameExpanded,
                         onClick = { nameExpanded.value = !nameExpanded.value }
-                    )
+                    )}
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                    ExpandableItem(
+                    Row(
+                        Modifier
+                            .background(DarkButtonWoof)
+                            .padding(15.dp)
+                    ) {ExpandableItem(
                         title = "Type",
                         content = { CustomBadge(type = service.type)},
                         expanded = typeExpanded,
                         onClick = { typeExpanded.value = !typeExpanded.value }
-                    )
+                    )}
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                    ExpandableItem(
+                    Row(
+                        Modifier
+                            .background(DarkButtonWoof)
+                            .padding(15.dp)
+                    ) {ExpandableItem(
                         title = "Status",
                         content = { CustomBadge(status = service.status)},
                         expanded = statusExpanded,
                         onClick = { statusExpanded.value = !statusExpanded.value }
-                    )
+                    )}
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
                     val publicationDate = if (service.publicationDate.contains(".")) {
                         service.publicationDate.split(".").first()
                     } else {
                         service.publicationDate
                     }
-                    ExpandableItem(
+                    Row(
+                        Modifier
+                            .background(DarkButtonWoof)
+                            .padding(15.dp)
+                    ) {ExpandableItem(
                         title = "Publication Date",
-                        content = { Text(text = "Publication Date: ${publicationDate}", style = typography.body1) },
+                        content = { Text(text = "Publication Date: ${publicationDate}", style = typography.body1,color = Color.White,) },
                         expanded = publicationDateExpanded,
                         onClick = { publicationDateExpanded.value = !publicationDateExpanded.value }
-                    )
+                    )}
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                    ExpandableItem(
+                    Row(
+                        Modifier
+                            .background(DarkButtonWoof)
+                            .padding(15.dp)
+                    ) {ExpandableItem(
                         title = "Description",
-                        content = { Text(text = service.description, style = typography.body1) },
+                        content = { Text(text = service.description, style = typography.body1, color = Color.White,) },
                         expanded = descriptionExpanded,
                         onClick = { descriptionExpanded.value = !descriptionExpanded.value }
-                    )
+                    )}
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                    ExpandableItem(
+                    Row(
+                        Modifier
+                            .background(DarkButtonWoof)
+                            .padding(15.dp)
+                    ) {ExpandableItem(
                         title = "Price",
-                        content = { Text(text = "Price: $${service.price}", style = typography.body1) },
+                        content = { Text(text = "Price: $${service.price}", style = typography.body1, color = Color.White,) },
                         expanded = priceExpanded,
                         onClick = { priceExpanded.value = !priceExpanded.value }
-                    )
+                    )}
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                    ExpandableItem(
+                    Row(
+                        Modifier
+                            .background(DarkButtonWoof)
+                            .padding(15.dp)
+                    ) {ExpandableItem(
                         title = "Rating",
                         content = { RatingBar(2.2) },
                         expanded = ratingExpanded,
                         onClick = { ratingExpanded.value = !ratingExpanded.value }
-                    )
+                    )}
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 }
             }
@@ -272,14 +300,14 @@ fun CustomBadge(type: Int = -1, status: Int = -1){
     if(type != -1){
         if(type == 0){
             Badge(
-                backgroundColor = Color.Green,
-                content = {Text(text = "Dog Trainer Service")}
+                backgroundColor = Color(0xFF006400),
+                content = {Text(text = "Dog Trainer Service", color = Color.White)}
             )
         }
         if(type == 1){
             Badge(
-                backgroundColor = Color.Green,
-                content = {Text(text = "Dog Caregiver Service")}
+                backgroundColor = Color(0xFF006400),
+                content = {Text(text = "Dog Caregiver Service", color = Color.White)}
             )
         }
     }
@@ -287,8 +315,8 @@ fun CustomBadge(type: Int = -1, status: Int = -1){
     if(status != -1){
         if(status == 0){
             Badge(
-                backgroundColor = Color.Green,
-                content = {Text(text = "Service Available")}
+                backgroundColor = Color(0xFF006400),
+                content = {Text(text = "Service Available", color = Color.White)}
             )
         }
         if(status == 1){
