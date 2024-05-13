@@ -39,9 +39,12 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,6 +68,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -73,7 +77,26 @@ import java.time.format.DateTimeFormatter
 fun ServiceInfoScreen(navController: NavController) {
     val scrollState = rememberScrollState()
     val service = DataRepository.getServicePlus()
-    val user = DataRepository.getUsers()?.filter { user: User -> user.id == service?.uid  }?.get(0)
+    var user by remember { mutableStateOf<User?>(null) }
+
+    LaunchedEffect(Unit) {
+        try {
+            val usersPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getUsers()
+            }
+            val productsPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getProducts()
+            }
+            val servicesPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getServices()
+            }
+            if (usersPetition.isSuccessful && productsPetition.isSuccessful && servicesPetition.isSuccessful) {
+                user = usersPetition.body()?.find { user: User -> user.id == service?.uid }
+            }
+        } catch (e: Exception) {
+            Log.d("excepcionUserC", "${e}")
+        }
+    }
     // Estados para rastrear si cada sección está expandida o no
     val nameExpanded = remember { mutableStateOf(true) }
     val typeExpanded = remember { mutableStateOf(true) }
@@ -104,7 +127,7 @@ fun ServiceInfoScreen(navController: NavController) {
                     id= 0,
                     uidReceiver= service.uid.toString(),
                     uidSender= DataRepository.getUser()?.id.toString(),
-                    serviceId= 3,
+                    serviceId= service.id,
                     status= "0",
                     creationDate =  "2024-04-05T10:00:00Z"
                 )
@@ -149,7 +172,7 @@ fun ServiceInfoScreen(navController: NavController) {
                         modifier = Modifier
                             .clickable {
                                 if (user != null) {
-                                    DataRepository.setUserPlus(user)
+                                    DataRepository.setUserPlus(user!!)
                                 }
                                 navController.navigate("userInfo")
                             },
@@ -165,7 +188,7 @@ fun ServiceInfoScreen(navController: NavController) {
                                     .clip(CircleShape)
                             )
                             Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-                            Text(text = user.name+", "+user.age, color = Color.White)
+                            Text(text = user!!.name+", "+user!!.age, color = Color.White)
                         }else {
                             Image(
                                 painter = rememberImagePainter("https://images.hola.com/imagenes/estar-bien/20221018219233/buenas-personas-caracteristicas/1-153-242/getty-chica-feliz-t.jpg?tx=w_680"),

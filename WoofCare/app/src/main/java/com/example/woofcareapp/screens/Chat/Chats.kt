@@ -62,11 +62,11 @@ fun ChatsScreen(navController: NavController) {
     var messages by remember {
         mutableStateOf(emptyList<Message>())
     }
-    val userList = DataRepository.getUsers()
     val context = LocalContext.current
 
     val myId = DataRepository.getUser()!!.id
     val chats = remember { mutableStateListOf<MutableList<Message>>() }
+    var users = remember { mutableStateOf<MutableList<User>>(mutableListOf()) }
 
     val onLoadMessages: () -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
@@ -83,9 +83,11 @@ fun ChatsScreen(navController: NavController) {
 
                         if (existingChat != null) {
                             existingChat.add(message)
+                            Log.d("asdasdadb", message.message)
                         } else {
                             val newChat = mutableListOf(message)
                             chats.add(newChat)
+                            Log.d("asdasdadA", message.message)
                         }
 
                     }
@@ -97,8 +99,20 @@ fun ChatsScreen(navController: NavController) {
             }
         }
     }
-    LaunchedEffect(myId) {
+
+    LaunchedEffect(key1 = true) {
         onLoadMessages()
+        try {
+            val usersPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getUsers()
+            }
+            if (usersPetition.isSuccessful) {
+                val userList = usersPetition.body() ?: emptyList()
+                users.value = userList.toMutableList()
+            }
+        } catch (e: Exception) {
+            Log.d("excepcionUserC", "${e}")
+        }
     }
 
     Column(modifier = Modifier
@@ -113,13 +127,18 @@ fun ChatsScreen(navController: NavController) {
                 } else {
                     chat[0].uidReceiver
                 }
+                Log.d("users", users.value.toString())
 
                 // Obtener el usuario correspondiente
-                val otherUser = userList!!.firstOrNull { user -> user.id == otherUserId }
+                val otherUser = users.value.find { user -> user.id == otherUserId }
 
 
-                Log.d("asdasdad", chat[0].uidReceiver.toString())
                 if (otherUser != null) {
+                    Log.d("otherUser", otherUser.name)
+                }
+                if (otherUser != null) {
+                    Log.d("2222222", chat[0].uidReceiver.toString())
+
                     ChatItem(chat = chat ,onClick = {
                         DataRepository.setMessagePlus(chat)
                         DataRepository.setUserPlus(otherUser)

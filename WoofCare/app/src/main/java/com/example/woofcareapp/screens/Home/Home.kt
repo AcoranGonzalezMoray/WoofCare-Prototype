@@ -50,6 +50,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.woofcareapp.api.models.Message
 import com.example.woofcareapp.api.services.RetrofitInstance
@@ -57,6 +58,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -114,22 +116,25 @@ fun HomeScreen(navController: NavController) {
     }
     LaunchedEffect(Unit) {
         onLoadGetData()
-        val userId = DataRepository.getUID()
-        if (userId != null) {
-            try {
-                val response = RetrofitInstance.api.getUserById(userId.toString())
-                if (response.isSuccessful) {
-                    val user: User? = response.body()
-                    if (user != null) {
-                        DataRepository.setUser(user)
+        GlobalScope.launch(Dispatchers.IO) {
+            val userId = DataRepository.getUID()
+            if (userId != null) {
+                try {
+                    val response = RetrofitInstance.api.getUserById(userId.toString())
+                    if (response.isSuccessful) {
+                        val user: User? = response.body()
+                        if (user != null) {
+                            DataRepository.setUser(user)
+                        }
+                    } else {
+                        Log.e("excepcionUserB", "Error al obtener el usuario: ${response.code()}")
                     }
-                } else {
-                    Log.e("excepcionUserB", "Error al obtener el usuario: ${response.code()}")
+                } catch (e: Exception) {
+                    Log.e("excepcionUserB", "Error al obtener el usuario: $e")
                 }
-            } catch (e: Exception) {
-                Log.e("excepcionUserB", "Error al obtener el usuario: $e")
             }
         }
+
     }
 
     val list = shuffleUsersAndProducts(userList!!, productList!!)
@@ -165,7 +170,29 @@ fun HomeScreen(navController: NavController) {
 }
 @Composable
 fun UserItemServices(service: Service, navController: NavController) {
-    val user = DataRepository.getUsers()?.filter { user: User -> user.id == service?.uid  }?.get(0)
+    var user by remember { mutableStateOf<User?>(null) }
+
+    LaunchedEffect(key1 = true) {
+        try {
+            val usersPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getUsers()
+            }
+            val productsPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getProducts()
+            }
+            val servicesPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getServices()
+            }
+            if (usersPetition.isSuccessful && productsPetition.isSuccessful && servicesPetition.isSuccessful) {
+                user = usersPetition.body()?.find { user: User -> user.id == service.uid }
+            }
+        } catch (e: Exception) {
+            Log.d("excepcionUserC", "${e}")
+        }
+    }
+
+
+
     val context = LocalContext.current
     val onSendServiceMessage: (service:Service) -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
@@ -390,7 +417,7 @@ fun shuffleUsersAndProducts(users: List<User>, products: List<Product>): List<An
         shuffledList.add(combinedList[index])
     }
 
-    return shuffledList.distinct()
+    return shuffledList
 }
 
 

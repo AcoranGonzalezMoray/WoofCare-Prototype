@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.woofcareapp.R
 import com.example.woofcareapp.api.models.Message
+import com.example.woofcareapp.api.models.Service
 import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.api.services.RetrofitInstance
 import com.example.woofcareapp.navigation.repository.DataRepository
@@ -66,6 +67,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -245,7 +247,24 @@ fun ChatMessages(messages: List<Message>?, other: User, navController: NavContro
 fun Message(message: Message, other: User, navController: NavController) {
     val me = DataRepository.getUser()
     val user = if (message.uidSender == me?.id) me else other
-    val serviceList = DataRepository.getServices()
+    var services = remember { mutableStateOf<MutableList<Service>>(mutableListOf()) }
+
+    LaunchedEffect(key1 = true) {
+        try {
+            val usersPetition = withContext(Dispatchers.IO) {
+                RetrofitInstance.api.getServices()
+            }
+            if (usersPetition.isSuccessful) {
+                val servicesLocal = usersPetition.body() ?: emptyList()
+                services.value = servicesLocal.toMutableList()
+            }
+        } catch (e: Exception) {
+            Log.d("excepcionUserC", "${e}")
+        }
+    }
+
+
+
     Surface(
         color = backWoof,
         modifier = Modifier.padding(4.dp),
@@ -285,7 +304,7 @@ fun Message(message: Message, other: User, navController: NavController) {
                             modifier = Modifier.padding(10.dp)
                         ) {
                             if(message.serviceId!=0){
-                                val service = serviceList!!.filter { it.id == message.serviceId }
+                                val service = services.value.filter { it.id == message.serviceId }
                                 if(service.isNotEmpty()){
                                     UserItemServices(service[0], navController)
                                 }

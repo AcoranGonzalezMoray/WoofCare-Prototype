@@ -64,6 +64,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.woofcareapp.api.models.Request
+import com.example.woofcareapp.api.models.Service
+import com.example.woofcareapp.api.models.User
 import com.example.woofcareapp.api.services.RetrofitInstance
 import com.example.woofcareapp.navigation.logic.Navigation
 import com.example.woofcareapp.navigation.model.ScreenModel
@@ -76,6 +78,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -90,13 +93,24 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
     val excludedRoutes = setOf("profile","productInfo", "userInfo", "FAQ", "serviceInfo", "chat", "addService", "editService")
     var dialog by remember { mutableStateOf(false) }
     var items by remember { mutableStateOf(emptyList<Request>()) }
+    var users = remember { mutableStateOf<MutableList<User>>(mutableListOf()) }
+    var services = remember { mutableStateOf<MutableList<Service>>(mutableListOf()) }
 
     val onLoadGetRequest: () -> Unit = {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val requestPetition = RetrofitInstance.api.getRequests()
-
-                if (requestPetition.isSuccessful) {
+                val usersPetition = withContext(Dispatchers.IO) {
+                    RetrofitInstance.api.getUsers()
+                }
+                val servicePetition = withContext(Dispatchers.IO) {
+                    RetrofitInstance.api.getServices()
+                }
+                if (requestPetition.isSuccessful && usersPetition.isSuccessful && servicePetition.isSuccessful) {
+                    val userList = usersPetition.body() ?: emptyList()
+                    users.value = userList.toMutableList()
+                    val serviceList = servicePetition.body() ?: emptyList()
+                    services.value = serviceList.toMutableList()
                     if(DataRepository.getUser()?.accountType != 0){
                         items = requestPetition.body()!!.filter { it.uidReceiver.toInt() == DataRepository.getUser()?.id }
                     }
@@ -213,7 +227,7 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
                     LazyColumn {
                         items(items) { item ->
                             Spacer(modifier = Modifier.padding(10.dp))
-                            val user  = DataRepository.getUsers()?.filter {
+                            val user  = users.value.filter {
                                 it.id == item.uidSender.toInt()
                             }?.first()
                             Row(modifier = Modifier.background(DarkButtonWoof),
@@ -249,8 +263,7 @@ fun BottomNavigationScreen(navControllerLogin: NavController,sharedPreferences: 
                                 ) {
                                     if(item.status.toInt() == 0){
                                         Icon(Icons.Filled.RemoveRedEye, contentDescription = null, Modifier.clickable {
-                                            val service = DataRepository.getServices()
-                                                ?.first { it.id == item.serviceId }
+                                            val service = services.value.filter { it.id == item.serviceId }.first()
                                             if (service != null) {
                                                 DataRepository.setServicePlus(service)
                                                 dialog = false
